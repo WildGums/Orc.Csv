@@ -54,6 +54,11 @@ namespace Orc.Csv
                 propertyMaps.Add(string.Format("this.Map(x => x.{0}).Name(\"{1}\");", propertyName, fieldHeader));
             }
 
+            if (!Directory.Exists(outputFolder))
+            {
+                Directory.CreateDirectory(outputFolder);
+            }
+
             CreateCSharpPocoFile(namespaceName, className, properties, outputFolder);
             CreateCSharpCsvMapFile(namespaceName, className, propertyMaps, outputFolder);
         }
