@@ -32,6 +32,12 @@ namespace Orc.Csv
         #endregion
 
         #region ITypeConverter Members
+        /// <summary>
+        /// Note: No conversion is undertaken. The value is simply returned as a string.
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public string ConvertToString(TypeConverterOptions options, object value)
         {
             return value.ToString();

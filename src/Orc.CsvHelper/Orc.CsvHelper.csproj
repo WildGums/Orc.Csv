@@ -60,6 +60,7 @@
     <Compile Include="..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="CodeGeneration\CodeGeneration.cs" />
     <Compile Include="Converters\CsvConverters.cs" />
     <Compile Include="Converters\TypeConverter.cs" />
     <Compile Include="Extensions\CsvExtensions.cs" />

@@ -19,6 +19,13 @@ namespace Orc.Csv
     /// Extensions to read csv files that are already open by another application.
     /// TODO: Accept a configuration
     /// TODO: Ability to change culture
+    /// Standard configuration for csv Reader:
+    /// 
+    /// csvReader.Configuration.CultureInfo = new CultureInfo("en-AU");
+    /// Configuration.WillThrowOnMissingField = false;
+    /// Configuration.SkipEmptyRecords = true;
+    /// Configuration.HasHeaderRecord = true;
+    /// Configuration.TrimFields = true;
     /// </summary>
     public static class CsvExtensions
     {
