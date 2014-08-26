@@ -26,14 +26,23 @@ namespace Orc.CsvHelper.Test
         public void FromCsvFile()
         {
             var result = CsvExtensions.FromCsvFile<Operation>(@"TestData\Operation.csv", typeof (OperationCsvMap));
-            Assert.AreEqual(5, result.Count);
-            Assert.AreEqual(1, result[1].Id);
-            Assert.AreEqual("Operation2", result[1].Name);
-            Assert.AreEqual(new DateTime(2014,5,30,20,30,0), result[1].StartTime);
-            Assert.AreEqual(new TimeSpan(0,15,0), result[1].Duration);
-            Assert.AreEqual(14.15, result[1].Quantity);
-            Assert.AreEqual(true, result[1].Enabled);
             var expectedResult = CreateSampleOperations();
+
+            var expectedEnumerator = expectedResult.GetEnumerator();
+            foreach (var operation in result)
+            {
+                expectedEnumerator.MoveNext();
+                var expectedOperation = expectedEnumerator.Current;
+
+                Assert.AreEqual(operation.Id, expectedOperation.Id);
+                Assert.AreEqual(operation.Name, expectedOperation.Name);
+                Assert.AreEqual(operation.StartTime, expectedOperation.StartTime);
+                Assert.AreEqual(operation.Duration, expectedOperation.Duration);
+                Assert.AreEqual(operation.Quantity, expectedOperation.Quantity);
+                Assert.AreEqual(operation.Enabled, expectedOperation.Enabled);
+            }
+        }
+
         [TestMethod]
         public void ToCsvFile()
         {
