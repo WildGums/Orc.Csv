@@ -1,0 +1,6 @@
+Id,Name,StartTime,Duration,Quantity,Enabled
+0,Operation1,30/05/2014 19:30,0:00:00,14,TRUE
+1,Operation2,30/05/2014 20:30,0:15:00,14.15,TRUE
+2,Operation3,30/05/2014 21:30,0:30:00,14.3,TRUE
+3,Operation4,30/05/2014 22:30,0:45:00,14.45,TRUE
+4,Operation5,30/05/2014 23:30,0:00:00,14.6,TRUE
