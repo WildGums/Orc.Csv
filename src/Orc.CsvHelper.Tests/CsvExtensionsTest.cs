@@ -1,28 +1,25 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CsvExtensionsTest.cs" company="Orchestra development team">
-//   Copyright (c) 2008 - 2014 Orchestra development team. All rights reserved.
+// <copyright file="CsvExtensionsTest.cs" company="Orcomp development team">
+//   Copyright (c) 2008 - 2014 Orcomp development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.CsvHelper.Test
+namespace Orc.Csv.Tests
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using Csv;
-    using Csv.Test.CsvMaps;
-    using Csv.Test.Entities;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Entities;
+    using CsvMaps;
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class CsvExtensionsTest
     {
         #region Methods
-
-        [TestMethod]
+        [Test]
         public void FromCsvFile()
         {
             var result = CsvExtensions.FromCsvFile<Operation>(@"TestData\Operation.csv", typeof (OperationCsvMap));
@@ -43,12 +40,12 @@ namespace Orc.CsvHelper.Test
             }
         }
 
-        [TestMethod]
+        [Test]
         public void ToCsvFile()
         {
             var file = @"Operation.csv";
             var operations = CreateSampleOperations();
-            operations.ToCsv(file, typeof(OperationCsvMap));
+            operations.ToCsv(file, typeof (OperationCsvMap));
 
             var resultCsvLines = File.ReadAllLines(file) as IEnumerable<string>;
 
@@ -60,9 +57,7 @@ namespace Orc.CsvHelper.Test
         }
         #endregion
 
-
         #region Helpers
-
         private void AssertCollectionsAreEqual(IEnumerable<string> expectedCsvLines, IEnumerable<string> resultCsvLines)
         {
             var iterator = resultCsvLines.GetEnumerator();
