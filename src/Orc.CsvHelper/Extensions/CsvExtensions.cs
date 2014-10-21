@@ -43,14 +43,23 @@ namespace Orc.Csv
                     csv.Configuration.CultureInfo = new CultureInfo("en-AU");
                     csv.Configuration.WillThrowOnMissingField = false;
                     csv.Configuration.HasHeaderRecord = true;
+                    //csv.Configuration.IgnorePrivateAccessor = true;
 
                     if (csvMap != null)
                     {
                         csv.Configuration.RegisterClassMap(csvMap);
                     }
 
-                    csv.WriteHeader<T>();
-                    csv.WriteRecords(records);
+                    try
+                    {
+                        csv.WriteHeader<T>();
+                        csv.WriteRecords(records);
+                    }
+                    catch (Exception ex)
+                    {
+                        var message = ex.Data["CsvHelper"];
+                        throw;
+                    }
                 }
             }
         }
