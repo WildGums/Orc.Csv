@@ -100,9 +100,9 @@ namespace Orc.Csv
             return csvReader;
         }
 
-        public static IEnumerable<T> GetRecords<T>(string filePaath, Type classMapType = null)
+        public static IEnumerable<T> GetRecords<T>(string filePath, Type classMapType = null)
         {
-            using (var csvReader = CreateCsvReader(filePaath, classMapType))
+            using (var csvReader = CreateCsvReader(filePath, classMapType))
             {
                 try
                 {
@@ -125,9 +125,9 @@ namespace Orc.Csv
             }
         }
 
-        public static IEnumerable<T> GetRecords<T, TMap>(string filePaath)
+        public static IEnumerable<T> GetRecords<T, TMap>(string filePath)
         {
-            return GetRecords<T>(filePaath, typeof(TMap));
+            return GetRecords<T>(filePath, typeof(TMap));
         }
         #endregion
     }

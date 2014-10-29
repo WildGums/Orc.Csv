@@ -11,10 +11,6 @@ namespace Orc.Csv
 
     public static class CsvConverters
     {
-        #region Constants
-        public static readonly TypeConverter<DateTime?> StringToNullableDateTime = new TypeConverter<DateTime?>(ConvertFromStringToNullableDateTime);
-        #endregion
-
         #region Methods
         public static DateTime? ConvertFromStringToNullableDateTime(string input)
         {
