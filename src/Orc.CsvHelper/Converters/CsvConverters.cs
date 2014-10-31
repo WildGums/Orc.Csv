@@ -20,7 +20,7 @@ namespace Orc.Csv
             }
 
             var dateTime = Convert.ToDateTime(input);
-            if (dateTime == CsvExtensions.ExcelNullDate)
+            if (dateTime == CsvEnvironment.ExcelNullDate)
             {
                 return null;
             }

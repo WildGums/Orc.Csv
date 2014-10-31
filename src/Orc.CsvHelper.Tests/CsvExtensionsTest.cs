@@ -22,7 +22,7 @@ namespace Orc.Csv.Tests
         [Test]
         public void FromCsvFile()
         {
-            var result = CsvExtensions.FromCsvFile<Operation>(@"TestData\Operation.csv", typeof (OperationCsvMap));
+            var result = CsvReaderHelper.ReadCsv<Operation, OperationCsvMap>(@"TestData\Operation.csv");
             var expectedResult = CreateSampleOperations();
 
             var expectedEnumerator = expectedResult.GetEnumerator();
