@@ -17,6 +17,10 @@ namespace Orc.Csv
 
     public static class CsvReaderHelper
     {
+        #region Constants
+        public static readonly DateTime ExcelNullDate = new DateTime(1900, 1, 1, 0, 0, 0);
+        #endregion
+
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         #region Methods

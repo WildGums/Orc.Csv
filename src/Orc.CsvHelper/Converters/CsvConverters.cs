@@ -12,7 +12,7 @@ namespace Orc.Csv
     public static class CsvConverters
     {
         #region Methods
-        public static DateTime? ConvertFromStringToNullableDateTime(string input)
+        public static DateTime? StringToNullableDateTime(string input)
         {
             if (string.IsNullOrEmpty(input))
             {
@@ -26,6 +26,24 @@ namespace Orc.Csv
             }
 
             return dateTime;
+        }
+        public static bool YesNoToBoolean(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+            {
+                return false;
+            }
+
+            input = input.ToLower();
+            if (input == "yes")
+            {
+                return true;
+            }
+            if (input == "no")
+            {
+                return false;
+            }
+            return false;
         }
         #endregion
     }
