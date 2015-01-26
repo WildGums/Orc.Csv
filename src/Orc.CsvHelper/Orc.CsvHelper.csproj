@@ -92,8 +92,9 @@
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="CodeGeneration\CodeGeneration.cs" />
-    <Compile Include="Converters\CsvConverters.cs" />
+    <Compile Include="Converters\StringToNullableDateTimeConverter.cs" />
     <Compile Include="Converters\TypeConverter.cs" />
+    <Compile Include="Converters\YesNoToBooleanConverter.cs" />
     <Compile Include="CsvEnvironment.cs" />
     <Compile Include="Extensions\CsvExtensions.cs" />
     <Compile Include="Helpers\CsvReaderHelper.cs" />
