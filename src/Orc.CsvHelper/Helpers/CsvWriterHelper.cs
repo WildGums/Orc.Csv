@@ -7,8 +7,10 @@
 
 namespace Orc.Csv
 {
+    using System.Collections.Generic;
     using System.IO;
     using CsvHelper;
+    using CsvHelper.Configuration;
 
     public static class CsvWriterHelper
     {
@@ -28,6 +30,17 @@ namespace Orc.Csv
             }
 
             writer.NextRecord();
+        }
+
+        public static void WriteCsv<TRecord>(IEnumerable<TRecord> records, string csvFileName)
+        {
+            records.ToCsv(csvFileName);
+        }
+
+        public static void WriteCsv<TRecord, TMap>(IEnumerable<TRecord> records, string csvFileName)
+            where TMap : CsvClassMap
+        {
+            records.ToCsv(csvFileName, typeof(TMap));
         }
     }
 }

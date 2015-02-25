@@ -30,7 +30,12 @@ namespace Orc.Csv
     public static class CsvExtensions
     {
         #region Methods
-        public static void ToCsv<T>(this IEnumerable<T> records, string path, Type csvMap = null)
+        public static void ToCsv<TRecord, TMap>(this IEnumerable<TRecord> records, string path)
+        {
+            ToCsv(records, path, typeof(TMap));
+        }
+
+        public static void ToCsv<TRecord>(this IEnumerable<TRecord> records, string path, Type csvMap = null)
         {
             using (var csvWriter = CsvWriterHelper.CreateWriter(path))
             {
@@ -46,7 +51,7 @@ namespace Orc.Csv
 
                 try
                 {
-                    csvWriter.WriteHeader<T>();
+                    csvWriter.WriteHeader<TRecord>();
                     csvWriter.WriteRecords(records);
                 }
                 catch (Exception ex)
