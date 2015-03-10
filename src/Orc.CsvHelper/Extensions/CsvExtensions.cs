@@ -69,25 +69,25 @@ namespace Orc.Csv
         /// <param name="filePath">The full file path of the csv file</param>
         /// <param name="classMap">The class map to use</param>
         /// <returns></returns>
-        [ObsoleteEx(Replacement = "CsvReaderHelper.ReadCsv", TreatAsErrorFromVersion = "0.1", RemoveInVersion = "1.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "CsvReaderHelper.ReadCsv", TreatAsErrorFromVersion = "0.1", RemoveInVersion = "1.0")]
         public static List<T> FromCsvFile<T>(string filePath, Type classMap = null)
         {
             throw new NotImplementedException();
         }
 
-        [ObsoleteEx(Replacement = "CsvReaderHelper.CreateReader", TreatAsErrorFromVersion = "0.1", RemoveInVersion = "1.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "CsvReaderHelper.CreateReader", TreatAsErrorFromVersion = "0.1", RemoveInVersion = "1.0")]
         public static CsvReader CreateCsvReader(string filePath, Type classMapType = null)
         {
             throw new NotImplementedException();
         }
 
-        [ObsoleteEx(Replacement = "CsvReaderHelper.ReadCsv", TreatAsErrorFromVersion = "0.1", RemoveInVersion = "1.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "CsvReaderHelper.ReadCsv", TreatAsErrorFromVersion = "0.1", RemoveInVersion = "1.0")]
         public static IEnumerable<T> GetRecords<T>(string filePath, Type classMapType = null)
         {
             throw new NotImplementedException();
         }
 
-        [ObsoleteEx(Replacement = "CsvReaderHelper.ReadCsv", TreatAsErrorFromVersion = "0.1", RemoveInVersion = "1.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "CsvReaderHelper.ReadCsv", TreatAsErrorFromVersion = "0.1", RemoveInVersion = "1.0")]
         public static IEnumerable<T> GetRecords<T, TMap>(string filePath)
         {
             throw new NotImplementedException();
