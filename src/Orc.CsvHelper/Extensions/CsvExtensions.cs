@@ -9,11 +9,6 @@ namespace Orc.Csv
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
-    using System.IO;
-    using System.Linq;
-    using System.Text;
-    using CsvHelper;
 
     /// <summary>
     /// Extensions to read csv files that are already open by another application.
@@ -60,37 +55,6 @@ namespace Orc.Csv
                     throw;
                 }
             }
-        }
-
-        /// <summary>
-        /// Read a csv file and return the row data as objects.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="filePath">The full file path of the csv file</param>
-        /// <param name="classMap">The class map to use</param>
-        /// <returns></returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "CsvReaderHelper.ReadCsv", TreatAsErrorFromVersion = "0.1", RemoveInVersion = "1.0")]
-        public static List<T> FromCsvFile<T>(string filePath, Type classMap = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        [ObsoleteEx(ReplacementTypeOrMember = "CsvReaderHelper.CreateReader", TreatAsErrorFromVersion = "0.1", RemoveInVersion = "1.0")]
-        public static CsvReader CreateCsvReader(string filePath, Type classMapType = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        [ObsoleteEx(ReplacementTypeOrMember = "CsvReaderHelper.ReadCsv", TreatAsErrorFromVersion = "0.1", RemoveInVersion = "1.0")]
-        public static IEnumerable<T> GetRecords<T>(string filePath, Type classMapType = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        [ObsoleteEx(ReplacementTypeOrMember = "CsvReaderHelper.ReadCsv", TreatAsErrorFromVersion = "0.1", RemoveInVersion = "1.0")]
-        public static IEnumerable<T> GetRecords<T, TMap>(string filePath)
-        {
-            throw new NotImplementedException();
         }
         #endregion
     }
