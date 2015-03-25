@@ -88,6 +88,7 @@ namespace Orc.Csv
             csvReader.Configuration.SkipEmptyRecords = true;
             csvReader.Configuration.HasHeaderRecord = true;
             csvReader.Configuration.TrimFields = true;
+            csvReader.Configuration.TrimHeaders = true;
 
             if (classMapType != null)
             {
