@@ -35,7 +35,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Catel.Core">
-      <HintPath>..\..\..\lib\Catel.Core.4.1.0-unstable0131\lib\net45\Catel.Core.dll</HintPath>
+      <HintPath>..\..\..\lib\Catel.Core.4.1.0\lib\net45\Catel.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="CsvHelper">
       <HintPath>..\..\..\lib\CsvHelper.2.11.1.1\lib\net40-client\CsvHelper.dll</HintPath>
