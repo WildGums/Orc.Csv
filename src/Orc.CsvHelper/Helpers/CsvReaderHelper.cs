@@ -17,24 +17,20 @@ namespace Orc.Csv
 
     public static class CsvReaderHelper
     {
-        #region Constants
-        public static readonly DateTime ExcelNullDate = new DateTime(1900, 1, 1, 0, 0, 0);
-        #endregion
-
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         #region Methods
-        public static IEnumerable<T> ReadCsv<T, TMap>(string csvFileName, Action<T> initializer = null)
+        public static IEnumerable<T> ReadCsv<T, TMap>(string csvFilePath, Action<T> initializer = null)
             where TMap : CsvClassMap
         {
-            return ReadCsv<T>(csvFileName, initializer, typeof(TMap));
+            return ReadCsv<T>(csvFilePath, initializer, typeof(TMap));
         }
 
-        public static IEnumerable<T> ReadCsv<T>(string csvFileName, Action<T> initializer = null, Type mapType = null)
+        public static IEnumerable<T> ReadCsv<T>(string csvFilePath, Action<T> initializer = null, Type mapType = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false)
         {
             var items = new List<T>();
 
-            using (var csvReader = CreateReader(csvFileName, mapType))
+            using (var csvReader = CreateReader(csvFilePath, mapType, csvConfiguration))
             {
                 try
                 {
@@ -51,10 +47,6 @@ namespace Orc.Csv
                 }
                 catch (Exception ex)
                 {
-                    // In debug mode we can read the message and know which line and column has a problem
-                    // Probably need to deal with that more elegantly.
-                    var message = ex.Data["CsvHelper"];
-
                     if (string.Equals(ex.Message, "No header record was found.", StringComparison.InvariantCultureIgnoreCase))
                     {
                         return new T[0];
@@ -62,7 +54,12 @@ namespace Orc.Csv
 
                     var errorMessage = ex.Data["CsvHelper"].ToString();
 
-                    Log.Warning("Cannot read row in '{0}'. Error Details: {1}", Path.GetFileName(csvFileName), errorMessage);
+                    Log.Error("Cannot read row in '{0}'. Error Details: {1}", Path.GetFileName(csvFilePath), errorMessage);
+
+                    if (throwOnError)
+                    {
+                        throw;
+                    }
                 }
             }
 
@@ -71,24 +68,29 @@ namespace Orc.Csv
 
 
 
-        public static CsvReader CreateReader(string csvFileName, Type classMapType = null)
+        public static CsvReader CreateReader(string csvFilePath, Type classMapType = null, CsvConfiguration csvConfiguration = null)
         {
-            if (!File.Exists(csvFileName))
+            if (!File.Exists(csvFilePath))
             {
-                throw new FileNotFoundException(string.Format("{0} doesn't exist", csvFileName));
+                throw new FileNotFoundException(string.Format("{0} doesn't exist", csvFilePath));
             }
 
             // No disposes are required, the user should dispose the csv class
-            var fs = new FileStream(csvFileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            var fs = new FileStream(csvFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
             var stream = new StreamReader(fs, Encoding.Default);
 
-            var csvReader = new CsvReader(stream);
-            csvReader.Configuration.CultureInfo = CsvEnvironment.DefaultCultureInfo;
-            csvReader.Configuration.WillThrowOnMissingField = false;
-            csvReader.Configuration.SkipEmptyRecords = true;
-            csvReader.Configuration.HasHeaderRecord = true;
-            csvReader.Configuration.TrimFields = true;
-            csvReader.Configuration.TrimHeaders = true;
+            if (csvConfiguration == null)
+            {
+                csvConfiguration = new CsvConfiguration();
+                csvConfiguration.CultureInfo = CsvEnvironment.DefaultCultureInfo;
+                csvConfiguration.WillThrowOnMissingField = false;
+                csvConfiguration.SkipEmptyRecords = true;
+                csvConfiguration.HasHeaderRecord = true;
+                csvConfiguration.TrimFields = true;
+                csvConfiguration.TrimHeaders = true;
+            }
+
+            var csvReader = new CsvReader(stream, csvConfiguration);
 
             if (classMapType != null)
             {

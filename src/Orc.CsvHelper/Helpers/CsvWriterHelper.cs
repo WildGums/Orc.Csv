@@ -14,12 +14,17 @@ namespace Orc.Csv
 
     public static class CsvWriterHelper
     {
-        public static CsvWriter CreateWriter(string csvFileName)
+        public static CsvWriter CreateWriter(string csvFilePath, CsvConfiguration csvConfiguration = null)
         {
             // No disposes are required, the user should dispose the csv class
-            var streamWriter = new StreamWriter(csvFileName, false);
+            var streamWriter = new StreamWriter(csvFilePath, false);
 
-            return new CsvWriter(streamWriter);
+            if (csvConfiguration == null)
+            {
+                csvConfiguration = new CsvConfiguration();
+            }
+
+            return new CsvWriter(streamWriter, csvConfiguration);
         }
 
         public static void WriteRecord(this CsvWriter writer, params object[] fields)
@@ -32,15 +37,15 @@ namespace Orc.Csv
             writer.NextRecord();
         }
 
-        public static void WriteCsv<TRecord>(IEnumerable<TRecord> records, string csvFileName)
+        public static void WriteCsv<TRecord>(IEnumerable<TRecord> records, string csvFilePath, CsvConfiguration csvConfiguration = null, bool throwOnError = false)
         {
-            records.ToCsv(csvFileName);
+            records.ToCsv(csvFilePath, null, csvConfiguration, throwOnError);
         }
 
-        public static void WriteCsv<TRecord, TMap>(IEnumerable<TRecord> records, string csvFileName)
+        public static void WriteCsv<TRecord, TMap>(IEnumerable<TRecord> records, string csvFilePath, CsvConfiguration csvConfiguration = null, bool throwOnError = false)
             where TMap : CsvClassMap
         {
-            records.ToCsv(csvFileName, typeof(TMap));
+            records.ToCsv(csvFilePath, typeof(TMap), csvConfiguration, throwOnError);
         }
     }
 }
