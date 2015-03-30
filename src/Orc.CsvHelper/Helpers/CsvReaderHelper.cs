@@ -20,10 +20,10 @@ namespace Orc.Csv
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         #region Methods
-        public static IEnumerable<T> ReadCsv<T, TMap>(string csvFilePath, Action<T> initializer = null)
+        public static IEnumerable<T> ReadCsv<T, TMap>(string csvFilePath, Action<T> initializer = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false)
             where TMap : CsvClassMap
         {
-            return ReadCsv<T>(csvFilePath, initializer, typeof(TMap));
+            return ReadCsv<T>(csvFilePath, initializer, typeof(TMap), csvConfiguration, throwOnError);
         }
 
         public static IEnumerable<T> ReadCsv<T>(string csvFilePath, Action<T> initializer = null, Type mapType = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false)
