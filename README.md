@@ -1,6 +1,8 @@
 Orc.CsvHelper
 =================
 
+[![Join the chat at https://gitter.im/WildGums/Orc.CsvHelper](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/WildGums/Orc.CsvHelper?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Small library of extensions and helper methods for the [CsvHelper](http://joshclose.github.io/CsvHelper) library.
 
 - Static methods are provided to read or write to a csv file with one line of code.
