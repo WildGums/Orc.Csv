@@ -28,7 +28,6 @@ namespace Orc.Csv
 
         public static IEnumerable<T> ReadCsv<T>(string csvFilePath, Action<T> initializer = null, Type mapType = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false)
         {
-
             using (var csvReader = CreateReader(csvFilePath, mapType, csvConfiguration))
             {
                 return ReadData(csvFilePath, initializer, throwOnError, csvReader);
@@ -37,7 +36,6 @@ namespace Orc.Csv
 
         public static IEnumerable<T> ReadCsv<T>(string csvFilePath, CsvClassMap map, Action<T> initializer = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false)
         {
-
             using (var csvReader = CreateReader(csvFilePath, map, csvConfiguration))
             {
                 return ReadData(csvFilePath, initializer, throwOnError, csvReader);
@@ -47,6 +45,7 @@ namespace Orc.Csv
         private static IEnumerable<T> ReadData<T>(string csvFilePath, Action<T> initializer, bool throwOnError, CsvReader csvReader)
         {
             var items = new List<T>();
+
             try
             {
                 while (csvReader.Read())
@@ -76,6 +75,7 @@ namespace Orc.Csv
                     throw;
                 }
             }
+
             return items;
         }
 
@@ -104,7 +104,7 @@ namespace Orc.Csv
         {
             if (!File.Exists(csvFilePath))
             {
-                throw new FileNotFoundException(string.Format("{0} doesn't exist", csvFilePath));
+                Log.ErrorAndThrowException<FileNotFoundException>("{0} doesn't exist", csvFilePath);
             }
 
             // No disposes are required, the user should dispose the csv class
