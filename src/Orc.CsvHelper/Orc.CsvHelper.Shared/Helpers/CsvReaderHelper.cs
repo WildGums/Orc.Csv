@@ -104,7 +104,7 @@ namespace Orc.Csv
         {
             if (!File.Exists(csvFilePath))
             {
-                Log.ErrorAndThrowException<FileNotFoundException>("{0} doesn't exist", csvFilePath);
+                Log.ErrorAndThrowException<FileNotFoundException>("File '{0}' doesn't exist", csvFilePath);
             }
 
             // No disposes are required, the user should dispose the csv class
