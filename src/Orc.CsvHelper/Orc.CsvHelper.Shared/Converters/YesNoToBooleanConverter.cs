@@ -27,12 +27,11 @@
                 return false;
             }
 
-            input = input.ToLower();
-            if (input == "yes")
+            if (string.Equals(input,"yes", StringComparison.InvariantCultureIgnoreCase))
             {
                 return true;
             }
-            if (input == "no")
+            if (string.Equals(input, "no", StringComparison.InvariantCultureIgnoreCase))
             {
                 return false;
             }
