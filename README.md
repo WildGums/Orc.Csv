@@ -6,7 +6,7 @@ Orc.CsvHelper
 Small library of extensions and helper methods for the [CsvHelper](http://joshclose.github.io/CsvHelper) library.
 
 - Static methods are provided to read or write to a csv file with one line of code.
-- Sensible configuration options are provided out of the box (but can be overwitten if needed).
+- Sensible configuration options are provided out of the box (but can be overwritten if needed).
 - Reading from a csv file will not lock it.
 - Capture a meaningful error message when an exception is thrown while reading a csv file. 
 
