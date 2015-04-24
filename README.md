@@ -13,7 +13,7 @@ Small library of extensions and helper methods for the [CsvHelper](http://joshcl
 Features
 ----------
 
-- **code generaion** => Use static class **CodeGeneration** for generating C# POCO classes and their associated maps.
-- **CsvReader helper** => Use static class **CsvReaderHelper** for reading csv files with a single line of code.
-- **CsvWriter helper** => Use static class **CsvWriterHelper** for writing records into a csv file.
-- **CsvExtensions** => for writing object collections into a csv file using the **ToCsv()** method.
+- **code generaion** => Use static class *CodeGeneration* for generating C# POCO classes and their associated maps.
+- **CsvReader helper** => Use static class *CsvReaderHelper* for reading csv files with a single line of code.
+- **CsvWriter helper** => Use static class *CsvWriterHelper* for writing records into a csv file.
+- **CsvExtensions** => for writing object collections into a csv file using the *ToCsv()* method.
