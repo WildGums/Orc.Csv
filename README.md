@@ -63,9 +63,8 @@ public static void WriteCsv<TRecord, TMap>(IEnumerable<TRecord> records, string 
 public static void ToCsv<TRecord>(this IEnumerable<TRecord> records, string csvFilePath, Type csvMap = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false)
 ```
 
-Example
+Example:
 
 ```C#
 records.ToCsv<MyClass>(csvFilePath, typeof(MyClassMap));
-
 ```
