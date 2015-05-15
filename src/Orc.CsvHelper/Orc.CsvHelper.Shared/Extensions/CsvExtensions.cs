@@ -11,6 +11,7 @@ namespace Orc.Csv
     using System.Collections.Generic;
     using System.IO;
     using Catel.Logging;
+    using CsvHelper;
     using CsvHelper.Configuration;
 
     /// <summary>
@@ -37,11 +38,7 @@ namespace Orc.Csv
         {
             if (csvConfiguration == null)
             {
-                csvConfiguration = new CsvConfiguration();
-                csvConfiguration.CultureInfo = CsvEnvironment.DefaultCultureInfo;
-                csvConfiguration.WillThrowOnMissingField = false;
-                csvConfiguration.HasHeaderRecord = true;
-                //csvConfiguration.IgnorePrivateAccessor = true;
+                csvConfiguration = CreateCsvConfiguration<TRecord>();
             }
 
             using (var csvWriter = CsvWriterHelper.CreateWriter(csvFilePath, csvConfiguration))
@@ -51,21 +48,55 @@ namespace Orc.Csv
                     csvWriter.Configuration.RegisterClassMap(csvMap);
                 }
 
-                try
+                WriteRecords(records, csvFilePath, throwOnError, csvWriter);
+            }
+        }
+
+        private static CsvConfiguration CreateCsvConfiguration<TRecord>()
+        {
+            CsvConfiguration csvConfiguration;
+            csvConfiguration = new CsvConfiguration();
+            csvConfiguration.CultureInfo = CsvEnvironment.DefaultCultureInfo;
+            csvConfiguration.WillThrowOnMissingField = false;
+            csvConfiguration.HasHeaderRecord = true;
+            //csvConfiguration.IgnorePrivateAccessor = true;
+            return csvConfiguration;
+        }
+
+        public static void ToCsv<TRecord>(this IEnumerable<TRecord> records, string csvFilePath, CsvClassMap csvMap, CsvConfiguration csvConfiguration = null, bool throwOnError = false)
+        {
+            if (csvConfiguration == null)
+            {
+                csvConfiguration = CreateCsvConfiguration<TRecord>();
+            }
+
+            using (var csvWriter = CsvWriterHelper.CreateWriter(csvFilePath, csvConfiguration))
+            {
+                if (csvMap != null)
                 {
-                    csvWriter.WriteHeader<TRecord>();
-                    csvWriter.WriteRecords(records);
+                    csvWriter.Configuration.RegisterClassMap(csvMap);
                 }
-                catch (Exception ex)
+
+                WriteRecords(records, csvFilePath, throwOnError, csvWriter);
+            }
+        }
+
+        private static void WriteRecords<TRecord>(IEnumerable<TRecord> records, string csvFilePath, bool throwOnError, CsvWriter csvWriter)
+        {
+            try
+            {
+                csvWriter.WriteHeader<TRecord>();
+                csvWriter.WriteRecords(records);
+            }
+            catch (Exception ex)
+            {
+                var errorMessage = ex.Data["CsvHelper"].ToString();
+
+                Log.Error("Cannot read row in '{0}'. Error Details: {1}", Path.GetFileName(csvFilePath), errorMessage);
+
+                if (throwOnError)
                 {
-                    var errorMessage = ex.Data["CsvHelper"].ToString();
-
-                    Log.Error("Cannot read row in '{0}'. Error Details: {1}", Path.GetFileName(csvFilePath), errorMessage);
-
-                    if (throwOnError)
-                    {
-                        throw;
-                    }
+                    throw;
                 }
             }
         }

@@ -7,6 +7,7 @@
 
 namespace Orc.Csv
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using CsvHelper;
@@ -39,7 +40,8 @@ namespace Orc.Csv
 
         public static void WriteCsv<TRecord>(IEnumerable<TRecord> records, string csvFilePath, CsvConfiguration csvConfiguration = null, bool throwOnError = false)
         {
-            records.ToCsv(csvFilePath, null, csvConfiguration, throwOnError);
+            Type csvMapType = null;
+            records.ToCsv(csvFilePath, csvMapType, csvConfiguration, throwOnError);
         }
 
         public static void WriteCsv<TRecord, TMap>(IEnumerable<TRecord> records, string csvFilePath, CsvConfiguration csvConfiguration = null, bool throwOnError = false)
