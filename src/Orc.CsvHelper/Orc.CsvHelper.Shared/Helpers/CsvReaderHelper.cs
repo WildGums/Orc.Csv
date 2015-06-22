@@ -9,6 +9,7 @@ namespace Orc.Csv
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
     using System.Text;
     using Catel.Logging;
@@ -26,17 +27,17 @@ namespace Orc.Csv
             return ReadCsv<T>(csvFilePath, initializer, typeof(TMap), csvConfiguration, throwOnError);
         }
 
-        public static IEnumerable<T> ReadCsv<T>(string csvFilePath, Action<T> initializer = null, Type mapType = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false)
+        public static IEnumerable<T> ReadCsv<T>(string csvFilePath, Action<T> initializer = null, Type mapType = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo culture = null)
         {
-            using (var csvReader = CreateReader(csvFilePath, mapType, csvConfiguration))
+            using (var csvReader = CreateReader(csvFilePath, mapType, csvConfiguration, culture))
             {
                 return ReadData(csvFilePath, initializer, throwOnError, csvReader);
             }
         }
 
-        public static IEnumerable<T> ReadCsv<T>(string csvFilePath, CsvClassMap map, Action<T> initializer = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false)
+        public static IEnumerable<T> ReadCsv<T>(string csvFilePath, CsvClassMap map, Action<T> initializer = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo culture = null)
         {
-            using (var csvReader = CreateReader(csvFilePath, map, csvConfiguration))
+            using (var csvReader = CreateReader(csvFilePath, map, csvConfiguration, culture))
             {
                 return ReadData(csvFilePath, initializer, throwOnError, csvReader);
             }
@@ -79,9 +80,9 @@ namespace Orc.Csv
             return items;
         }
 
-        public static CsvReader CreateReader(string csvFilePath, Type classMapType = null, CsvConfiguration csvConfiguration = null)
+        public static CsvReader CreateReader(string csvFilePath, Type classMapType = null, CsvConfiguration csvConfiguration = null, CultureInfo culture = null)
         {
-            var csvReader = CreateCsvReader(csvFilePath, csvConfiguration);
+            var csvReader = CreateCsvReader(csvFilePath, csvConfiguration, culture);
 
             if (classMapType != null)
             {
@@ -91,16 +92,16 @@ namespace Orc.Csv
             return csvReader;
         }
 
-        public static CsvReader CreateReader(string csvFilePath, CsvClassMap classMap, CsvConfiguration csvConfiguration = null)
+        public static CsvReader CreateReader(string csvFilePath, CsvClassMap classMap, CsvConfiguration csvConfiguration = null, CultureInfo culture = null)
         {
-            var csvReader = CreateCsvReader(csvFilePath, csvConfiguration);
+            var csvReader = CreateCsvReader(csvFilePath, csvConfiguration, culture);
 
             csvReader.Configuration.RegisterClassMap(classMap);
 
             return csvReader;
         }
 
-        private static CsvReader CreateCsvReader(string csvFilePath, CsvConfiguration csvConfiguration)
+        private static CsvReader CreateCsvReader(string csvFilePath, CsvConfiguration csvConfiguration, CultureInfo culture)
         {
             if (!File.Exists(csvFilePath))
             {
@@ -114,7 +115,7 @@ namespace Orc.Csv
             if (csvConfiguration == null)
             {
                 csvConfiguration = new CsvConfiguration();
-                csvConfiguration.CultureInfo = CsvEnvironment.DefaultCultureInfo;
+                csvConfiguration.CultureInfo = culture ?? CsvEnvironment.DefaultCultureInfo;
                 csvConfiguration.WillThrowOnMissingField = false;
                 csvConfiguration.SkipEmptyRecords = true;
                 csvConfiguration.HasHeaderRecord = true;
