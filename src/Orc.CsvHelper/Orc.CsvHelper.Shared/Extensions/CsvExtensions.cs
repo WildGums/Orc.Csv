@@ -9,6 +9,7 @@ namespace Orc.Csv
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
     using Catel.Logging;
     using CsvHelper;
@@ -29,16 +30,16 @@ namespace Orc.Csv
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         #region Methods
-        public static void ToCsv<TRecord, TMap>(this IEnumerable<TRecord> records, string csvFilePath, CsvConfiguration csvConfiguration = null, bool throwOnError = false)
+        public static void ToCsv<TRecord, TMap>(this IEnumerable<TRecord> records, string csvFilePath, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
         {
-            ToCsv(records, csvFilePath, typeof(TMap), csvConfiguration);
+            ToCsv(records, csvFilePath, typeof(TMap), csvConfiguration, throwOnError, cultureInfo);
         }
 
-        public static void ToCsv<TRecord>(this IEnumerable<TRecord> records, string csvFilePath, Type csvMap = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false)
+        public static void ToCsv<TRecord>(this IEnumerable<TRecord> records, string csvFilePath, Type csvMap = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
         {
             if (csvConfiguration == null)
             {
-                csvConfiguration = CreateCsvConfiguration<TRecord>();
+                csvConfiguration = CreateCsvConfiguration<TRecord>(cultureInfo);
             }
 
             using (var csvWriter = CsvWriterHelper.CreateWriter(csvFilePath, csvConfiguration))
@@ -52,22 +53,22 @@ namespace Orc.Csv
             }
         }
 
-        private static CsvConfiguration CreateCsvConfiguration<TRecord>()
+        private static CsvConfiguration CreateCsvConfiguration<TRecord>(CultureInfo cultureInfo = null)
         {
             CsvConfiguration csvConfiguration;
             csvConfiguration = new CsvConfiguration();
-            csvConfiguration.CultureInfo = CsvEnvironment.DefaultCultureInfo;
+            csvConfiguration.CultureInfo = cultureInfo ?? CsvEnvironment.DefaultCultureInfo;
             csvConfiguration.WillThrowOnMissingField = false;
             csvConfiguration.HasHeaderRecord = true;
             //csvConfiguration.IgnorePrivateAccessor = true;
             return csvConfiguration;
         }
 
-        public static void ToCsv<TRecord>(this IEnumerable<TRecord> records, string csvFilePath, CsvClassMap csvMap, CsvConfiguration csvConfiguration = null, bool throwOnError = false)
+        public static void ToCsv<TRecord>(this IEnumerable<TRecord> records, string csvFilePath, CsvClassMap csvMap, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
         {
             if (csvConfiguration == null)
             {
-                csvConfiguration = CreateCsvConfiguration<TRecord>();
+                csvConfiguration = CreateCsvConfiguration<TRecord>(cultureInfo);
             }
 
             using (var csvWriter = CsvWriterHelper.CreateWriter(csvFilePath, csvConfiguration))
