@@ -11,6 +11,7 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CodeGeneration\CodeGeneration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\EnumConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\StringToNullableDateTimeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\TypeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\YesNoToBooleanConverter.cs" />
