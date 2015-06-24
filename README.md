@@ -68,3 +68,38 @@ Example:
 ```C#
 records.ToCsv<MyClass>(csvFilePath, typeof(MyClassMap));
 ```
+
+Converters
+--------------
+
+- **EnumConverter** - generic string to enum converter
+- **StringToNullableDateTimeConverter** - converts string to DateTime? type
+- **YesNoToBooleanConverter** - converts "yes" and "no" strings to true and false values correspondingly
+- **TypeConverter** - generic type converter which in some cases is more fluent than the default one.
+
+```C#
+public class EmployeeMap : CsvClassMap<Employee>
+{
+    public EmployeeMap()
+    {
+        Map(x => x.Name).Name("Name");
+        Map(x => x.StartDate).Name("StartDate");
+
+        // Parse the enum. Use EmployeeRate.PerHour on failure.
+        Map(x => x.Rate).Name("Rate")
+            .TypeConverter(new EnumConverter<EmployeeRate>(EmployeeRate.PerHour));
+
+        // Parse nullable DateTime value
+        Map(x => x.DischargeDate).Name("DischargeDate");
+            .TypeConverter(new NullableDateTimeConverter());
+
+        // Parse Yes and No string values as booleans
+        Map(x => x.Married).Name("Married");
+            .TypeConverter(new YesNoToBooleanConverter());
+
+        Map(x => x.WorkDayDuration).Name("WorkDayDuration")
+            .TypeConverter(new TypeConverter<TimeSpan>((hours) => return new TimeSpan(Convert.ToDouble(hours), 0, 0)));
+    }
+}
+
+```
