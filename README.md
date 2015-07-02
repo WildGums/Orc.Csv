@@ -3,6 +3,11 @@ Orc.CsvHelper
 
 [![Join the chat at https://gitter.im/WildGums/Orc.CsvHelper](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/WildGums/Orc.CsvHelper?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+![License](https://img.shields.io/github/license/wildgums/orc.csvhelper.svg)
+![NuGet downloads](https://img.shields.io/nuget/dt/orc.csvhelper.svg)
+![Version](https://img.shields.io/nuget/v/orc.csvhelper.svg)
+![Pre-release version](https://img.shields.io/nuget/vpre/orc.csvhelper.svg)
+
 Small library of extensions and helper methods for the [CsvHelper](http://joshclose.github.io/CsvHelper) library.
 
 - Static methods are provided to read or write to a csv file with one line of code.
