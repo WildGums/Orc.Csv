@@ -118,7 +118,7 @@ namespace Orc.Csv
             // Remove all not alphanumeric characters. Leave white spaces.
             var cleanChars = input.Where(c => (char.IsLetterOrDigit(c) || char.IsWhiteSpace(c))).ToArray();
 
-            var words = new String(cleanChars).Split(' ');
+            var words = new string(cleanChars).Split(' ');
             var sb = new StringBuilder();
 
             foreach (var word in words)
@@ -138,7 +138,7 @@ namespace Orc.Csv
 
         private static string Spaces(int n)
         {
-            return new String(' ', n);
+            return new string(' ', n);
         }
     }
 }

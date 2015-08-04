@@ -1,3 +1,10 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="EnumConverter.cs" company="Orcomp development team">
+//   Copyright (c) 2008 - 2015 Orcomp development team. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+
 namespace Orc.Csv
 {
     using System;
@@ -8,7 +15,8 @@ namespace Orc.Csv
     /// Generic enum converter which can be used with CsvHelper
     /// </summary>
     /// <typeparam name="T">Type of enum</typeparam>
-    public class EnumConverter<T> : ITypeConverter where T : struct, IComparable, IFormattable
+    public class EnumConverter<T> : ITypeConverter 
+        where T : struct, IComparable, IFormattable
     {
         private readonly T _defaultEnumValue;
 
@@ -37,11 +45,13 @@ namespace Orc.Csv
         public object ConvertFromString(TypeConverterOptions options, string text)
         {
             T result;
+
             var success = Enum<T>.TryParse(text, true, out result);
             if (success)
             {
                 return result;
             }
+
             return _defaultEnumValue;
         }
 
@@ -51,6 +61,7 @@ namespace Orc.Csv
             {
                 return true;
             }
+
             return false;
         }
 

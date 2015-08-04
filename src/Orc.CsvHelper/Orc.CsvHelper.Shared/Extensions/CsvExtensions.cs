@@ -56,12 +56,14 @@ namespace Orc.Csv
 
         private static CsvConfiguration CreateCsvConfiguration(CultureInfo cultureInfo = null)
         {
-            CsvConfiguration csvConfiguration;
-            csvConfiguration = new CsvConfiguration();
-            csvConfiguration.CultureInfo = cultureInfo ?? CsvEnvironment.DefaultCultureInfo;
-            csvConfiguration.WillThrowOnMissingField = false;
-            csvConfiguration.HasHeaderRecord = true;
-            //csvConfiguration.IgnorePrivateAccessor = true;
+            var csvConfiguration = new CsvConfiguration
+            {
+                CultureInfo = cultureInfo ?? CsvEnvironment.DefaultCultureInfo,
+                WillThrowOnMissingField = false,
+                HasHeaderRecord = true
+                //csvConfiguration.IgnorePrivateAccessor = true;
+            };
+            
             return csvConfiguration;
         }
 

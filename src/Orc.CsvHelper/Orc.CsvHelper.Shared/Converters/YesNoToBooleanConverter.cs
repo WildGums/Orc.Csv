@@ -1,4 +1,11 @@
-﻿namespace Orc.Csv
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="YesNoToBooleanConverter.cs" company="Orcomp development team">
+//   Copyright (c) 2008 - 2015 Orcomp development team. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+
+namespace Orc.Csv
 {
     using System;
 
@@ -31,12 +38,13 @@
             {
                 return true;
             }
+
             if (string.Equals(input, "no", StringComparison.InvariantCultureIgnoreCase))
             {
                 return false;
             }
+
             return false;
         }
-
     }
 }
