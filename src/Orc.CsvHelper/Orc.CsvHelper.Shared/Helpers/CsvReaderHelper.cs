@@ -10,122 +10,51 @@ namespace Orc.Csv
     using System;
     using System.Collections.Generic;
     using System.Globalization;
-    using System.IO;
-    using System.Text;
-    using Catel.Logging;
-    using CsvHelper;
-    using CsvHelper.Configuration;
+    using Catel.IoC;
+    using CsvHelper.Services;
+    using global::CsvHelper;
+    using global::CsvHelper.Configuration;
 
+    [ObsoleteEx(RemoveInVersion = "1.2", TreatAsErrorFromVersion = "1.1", ReplacementTypeOrMember = "ICsvReaderService")]
     public static class CsvReaderHelper
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         #region Methods
         public static IEnumerable<T> ReadCsv<T, TMap>(string csvFilePath, Action<T> initializer = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false)
             where TMap : CsvClassMap
         {
-            return ReadCsv<T>(csvFilePath, initializer, typeof(TMap), csvConfiguration, throwOnError);
+            var serviceLocator = ServiceLocator.Default;
+            var csvReaderService = serviceLocator.ResolveType<ICsvReaderService>();
+            return csvReaderService.ReadCsv<T, TMap>(csvFilePath, initializer, csvConfiguration, throwOnError);
         }
 
         public static IEnumerable<T> ReadCsv<T>(string csvFilePath, Action<T> initializer = null, Type mapType = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo culture = null)
         {
-            using (var csvReader = CreateReader(csvFilePath, mapType, csvConfiguration, culture))
-            {
-                return ReadData(csvFilePath, initializer, throwOnError, csvReader);
-            }
+            var serviceLocator = ServiceLocator.Default;
+            var csvReaderService = serviceLocator.ResolveType<ICsvReaderService>();
+            return csvReaderService.ReadCsv<T>(csvFilePath, initializer, mapType, csvConfiguration, throwOnError, culture);
         }
 
         public static IEnumerable<T> ReadCsv<T>(string csvFilePath, CsvClassMap map, Action<T> initializer = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo culture = null)
         {
-            using (var csvReader = CreateReader(csvFilePath, map, csvConfiguration, culture))
-            {
-                return ReadData(csvFilePath, initializer, throwOnError, csvReader);
-            }
-        }
-
-        private static IEnumerable<T> ReadData<T>(string csvFilePath, Action<T> initializer, bool throwOnError, CsvReader csvReader)
-        {
-            var items = new List<T>();
-
-            try
-            {
-                while (csvReader.Read())
-                {
-                    var record = csvReader.GetRecord<T>();
-                    if (initializer != null)
-                    {
-                        initializer(record);
-                    }
-
-                    items.Add(record);
-                }
-            }
-            catch (Exception ex)
-            {
-                if (string.Equals(ex.Message, "No header record was found.", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    return new T[0];
-                }
-
-                var errorMessage = ex.Data["CsvHelper"].ToString();
-
-                Log.Error("Cannot read row in '{0}'. Error Details: {1}", Path.GetFileName(csvFilePath), errorMessage);
-
-                if (throwOnError)
-                {
-                    throw;
-                }
-            }
-
-            return items;
+            var serviceLocator = ServiceLocator.Default;
+            var csvReaderService = serviceLocator.ResolveType<ICsvReaderService>();
+            return csvReaderService.ReadCsv<T>(csvFilePath, map, initializer, csvConfiguration, throwOnError, culture);
         }
 
         public static CsvReader CreateReader(string csvFilePath, Type classMapType = null, CsvConfiguration csvConfiguration = null, CultureInfo culture = null)
         {
-            var csvReader = CreateCsvReader(csvFilePath, csvConfiguration, culture);
-
-            if (classMapType != null)
-            {
-                csvReader.Configuration.RegisterClassMap(classMapType);
-            }
-
-            return csvReader;
+            var serviceLocator = ServiceLocator.Default;
+            var csvReaderService = serviceLocator.ResolveType<ICsvReaderService>();
+            return csvReaderService.CreateReader(csvFilePath, classMapType, csvConfiguration, culture);
         }
 
         public static CsvReader CreateReader(string csvFilePath, CsvClassMap classMap, CsvConfiguration csvConfiguration = null, CultureInfo culture = null)
         {
-            var csvReader = CreateCsvReader(csvFilePath, csvConfiguration, culture);
-
-            csvReader.Configuration.RegisterClassMap(classMap);
-
-            return csvReader;
+            var serviceLocator = ServiceLocator.Default;
+            var csvReaderService = serviceLocator.ResolveType<ICsvReaderService>();
+            return csvReaderService.CreateReader(csvFilePath, classMap, csvConfiguration, culture);
         }
 
-        private static CsvReader CreateCsvReader(string csvFilePath, CsvConfiguration csvConfiguration, CultureInfo culture)
-        {
-            if (!File.Exists(csvFilePath))
-            {
-                Log.ErrorAndThrowException<FileNotFoundException>("File '{0}' doesn't exist", csvFilePath);
-            }
-
-            // No disposes are required, the user should dispose the csv class
-            var fs = new FileStream(csvFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-            var stream = new StreamReader(fs, Encoding.Default);
-
-            if (csvConfiguration == null)
-            {
-                csvConfiguration = new CsvConfiguration();
-                csvConfiguration.CultureInfo = culture ?? CsvEnvironment.DefaultCultureInfo;
-                csvConfiguration.WillThrowOnMissingField = false;
-                csvConfiguration.SkipEmptyRecords = true;
-                csvConfiguration.HasHeaderRecord = true;
-                csvConfiguration.TrimFields = true;
-                csvConfiguration.TrimHeaders = true;
-            }
-
-            var csvReader = new CsvReader(stream, csvConfiguration);
-            return csvReader;
-        }
         #endregion
     }
 }

@@ -13,8 +13,8 @@ namespace Orc.Csv
     using System.Globalization;
     using System.IO;
     using Catel.Logging;
-    using CsvHelper;
-    using CsvHelper.Configuration;
+    using global::CsvHelper;
+    using global::CsvHelper.Configuration;
 
     /// <summary>
     /// Extensions to read csv files that are already open by another application.

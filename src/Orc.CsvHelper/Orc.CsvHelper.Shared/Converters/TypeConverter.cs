@@ -8,7 +8,7 @@
 namespace Orc.Csv
 {
     using System;
-    using CsvHelper.TypeConversion;
+    using global::CsvHelper.TypeConversion;
 
     public class TypeConverter<T> : ITypeConverter
     {

@@ -9,7 +9,7 @@ namespace Orc.Csv
 {
     using System;
     using Catel;
-    using CsvHelper.TypeConversion;
+    using global::CsvHelper.TypeConversion;
 
     /// <summary>
     /// Generic enum converter which can be used with CsvHelper

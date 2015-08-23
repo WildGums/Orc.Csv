@@ -10,7 +10,8 @@ namespace Orc.Csv.Tests
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using Csv;
+    using Catel.IoC;
+    using CsvHelper.Services;
     using Entities;
     using CsvMaps;
     using NUnit.Framework;
@@ -22,7 +23,10 @@ namespace Orc.Csv.Tests
         [Test]
         public void FromCsvFile()
         {
-            var result = CsvReaderHelper.ReadCsv<Operation, OperationCsvMap>(@"TestData\Operation.csv");
+            var serviceLocator = ServiceLocator.Default;
+            var csvReaderService = serviceLocator.ResolveType<ICsvReaderService>();
+
+            var result = csvReaderService.ReadCsv<Operation, OperationCsvMap>(@"TestData\Operation.csv");
             var expectedResult = CreateSampleOperations();
 
             var expectedEnumerator = expectedResult.GetEnumerator();
