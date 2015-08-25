@@ -1,4 +1,11 @@
-namespace Orc.CsvHelper.Services
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ICsvReaderService.cs" company="Orcomp development team">
+//   Copyright (c) 2008 - 2015 Orcomp development team. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+
+namespace Orc.Csv
 {
     using System;
     using System.Collections.Generic;
@@ -8,6 +15,7 @@ namespace Orc.CsvHelper.Services
 
     public interface ICsvReaderService
     {
+        #region Methods
         IEnumerable<T> ReadCsv<T, TMap>(string csvFilePath, Action<T> initializer = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false)
             where TMap : CsvClassMap;
 
@@ -18,5 +26,6 @@ namespace Orc.CsvHelper.Services
         CsvReader CreateReader(string csvFilePath, Type classMapType = null, CsvConfiguration csvConfiguration = null, CultureInfo culture = null);
 
         CsvReader CreateReader(string csvFilePath, CsvClassMap classMap, CsvConfiguration csvConfiguration = null, CultureInfo culture = null);
+        #endregion
     }
 }

@@ -11,7 +11,6 @@ namespace Orc.Csv
     using System.Collections.Generic;
     using System.Globalization;
     using Catel.IoC;
-    using CsvHelper.Services;
     using global::CsvHelper;
     using global::CsvHelper.Configuration;
 

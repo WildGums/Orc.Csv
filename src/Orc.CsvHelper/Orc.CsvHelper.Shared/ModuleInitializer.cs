@@ -1,6 +1,6 @@
 ﻿
 using Catel.IoC;
-using Orc.CsvHelper.Services;
+using Orc.Csv;
 
 /// <summary>
 /// Used by the ModuleInit. All code inside the Initialize method is ran as soon as the assembly is loaded.
@@ -13,6 +13,7 @@ public static class ModuleInitializer
     public static void Initialize()
     {
         var serviceLocator = ServiceLocator.Default;
+
         serviceLocator.RegisterType<ICsvReaderService, CsvReaderService>();
     }
 }

@@ -11,7 +11,6 @@ namespace Orc.Csv.Tests
     using System.Collections.Generic;
     using System.IO;
     using Catel.IoC;
-    using CsvHelper.Services;
     using Entities;
     using CsvMaps;
     using NUnit.Framework;

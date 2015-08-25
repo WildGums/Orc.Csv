@@ -6,7 +6,7 @@
     <SharedGUID>3c0201f7-5000-4f18-8827-c47edad1df1d</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>Orc.CsvHelper.Shared</Import_RootNamespace>
+    <Import_RootNamespace>Orc.Csv</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
@@ -24,6 +24,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Services\CsvReaderService.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\interfaces\ICsvReaderService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ICsvReaderService.cs" />
   </ItemGroup>
 </Project>
