@@ -24,6 +24,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Services\CsvReaderService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\CsvWriterService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ICsvReaderService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ICsvWriterService.cs" />
   </ItemGroup>
 </Project>
