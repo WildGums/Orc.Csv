@@ -19,12 +19,13 @@
     <copyright>Copyright Orchestra team 2010 - 2014</copyright>
 
 	<language>en-US</language>
-	<projectUrl>https://github.com/Orcomp/Orc.Sort</projectUrl>
+	<projectUrl>https://github.com/Orcomp/Orc.CsvHelper</projectUrl>
 	<!--<licenseUrl>http://catel.codeplex.com/license</licenseUrl>-->
 	<!--<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>-->
     
     <dependencies>
       <dependency id="CsvHelper" version="[replaced]" />
+      <dependency id="Catel.Core" version="[replaced]" />
     </dependencies>    
   </metadata>
 </package>
