@@ -17,10 +17,13 @@ namespace Orc.Csv
 
         public virtual CsvWriter CreateWriter(string csvFilePath, CsvConfiguration csvConfiguration = null)
         {
-            // No disposes are required, the user should dispose the csv class
             var streamWriter = new StreamWriter(csvFilePath, false);
+            return CreateWriter(streamWriter, csvConfiguration);
+        }
 
-            return new CsvWriter(streamWriter, csvConfiguration ?? new CsvConfiguration());
+        public virtual CsvWriter CreateWriter(StreamWriter streamWriter, CsvConfiguration csvConfiguration = null)
+        {
+            return new CsvWriter(streamWriter, csvConfiguration ?? CreateDefaultCsvConfiguration());
         }
 
         public virtual void WriteRecord(CsvWriter writer, params object[] fields)
@@ -35,19 +38,27 @@ namespace Orc.Csv
 
         public virtual void WriteCsv<TRecord>(IEnumerable<TRecord> records, string csvFilePath, Type csvMap = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
         {
-            if (csvConfiguration == null)
-            {
-                csvConfiguration = CreateCsvConfiguration(cultureInfo);
-            }
-
-            using (var csvWriter = CreateWriter(csvFilePath, csvConfiguration))
+            using (var csvWriter = CreateWriter(csvFilePath, csvConfiguration ?? CreateDefaultCsvConfiguration(cultureInfo)))
             {
                 if (csvMap != null)
                 {
                     csvWriter.Configuration.RegisterClassMap(csvMap);
                 }
 
-                WriteRecords(records, typeof(TRecord), csvFilePath, throwOnError, csvWriter);
+                WriteRecords(records, typeof(TRecord), throwOnError, csvWriter);
+            }
+        }
+
+        public virtual void WriteCsv<TRecord>(IEnumerable<TRecord> records, StreamWriter streamWriter, Type csvMap = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
+        {
+            using (var csvWriter = CreateWriter(streamWriter, csvConfiguration ?? CreateDefaultCsvConfiguration(cultureInfo)))
+            {
+                if (csvMap != null)
+                {
+                    csvWriter.Configuration.RegisterClassMap(csvMap);
+                }
+
+                WriteRecords(records, typeof(TRecord), throwOnError, csvWriter);
             }
         }
 
@@ -57,56 +68,52 @@ namespace Orc.Csv
             WriteCsv<TRecord>(records, csvFilePath, typeof (TMap), csvConfiguration, throwOnError, cultureInfo);
         }
 
-        public virtual void WriteCsv<TRecord>(IEnumerable<TRecord> records, string csvFilePath, CsvClassMap csvMap, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
-        {
-            if (csvConfiguration == null)
-            {
-                csvConfiguration = CreateCsvConfiguration(cultureInfo);
-            }
-
-            using (var csvWriter = CreateWriter(csvFilePath, csvConfiguration))
-            {
-                if (csvMap != null)
-                {
-                    csvWriter.Configuration.RegisterClassMap(csvMap);
-                }
-
-                WriteRecords(records, typeof(TRecord), csvFilePath, throwOnError, csvWriter);
-            }
-        }
 
         public virtual void WriteCsv(IEnumerable records, string csvFilePath, Type recordType, CsvClassMap csvMap, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
         {
-            if (csvConfiguration == null)
-            {
-                csvConfiguration = CreateCsvConfiguration(cultureInfo);
-            }
-
-            using (var csvWriter = CreateWriter(csvFilePath, csvConfiguration))
+            using (var csvWriter = CreateWriter(csvFilePath, csvConfiguration ?? CreateDefaultCsvConfiguration(cultureInfo)))
             {
                 if (csvMap != null)
                 {
                     csvWriter.Configuration.RegisterClassMap(csvMap);
                 }
 
-                WriteRecords(records, recordType, csvFilePath, throwOnError, csvWriter);
+                WriteRecords(records, recordType, throwOnError, csvWriter);
             }
         }
 
-        protected virtual CsvConfiguration CreateCsvConfiguration(CultureInfo cultureInfo = null)
+        public virtual void WriteCsv(IEnumerable records, StreamWriter streamWriter, Type recordType, CsvClassMap csvMap, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
+        {
+            using (var csvWriter = CreateWriter(streamWriter, csvConfiguration ?? CreateDefaultCsvConfiguration(cultureInfo)))
+            { 
+                if (csvMap != null)
+                {
+                    csvWriter.Configuration.RegisterClassMap(csvMap);
+                }
+
+                WriteRecords(records, recordType, throwOnError, csvWriter);
+            }
+        }
+
+        public virtual void WriteCsv<TRecord>(IEnumerable<TRecord> records, string csvFilePath, CsvClassMap csvMap, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
+        {
+            WriteCsv(records, csvFilePath, typeof(TRecord), csvMap, csvConfiguration, throwOnError, cultureInfo);
+        }
+
+
+        public virtual CsvConfiguration CreateDefaultCsvConfiguration(CultureInfo cultureInfo = null)
         {
             var csvConfiguration = new CsvConfiguration
             {
                 CultureInfo = cultureInfo ?? CsvEnvironment.DefaultCultureInfo,
                 WillThrowOnMissingField = false,
                 HasHeaderRecord = true
-                //csvConfiguration.IgnorePrivateAccessor = true;
             };
 
             return csvConfiguration;
         }
 
-        protected virtual void WriteRecords(IEnumerable records, Type recordType, string csvFilePath, bool throwOnError, CsvWriter csvWriter)
+        protected virtual void WriteRecords(IEnumerable records, Type recordType, bool throwOnError, CsvWriter csvWriter)
         {
             try
             {
@@ -117,7 +124,7 @@ namespace Orc.Csv
             {
                 var errorMessage = ex.Data["CsvHelper"].ToString();
 
-                Log.Error("Cannot read row in '{0}'. Error Details: {1}", Path.GetFileName(csvFilePath), errorMessage);
+                Log.Error("Cannot write row to csv. Error Details: {0}", errorMessage);
 
                 if (throwOnError)
                 {
