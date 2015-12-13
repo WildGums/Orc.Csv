@@ -1,5 +1,7 @@
 ﻿
 using Catel.IoC;
+using Catel.Services;
+using Catel.Services.Models;
 using Orc.Csv;
 
 /// <summary>
@@ -16,5 +18,8 @@ public static class ModuleInitializer
 
         serviceLocator.RegisterType<ICsvReaderService, CsvReaderService>();
         serviceLocator.RegisterType<ICsvWriterService, CsvWriterService>();
+
+        var languageService = serviceLocator.ResolveType<ILanguageService>();
+        languageService.RegisterLanguageSource(new LanguageResourceSource("Orc.CsvHelper", "Orc.Csv.Properties", "Resources"));
     }
 }

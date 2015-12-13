@@ -108,7 +108,7 @@ namespace Orc.Csv
         {
             if (!File.Exists(csvFilePath))
             {
-                Log.ErrorAndThrowException<FileNotFoundException>("File '{0}' doesn't exist", csvFilePath);
+                throw Log.ErrorAndCreateException<FileNotFoundException>("File '{0}' doesn't exist", csvFilePath);
             }
 
             var fs = new FileStream(csvFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
