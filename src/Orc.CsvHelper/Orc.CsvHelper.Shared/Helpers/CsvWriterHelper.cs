@@ -13,7 +13,7 @@ namespace Orc.Csv
     using global::CsvHelper;
     using global::CsvHelper.Configuration;
 
-    [ObsoleteEx(RemoveInVersion = "1.2", TreatAsErrorFromVersion = "1.1", ReplacementTypeOrMember = "ICsvWriterService")]
+    [ObsoleteEx(RemoveInVersion = "2.0", TreatAsErrorFromVersion = "1.1", ReplacementTypeOrMember = "ICsvWriterService")]
     public static class CsvWriterHelper
     {
         public static CsvWriter CreateWriter(string csvFilePath, CsvConfiguration csvConfiguration = null)

@@ -26,7 +26,7 @@ namespace Orc.Csv
     /// Configuration.HasHeaderRecord = true;
     /// Configuration.TrimFields = true;
     /// </summary>
-    [ObsoleteEx(RemoveInVersion = "1.2", TreatAsErrorFromVersion = "1.1", ReplacementTypeOrMember = "ICsvWriterService")]
+    [ObsoleteEx(RemoveInVersion = "2.0", TreatAsErrorFromVersion = "1.1", ReplacementTypeOrMember = "ICsvWriterService")]
     public static class CsvExtensions
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();

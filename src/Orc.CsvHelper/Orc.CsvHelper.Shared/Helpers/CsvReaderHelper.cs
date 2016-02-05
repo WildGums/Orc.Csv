@@ -14,7 +14,7 @@ namespace Orc.Csv
     using global::CsvHelper;
     using global::CsvHelper.Configuration;
 
-    [ObsoleteEx(RemoveInVersion = "1.2", TreatAsErrorFromVersion = "1.1", ReplacementTypeOrMember = "ICsvReaderService")]
+    [ObsoleteEx(RemoveInVersion = "2.0", TreatAsErrorFromVersion = "1.1", ReplacementTypeOrMember = "ICsvReaderService")]
     public static class CsvReaderHelper
     {
         #region Methods
