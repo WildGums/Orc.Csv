@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EnumConverter.cs" company="Orcomp development team">
-//   Copyright (c) 2008 - 2015 Orcomp development team. All rights reserved.
+// <copyright file="EnumConverter.cs" company="WildGums">
+//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
