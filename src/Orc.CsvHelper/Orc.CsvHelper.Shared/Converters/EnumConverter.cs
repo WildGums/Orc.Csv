@@ -44,6 +44,11 @@ namespace Orc.Csv
 
         public object ConvertFromString(TypeConverterOptions options, string text)
         {
+            if (string.IsNullOrEmpty(text))
+            {
+                return _defaultEnumValue;
+            }
+
             T result;
 
             var success = Enum<T>.TryParse(text, true, out result);
