@@ -66,6 +66,9 @@
       <Name>Orc.CsvHelper.NET45</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ModuleInitializer.cs" />
+  </ItemGroup>
   <Import Project="..\Orc.CsvHelper.Tests.Shared\Orc.CsvHelper.Tests.Shared.projitems" Label="Shared" Condition="Exists('..\Orc.CsvHelper.Tests.Shared\Orc.CsvHelper.Tests.Shared.projitems')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
