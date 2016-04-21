@@ -51,7 +51,7 @@ namespace Orc.Csv
             {
                 var propertyName = ToCamelCase(fieldHeader);
                 properties.Add(string.Format("public string {0} {1}", propertyName, getSet));
-                propertyMaps.Add(string.Format("this.Map(x => x.{0}).Name(\"{1}\");", propertyName, fieldHeader));
+                propertyMaps.Add(string.Format("Map(x => x.{0}).Name(\"{1}\");", propertyName, fieldHeader));
             }
 
             if (!Directory.Exists(outputFolder))
@@ -95,9 +95,9 @@ namespace Orc.Csv
             sb.AppendLine("{");
             sb.AppendLine(string.Format("{0}using CsvHelper.Configuration;", Spaces(4)));
             sb.AppendLine("");
-            sb.AppendLine(string.Format("{0}public class {1} : CsvClassMap<{2}>", Spaces(4), classNameMap, className));
+            sb.AppendLine(string.Format("{0}public sealed class {1} : CsvClassMap<{2}>", Spaces(4), classNameMap, className));
             sb.AppendLine(Spaces(4) + "{");
-            sb.AppendLine(string.Format("{0}public {1}", Spaces(8), classNameMap));
+            sb.AppendLine(string.Format("{0}public {1}()", Spaces(8), classNameMap));
             sb.AppendLine(Spaces(8) + "{");
             foreach (var property in properties)
             {
