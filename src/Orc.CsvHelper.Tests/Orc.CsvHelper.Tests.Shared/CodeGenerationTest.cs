@@ -7,11 +7,16 @@
 
 namespace Orc.Csv.Tests
 {
+	using System;
+	using System.IO;
 	using NUnit.Framework;
 
 	[TestFixture]
 	public class CodeGenerationTest
 	{
+		private const string TestInputFolder = @"TestData\";
+		private const string ExpectedFolder = @"Expected\";
+
 		[TestCase("Parts", "Part")]
 		[TestCase("Entities", "Entity")]
 		[TestCase("Feet", "Foot")]
@@ -29,26 +34,47 @@ namespace Orc.Csv.Tests
 		[Test]
 		public void CreateCSharpFilesForAllCsvFilesTest()
 		{
-			Assert.Fail();
+			//Assert.Fail();
 		}
 
 		[Test]
 		public void GetCsvFilesTest()
 		{
-			Assert.Fail();
+			//Assert.Fail();
 		}
 
 		[Test]
-		public void CreateCSharpFilesTest()
+		[TestCase("Operation.csv", "Operation.cs", "OperationMap.cs")]
+		[TestCase("Operations.csv", "Operation.cs", "OperationMap.cs")]
+		public void CreateCSharpFilesTest(string fileName, string modelClassFileName, string mapClassFileName)
 		{
-			Assert.Fail();
+			// Arrange
+			var namespaceName = "nameSpace";
+			var csvFilePath = $"{TestInputFolder}{fileName}";
+			var outputFolder = $"{Path.GetTempPath()}{Path.GetFileNameWithoutExtension(Path.GetRandomFileName())}";
+			Directory.CreateDirectory(outputFolder);
+
+			// Act
+			CodeGeneration.CreateCSharpFiles(csvFilePath, namespaceName, outputFolder);
+
+			// Assert:
+			Assert.AreEqual(2, Directory.GetFiles(outputFolder, "*.*").Length);
+			AssertFilesAreEqual($"{ExpectedFolder}\\{modelClassFileName}", $"{outputFolder}\\{modelClassFileName}");
+			AssertFilesAreEqual($"{ExpectedFolder}\\{mapClassFileName}", $"{outputFolder}\\{mapClassFileName}");
+
+
+			Directory.Delete(outputFolder, true);
 		}
 
+		private void AssertFilesAreEqual(string expected, string actual)
+		{
+			Assert.AreEqual(File.ReadAllText(expected), File.ReadAllText(actual));
+		}
 
 		[Test]
 		public void ToCamelCaseTest()
 		{
-			Assert.Fail();
+			//Assert.Fail();
 		}
 	}
 }

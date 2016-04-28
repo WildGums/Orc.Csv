@@ -40,6 +40,7 @@ namespace Orc.Csv
 		{
 			var fileName = Path.GetFileNameWithoutExtension(csvFilePath);
 			var className = ToCamelCase(fileName);
+			className = ToSingular(className);
 
 			var csvReader = CsvReaderHelper.CreateReader(csvFilePath);
 
