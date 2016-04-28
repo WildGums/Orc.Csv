@@ -4,7 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-
 namespace Orc.Csv.Tests
 {
     using System;
@@ -18,8 +17,7 @@ namespace Orc.Csv.Tests
     [TestFixture]
     public class CsvExtensionsTest
     {
-        #region Methods
-        [Test]
+	    [Test]
         public void FromCsvFile()
         {
             var serviceLocator = ServiceLocator.Default;
@@ -58,9 +56,8 @@ namespace Orc.Csv.Tests
             // clean up
             File.Delete(file);
         }
-        #endregion
 
-        #region Helpers
+	    #region Helpers
         private void AssertCollectionsAreEqual(IEnumerable<string> expectedCsvLines, IEnumerable<string> resultCsvLines)
         {
             var iterator = resultCsvLines.GetEnumerator();

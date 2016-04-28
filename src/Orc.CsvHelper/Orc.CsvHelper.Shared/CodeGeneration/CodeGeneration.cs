@@ -7,7 +7,9 @@ namespace Orc.Csv
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
+    using System.Data.Entity.Design.PluralizationServices;
+	using System.Data.Entity.Infrastructure.Pluralization;
+	using System.IO;
     using System.Linq;
     using System.Text;
 
@@ -18,7 +20,9 @@ namespace Orc.Csv
     /// </summary>
     public static class CodeGeneration
     {
-        public static void CreateCSharpFilesForAllCsvFiles(string inputFoler, string namespaceName, string outputFolder)
+		private static readonly IPluralizationService PluralizationService = new EnglishPluralizationService();
+
+		public static void CreateCSharpFilesForAllCsvFiles(string inputFoler, string namespaceName, string outputFolder)
         {
             var csvFiles = GetCsvFiles(inputFoler);
 
@@ -113,7 +117,14 @@ namespace Orc.Csv
             File.WriteAllText(filePath, content);
         }
 
-        public static string ToCamelCase(this string input)
+	    public static string ToSingular(this string input)
+	    {
+			// TODO: Implement handling invalid characters and other cases like starting with number
+			// Currently this is only a KISS singularize transform to statisfy SolutionGenerator's needs
+		    return PluralizationService.Singularize(input);
+	    }
+
+		public static string ToCamelCase(this string input)
         {
             // Remove all not alphanumeric characters. Leave white spaces.
             var cleanChars = input.Where(c => (char.IsLetterOrDigit(c) || char.IsWhiteSpace(c))).ToArray();
