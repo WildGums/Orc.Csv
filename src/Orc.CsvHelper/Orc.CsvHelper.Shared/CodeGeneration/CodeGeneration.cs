@@ -11,6 +11,7 @@ namespace Orc.Csv
 	using System.IO;
 	using System.Linq;
 	using System.Text;
+	using Catel.Logging;
 
 	/// <summary>
 	/// Create CSharp files to consume CSV files.
@@ -20,6 +21,7 @@ namespace Orc.Csv
 	public static class CodeGeneration
 	{
 		private static readonly IPluralizationService PluralizationService = new EnglishPluralizationService();
+		private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
 		public static void CreateCSharpFilesForAllCsvFiles(string inputFoler, string namespaceName, string outputFolder)
 		{
@@ -51,8 +53,15 @@ namespace Orc.Csv
 
 			csvReader.Read();
 
-			foreach (var fieldHeader in csvReader.FieldHeaders)
+			for (int index = 0; index < csvReader.FieldHeaders.Length; index++)
 			{
+				var fieldHeader = csvReader.FieldHeaders[index];
+				if (string.IsNullOrEmpty(fieldHeader))
+				{
+					Log.Warning($"Skipping column #{index} in data file {fileName} because its column header is missing.");
+					continue;
+				}
+
 				var propertyName = ToCamelCase(fieldHeader);
 				properties.Add($"public string {propertyName} {getSet}");
 				propertyMaps.Add($"Map(x => x.{propertyName}).Name(\"{fieldHeader}\");");

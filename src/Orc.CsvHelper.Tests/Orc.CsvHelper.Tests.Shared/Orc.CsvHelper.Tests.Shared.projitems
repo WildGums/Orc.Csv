@@ -14,6 +14,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)CsvExtensionsTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CsvMaps\OperationCsvMap.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Operation.cs" />
+    <None Include="$(MSBuildThisFileDirectory)Expected\OperationWithMissingColumn.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Expected\OperationWithMissingColumnMap.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="$(MSBuildThisFileDirectory)Expected\Operation.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

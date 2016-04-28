@@ -46,6 +46,7 @@ namespace Orc.Csv.Tests
 		[Test]
 		[TestCase("Operation.csv", "Operation.cs", "OperationMap.cs")]
 		[TestCase("Operations.csv", "Operation.cs", "OperationMap.cs")]
+		[TestCase("OperationWithMissingColumn.csv", "OperationWithMissingColumn.cs", "OperationWithMissingColumnMap.cs")]
 		public void CreateCSharpFilesTest(string fileName, string modelClassFileName, string mapClassFileName)
 		{
 			// Arrange
@@ -60,19 +61,20 @@ namespace Orc.Csv.Tests
 			// Assert:
 			Assert.AreEqual(2, Directory.GetFiles(outputFolder, "*.*").Length);
 			AssertFilesAreEqual($"{ExpectedFolder}\\{modelClassFileName}", $"{outputFolder}\\{modelClassFileName}");
-			AssertFilesAreEqual($"{ExpectedFolder}\\{mapClassFileName}", $"{outputFolder}\\{mapClassFileName}");
-
+			AssertFilesAreEqual($"{ExpectedFolder}{mapClassFileName}", $"{outputFolder}\\{mapClassFileName}");
 
 			Directory.Delete(outputFolder, true);
 		}
 
 		private void AssertFilesAreEqual(string expected, string actual)
 		{
-			Assert.AreEqual(File.ReadAllText(expected), File.ReadAllText(actual));
+			var s = File.ReadAllText(expected);
+			var readAllText = File.ReadAllText(actual);
+			Assert.AreEqual(s, readAllText);
 		}
 
 		[Test]
-		public void ToCamelCaseTest()
+		public void ToCamelCaseTest() 
 		{
 			//Assert.Fail();
 		}
