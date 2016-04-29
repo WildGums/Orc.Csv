@@ -25,7 +25,6 @@
     
     <dependencies>
       <dependency id="CsvHelper" version="[replaced]" />
-      <dependency id="EntityFramework" version="[replaced]" />
       <dependency id="Catel.Core" version="[replaced]" />
     </dependencies>    
   </metadata>
