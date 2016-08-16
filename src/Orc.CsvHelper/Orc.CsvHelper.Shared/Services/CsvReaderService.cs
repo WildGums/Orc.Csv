@@ -30,7 +30,6 @@ namespace Orc.Csv
             return ReadCsv<T>(csvFilePath, initializer, typeof (TMap), csvConfiguration, throwOnError);
         }
 
-        [ObsoleteEx(RemoveInVersion = "2.0", TreatAsErrorFromVersion = "1.1", ReplacementTypeOrMember = "ReadCsv with CsvClassMap signature")]
         public virtual IEnumerable<T> ReadCsv<T>(string csvFilePath, Action<T> initializer = null, Type mapType = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo culture = null)
         {
             using (var csvReader = CreateReader(csvFilePath, mapType, csvConfiguration, culture))
@@ -84,7 +83,6 @@ namespace Orc.Csv
             return items;
         }
 
-        [ObsoleteEx(RemoveInVersion = "2.0", TreatAsErrorFromVersion = "1.1", ReplacementTypeOrMember = "CreateReader with CsvClassMap signature")]
         public CsvReader CreateReader(string csvFilePath, Type csvMapType = null, CsvConfiguration csvConfiguration = null, CultureInfo culture = null)
         {
             if (csvConfiguration != null)
