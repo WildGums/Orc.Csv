@@ -15,7 +15,7 @@ namespace Orc.Csv
         #region Constants
         public static readonly DateTime ExcelNullDate = new DateTime(1900, 1, 1, 0, 0, 0);
 
-        public static CultureInfo DefaultCultureInfo = new CultureInfo("en-AU");
+        public static readonly CultureInfo DefaultCultureInfo = new CultureInfo("en-AU");
         #endregion
     }
 }

@@ -33,25 +33,25 @@ namespace Orc.Csv
             return csvReaderService.ReadCsv<T>(csvFilePath, initializer, mapType, csvConfiguration, throwOnError, culture);
         }
 
-        public static IEnumerable<T> ReadCsv<T>(string csvFilePath, CsvClassMap map, Action<T> initializer = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo culture = null)
+        public static IEnumerable<T> ReadCsv<T>(string csvFilePath, CsvClassMap csvMap, Action<T> initializer = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo culture = null)
         {
             var serviceLocator = ServiceLocator.Default;
             var csvReaderService = serviceLocator.ResolveType<ICsvReaderService>();
-            return csvReaderService.ReadCsv<T>(csvFilePath, map, initializer, csvConfiguration, throwOnError, culture);
+            return csvReaderService.ReadCsv<T>(csvFilePath, csvMap, initializer, csvConfiguration, throwOnError, culture);
         }
 
-        public static CsvReader CreateReader(string csvFilePath, Type classMapType = null, CsvConfiguration csvConfiguration = null, CultureInfo culture = null)
+        public static CsvReader CreateReader(string csvFilePath, Type csvMapType = null, CsvConfiguration csvConfiguration = null, CultureInfo culture = null)
         {
             var serviceLocator = ServiceLocator.Default;
             var csvReaderService = serviceLocator.ResolveType<ICsvReaderService>();
-            return csvReaderService.CreateReader(csvFilePath, classMapType, csvConfiguration, culture);
+            return csvReaderService.CreateReader(csvFilePath, csvMapType, csvConfiguration, culture);
         }
 
-        public static CsvReader CreateReader(string csvFilePath, CsvClassMap classMap, CsvConfiguration csvConfiguration = null, CultureInfo culture = null)
+        public static CsvReader CreateReader(string csvFilePath, CsvClassMap csvMap, CsvConfiguration csvConfiguration = null, CultureInfo culture = null)
         {
             var serviceLocator = ServiceLocator.Default;
             var csvReaderService = serviceLocator.ResolveType<ICsvReaderService>();
-            return csvReaderService.CreateReader(csvFilePath, classMap, csvConfiguration, culture);
+            return csvReaderService.CreateReader(csvFilePath, csvMap, csvConfiguration, culture);
         }
 
         #endregion

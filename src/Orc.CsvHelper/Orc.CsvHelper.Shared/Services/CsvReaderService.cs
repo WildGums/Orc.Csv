@@ -30,6 +30,7 @@ namespace Orc.Csv
             return ReadCsv<T>(csvFilePath, initializer, typeof (TMap), csvConfiguration, throwOnError);
         }
 
+        [ObsoleteEx(RemoveInVersion = "2.0", TreatAsErrorFromVersion = "1.1", ReplacementTypeOrMember = "ReadCsv with CsvClassMap signature")]
         public virtual IEnumerable<T> ReadCsv<T>(string csvFilePath, Action<T> initializer = null, Type mapType = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo culture = null)
         {
             using (var csvReader = CreateReader(csvFilePath, mapType, csvConfiguration, culture))
@@ -38,9 +39,9 @@ namespace Orc.Csv
             }
         }
 
-        public virtual IEnumerable<T> ReadCsv<T>(string csvFilePath, CsvClassMap map, Action<T> initializer = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo culture = null)
+        public virtual IEnumerable<T> ReadCsv<T>(string csvFilePath, CsvClassMap csvMap, Action<T> initializer = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo culture = null)
         {
-            using (var csvReader = CreateReader(csvFilePath, map, csvConfiguration, culture))
+            using (var csvReader = CreateReader(csvFilePath, csvMap, csvConfiguration, culture))
             {
                 return ReadData(csvFilePath, initializer, throwOnError, csvReader);
             }
@@ -83,23 +84,34 @@ namespace Orc.Csv
             return items;
         }
 
-        public CsvReader CreateReader(string csvFilePath, Type classMapType = null, CsvConfiguration csvConfiguration = null, CultureInfo culture = null)
+        [ObsoleteEx(RemoveInVersion = "2.0", TreatAsErrorFromVersion = "1.1", ReplacementTypeOrMember = "CreateReader with CsvClassMap signature")]
+        public CsvReader CreateReader(string csvFilePath, Type csvMapType = null, CsvConfiguration csvConfiguration = null, CultureInfo culture = null)
         {
+            if (csvConfiguration != null)
+            {
+                csvConfiguration.CultureInfo = culture;
+            }
+
             var csvReader = CreateCsvReader(csvFilePath, csvConfiguration ?? CreateDefaultCsvConfiguration(culture));
 
-            if (classMapType != null)
+            if (csvMapType != null)
             {
-                csvReader.Configuration.RegisterClassMap(classMapType);
+                csvReader.Configuration.RegisterClassMap(csvMapType);
             }
 
             return csvReader;
         }
 
-        public CsvReader CreateReader(string csvFilePath, CsvClassMap classMap, CsvConfiguration csvConfiguration = null, CultureInfo culture = null)
+        public CsvReader CreateReader(string csvFilePath, CsvClassMap csvMap, CsvConfiguration csvConfiguration = null, CultureInfo culture = null)
         {
+            if (csvConfiguration != null)
+            {
+                csvConfiguration.CultureInfo = culture;
+            }
+
             var csvReader = CreateCsvReader(csvFilePath, csvConfiguration ?? CreateDefaultCsvConfiguration(culture));
 
-            csvReader.Configuration.RegisterClassMap(classMap);
+            csvReader.Configuration.RegisterClassMap(csvMap);
 
             return csvReader;
         }
