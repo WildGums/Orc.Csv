@@ -38,7 +38,7 @@ namespace Orc.Csv
 
         public virtual void WriteCsv<TRecord>(IEnumerable<TRecord> records, string csvFilePath, Type csvMap = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
         {
-            if (csvConfiguration != null)
+            if (csvConfiguration != null && cultureInfo != null)
             {
                 csvConfiguration.CultureInfo = cultureInfo;
             }
@@ -56,7 +56,7 @@ namespace Orc.Csv
 
         public virtual void WriteCsv<TRecord>(IEnumerable<TRecord> records, StreamWriter streamWriter, Type csvMap = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
         {
-            if (csvConfiguration != null)
+            if (csvConfiguration != null && cultureInfo != null)
             {
                 csvConfiguration.CultureInfo = cultureInfo;
             }
@@ -81,7 +81,7 @@ namespace Orc.Csv
 
         public virtual void WriteCsv(IEnumerable records, string csvFilePath, Type recordType, CsvClassMap csvMap, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
         {
-            if (csvConfiguration != null)
+            if (csvConfiguration != null && cultureInfo != null)
             {
                 csvConfiguration.CultureInfo = cultureInfo;
             }
@@ -99,7 +99,7 @@ namespace Orc.Csv
 
         public virtual void WriteCsv(IEnumerable records, StreamWriter streamWriter, Type recordType, CsvClassMap csvMap, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
         {
-            if (csvConfiguration != null)
+            if (csvConfiguration != null && cultureInfo != null)
             {
                 csvConfiguration.CultureInfo = cultureInfo;
             }

@@ -47,7 +47,7 @@
     </Reference>
     <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\CsvHelper.2.15.0.1\lib\net45\CsvHelper.dll</HintPath>
+      <HintPath>..\..\..\lib\CsvHelper.2.16.0.0\lib\net45\CsvHelper.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="nunit.framework">

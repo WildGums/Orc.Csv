@@ -85,7 +85,7 @@ namespace Orc.Csv
 
         public CsvReader CreateReader(string csvFilePath, Type csvMapType = null, CsvConfiguration csvConfiguration = null, CultureInfo culture = null)
         {
-            if (csvConfiguration != null)
+            if (csvConfiguration != null && culture != null)
             {
                 csvConfiguration.CultureInfo = culture;
             }
@@ -102,7 +102,7 @@ namespace Orc.Csv
 
         public CsvReader CreateReader(string csvFilePath, CsvClassMap csvMap, CsvConfiguration csvConfiguration = null, CultureInfo culture = null)
         {
-            if (csvConfiguration != null)
+            if (csvConfiguration != null && culture != null)
             {
                 csvConfiguration.CultureInfo = culture;
             }
@@ -130,14 +130,14 @@ namespace Orc.Csv
 
         protected virtual CsvConfiguration CreateDefaultCsvConfiguration(CultureInfo culture)
         {
-            var csvConfiguration1 = new CsvConfiguration();
-            csvConfiguration1.CultureInfo = culture ?? CsvEnvironment.DefaultCultureInfo;
-            csvConfiguration1.WillThrowOnMissingField = false;
-            csvConfiguration1.SkipEmptyRecords = true;
-            csvConfiguration1.HasHeaderRecord = true;
-            csvConfiguration1.TrimFields = true;
-            csvConfiguration1.TrimHeaders = true;
-            return csvConfiguration1;
+            var configuration = new CsvConfiguration();
+            configuration.CultureInfo = culture ?? CsvEnvironment.DefaultCultureInfo;
+            configuration.WillThrowOnMissingField = false;
+            configuration.SkipEmptyRecords = true;
+            configuration.HasHeaderRecord = true;
+            configuration.TrimFields = true;
+            configuration.TrimHeaders = true;
+            return configuration;
         }
         #endregion
     }
