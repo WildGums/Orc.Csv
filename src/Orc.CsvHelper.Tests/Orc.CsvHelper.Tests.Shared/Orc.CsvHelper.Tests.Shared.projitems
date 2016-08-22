@@ -27,6 +27,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
+    <None Include="$(MSBuildThisFileDirectory)TestData\2Operation.csv" />
+    <None Include="$(MSBuildThisFileDirectory)TestData\Operation2Duplicate.csv" />
+    <None Include="$(MSBuildThisFileDirectory)TestData\Operation2Invalid.csv" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)TestData\OperationWithMissingColumn.csv">

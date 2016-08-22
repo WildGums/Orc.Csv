@@ -29,7 +29,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\EntityPluralService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ICodeGenerationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ICsvReaderService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\interfaces\ICsvValidationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ICsvWriterService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IEntityPluralService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Validation\CsvValidatorService.cs" />
   </ItemGroup>
 </Project>
