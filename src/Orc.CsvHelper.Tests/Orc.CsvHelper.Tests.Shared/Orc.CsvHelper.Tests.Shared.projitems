@@ -14,6 +14,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)CsvExtensionsTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CsvMaps\OperationCsvMap.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Operation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ValidationServiceTest.cs" />
     <None Include="$(MSBuildThisFileDirectory)Expected\OperationWithMissingColumn.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -27,9 +28,15 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
-    <None Include="$(MSBuildThisFileDirectory)TestData\2Operation.csv" />
-    <None Include="$(MSBuildThisFileDirectory)TestData\Operation2Duplicate.csv" />
-    <None Include="$(MSBuildThisFileDirectory)TestData\Operation2Invalid.csv" />
+    <None Include="$(MSBuildThisFileDirectory)TestData\2Operation.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)TestData\Operation2Duplicate.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)TestData\Operation2Invalid.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)TestData\OperationWithMissingColumn.csv">
