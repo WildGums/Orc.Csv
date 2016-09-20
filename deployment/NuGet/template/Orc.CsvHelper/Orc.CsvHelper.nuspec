@@ -26,6 +26,7 @@
     <dependencies>
       <dependency id="CsvHelper" version="[replaced]" />
       <dependency id="Catel.Core" version="[replaced]" />
+	  <dependency id="Orc.FileSystem" version="[replaced]" />
     </dependencies>    
   </metadata>
 </package>

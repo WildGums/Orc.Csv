@@ -9,6 +9,7 @@ namespace Orc.Csv.Tests
 {
     using System;
     using System.IO;
+    using FileSystem;
     using NUnit.Framework;
 
     [TestFixture]
@@ -56,7 +57,7 @@ namespace Orc.Csv.Tests
             Directory.CreateDirectory(outputFolder);
 
             // Act
-            var codeGenerationService = new CodeGenerationService(new EntityPluralService());
+            var codeGenerationService = new CodeGenerationService(new EntityPluralService(), new FileService(), new DirectoryService());
             codeGenerationService.CreateCSharpFiles(csvFilePath, namespaceName, outputFolder);
 
             // Assert:

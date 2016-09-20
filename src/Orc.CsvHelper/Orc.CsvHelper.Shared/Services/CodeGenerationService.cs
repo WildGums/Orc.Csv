@@ -8,9 +8,11 @@ namespace Orc.Csv
 {
     using System.Collections.Generic;
     using System.IO;
+    //using System.IO;
     using System.Text;
     using Catel;
     using Catel.Logging;
+    using FileSystem;
 
     /// <summary>
     /// Create CSharp files to consume CSV files.
@@ -22,12 +24,18 @@ namespace Orc.Csv
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly IEntityPluralService _entityPluralService;
+        private readonly IFileService _fileService;
+        private readonly IDirectoryService _directoryService;
 
-        public CodeGenerationService(IEntityPluralService entityPluralService)
+        public CodeGenerationService(IEntityPluralService entityPluralService, IFileService fileService, IDirectoryService directoryService)
         {
             Argument.IsNotNull(() => entityPluralService);
+            Argument.IsNotNull(() => fileService);
+            Argument.IsNotNull(() => directoryService);
 
             _entityPluralService = entityPluralService;
+            _fileService = fileService;
+            _directoryService = directoryService;
         }
 
         public void CreateCSharpFilesForAllCsvFiles(string inputFoler, string namespaceName, string outputFolder)
@@ -42,7 +50,7 @@ namespace Orc.Csv
 
         public string[] GetCsvFiles(string folderPath)
         {
-            return Directory.GetFiles(folderPath, "*.csv");
+            return _directoryService.GetFiles(folderPath, "*.csv");
         }
 
         public void CreateCSharpFiles(string csvFilePath, string namespaceName, string outputFolder)
@@ -74,10 +82,7 @@ namespace Orc.Csv
                 propertyMaps.Add($"Map(x => x.{propertyName}).Name(\"{fieldHeader}\");");
             }
 
-            if (!Directory.Exists(outputFolder))
-            {
-                Directory.CreateDirectory(outputFolder);
-            }
+            _directoryService.Create(outputFolder);
 
             CreateCSharpPocoFile(namespaceName, className, properties, outputFolder);
             CreateCSharpCsvMapFile(namespaceName, className, propertyMaps, outputFolder);
@@ -103,7 +108,7 @@ namespace Orc.Csv
             var content = sb.ToString();
             var filePath = Path.Combine(outputFolder, className + ".cs");
 
-            File.WriteAllText(filePath, content);
+            _fileService.WriteAllText(filePath, content);
         }
 
         private void CreateCSharpCsvMapFile(string namespaceName, string className, IEnumerable<string> properties, string outputFolder)
@@ -130,7 +135,7 @@ namespace Orc.Csv
             var content = sb.ToString();
             var filePath = Path.Combine(outputFolder, classNameMap + ".cs");
 
-            File.WriteAllText(filePath, content);
+            _fileService.WriteAllText(filePath, content);
         }
 
         private static string Spaces(int n)

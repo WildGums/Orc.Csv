@@ -12,16 +12,27 @@ namespace Orc.Csv
     using System.Globalization;
     using System.IO;
     using System.Text;
+    using Catel;
     using Catel.Logging;
     using Csv;
+    using FileSystem;
     using global::CsvHelper;
     using global::CsvHelper.Configuration;
 
     public class CsvReaderService : ICsvReaderService
     {
+        private readonly IFileService _fileService;
+
         #region Constants
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
         #endregion
+
+        public CsvReaderService(IFileService fileService)
+        {
+            Argument.IsNotNull(() => fileService);
+
+            _fileService = fileService;
+        }
 
         #region Methods
         public virtual IEnumerable<T> ReadCsv<T, TMap>(string csvFilePath, Action<T> initializer = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false)
@@ -116,13 +127,13 @@ namespace Orc.Csv
 
         protected virtual CsvReader CreateCsvReader(string csvFilePath, CsvConfiguration csvConfiguration)
         {
-            if (!File.Exists(csvFilePath))
+            if (!_fileService.Exists(csvFilePath))
             {
                 throw Log.ErrorAndCreateException<FileNotFoundException>("File '{0}' doesn't exist", csvFilePath);
             }
 
-            var fs = new FileStream(csvFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-            var stream = new StreamReader(fs, Encoding.Default);
+            var fileStream = _fileService.Open(csvFilePath, FileMode.Open, FileAccess.Read);
+            var stream = new StreamReader(fileStream, Encoding.Default);
 
             var csvReader = new CsvReader(stream, csvConfiguration);
             return csvReader;

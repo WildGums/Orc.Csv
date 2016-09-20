@@ -7,14 +7,10 @@
 
 namespace Orc.CsvHelper.Tests.Shared
 {
-    using System;
-    using System.Globalization;
-    using System.IO;
-    using System.Net.NetworkInformation;
     using Csv;
+    using FileSystem;
     using global::CsvHelper.Configuration;
     using NUnit.Framework;
-    using NUnit.Framework.Constraints;
 
     [TestFixture]
     public class BugsTest
@@ -27,7 +23,7 @@ namespace Orc.CsvHelper.Tests.Shared
             // Arrange
             var csvFilePath = $"{TestInputFolder}{"Operation.csv"}";
 
-            var csvReaderService = new CsvReaderService();
+            var csvReaderService = new CsvReaderService(new FileService());
              var csvConfiguration = new CsvConfiguration()
             {
                 WillThrowOnMissingField = false,
