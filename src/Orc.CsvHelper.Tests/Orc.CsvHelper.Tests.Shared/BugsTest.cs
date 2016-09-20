@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.CsvHelper.Tests.Shared
+namespace Orc.CsvHelper.Tests
 {
     using Csv;
     using FileSystem;
@@ -24,14 +24,14 @@ namespace Orc.CsvHelper.Tests.Shared
             var csvFilePath = $"{TestInputFolder}{"Operation.csv"}";
 
             var csvReaderService = new CsvReaderService(new FileService());
-             var csvConfiguration = new CsvConfiguration()
+            var csvConfiguration = new CsvConfiguration
             {
                 WillThrowOnMissingField = false,
                 SkipEmptyRecords = true,
                 HasHeaderRecord = true,
                 TrimFields = true,
                 TrimHeaders = true,
-        };
+            };
 
             using (var csvReader = csvReaderService.CreateReader(csvFilePath, csvConfiguration: csvConfiguration))
             {
