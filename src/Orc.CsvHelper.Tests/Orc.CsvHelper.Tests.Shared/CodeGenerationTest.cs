@@ -9,6 +9,7 @@ namespace Orc.Csv.Tests
 {
     using System;
     using System.IO;
+    using Catel.IoC;
     using FileSystem;
     using NUnit.Framework;
 
@@ -57,7 +58,8 @@ namespace Orc.Csv.Tests
             Directory.CreateDirectory(outputFolder);
 
             // Act
-            var codeGenerationService = new CodeGenerationService(new EntityPluralService(), new FileService(), new DirectoryService());
+            var typeFactory = TypeFactory.Default;
+            var codeGenerationService = typeFactory.CreateInstanceWithParametersAndAutoCompletion<CodeGenerationService>(new EntityPluralService());
             codeGenerationService.CreateCSharpFiles(csvFilePath, namespaceName, outputFolder);
 
             // Assert:
