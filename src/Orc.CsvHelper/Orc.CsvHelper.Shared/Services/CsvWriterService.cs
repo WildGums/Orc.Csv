@@ -38,6 +38,11 @@ namespace Orc.Csv
 
         public virtual void WriteCsv<TRecord>(IEnumerable<TRecord> records, string csvFilePath, Type csvMap = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
         {
+            if (csvConfiguration != null && cultureInfo != null)
+            {
+                csvConfiguration.CultureInfo = cultureInfo;
+            }
+
             using (var csvWriter = CreateWriter(csvFilePath, csvConfiguration ?? CreateDefaultCsvConfiguration(cultureInfo)))
             {
                 if (csvMap != null)
@@ -51,6 +56,11 @@ namespace Orc.Csv
 
         public virtual void WriteCsv<TRecord>(IEnumerable<TRecord> records, StreamWriter streamWriter, Type csvMap = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
         {
+            if (csvConfiguration != null && cultureInfo != null)
+            {
+                csvConfiguration.CultureInfo = cultureInfo;
+            }
+
             using (var csvWriter = CreateWriter(streamWriter, csvConfiguration ?? CreateDefaultCsvConfiguration(cultureInfo)))
             {
                 if (csvMap != null)
@@ -71,6 +81,11 @@ namespace Orc.Csv
 
         public virtual void WriteCsv(IEnumerable records, string csvFilePath, Type recordType, CsvClassMap csvMap, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
         {
+            if (csvConfiguration != null && cultureInfo != null)
+            {
+                csvConfiguration.CultureInfo = cultureInfo;
+            }
+
             using (var csvWriter = CreateWriter(csvFilePath, csvConfiguration ?? CreateDefaultCsvConfiguration(cultureInfo)))
             {
                 if (csvMap != null)
@@ -84,6 +99,11 @@ namespace Orc.Csv
 
         public virtual void WriteCsv(IEnumerable records, StreamWriter streamWriter, Type recordType, CsvClassMap csvMap, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
         {
+            if (csvConfiguration != null && cultureInfo != null)
+            {
+                csvConfiguration.CultureInfo = cultureInfo;
+            }
+
             using (var csvWriter = CreateWriter(streamWriter, csvConfiguration ?? CreateDefaultCsvConfiguration(cultureInfo)))
             { 
                 if (csvMap != null)
@@ -99,7 +119,6 @@ namespace Orc.Csv
         {
             WriteCsv(records, csvFilePath, typeof(TRecord), csvMap, csvConfiguration, throwOnError, cultureInfo);
         }
-
 
         public virtual CsvConfiguration CreateDefaultCsvConfiguration(CultureInfo cultureInfo = null)
         {
@@ -132,7 +151,5 @@ namespace Orc.Csv
                 }
             }
         }
-
-
     }
 }

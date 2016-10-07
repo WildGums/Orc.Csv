@@ -10,22 +10,28 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)CodeGeneration\CodeGeneration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\EnumConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\StringToNullableDateTimeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\TypeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\YesNoToBooleanConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CsvEnvironment.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\CsvExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\CsvReaderHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\CsvWriterHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Services\CodeGenerationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\CsvReaderService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\CsvWriterService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\EntityPluralService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ICodeGenerationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ICsvReaderService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\interfaces\ICsvValidationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ICsvWriterService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IEntityPluralService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Validation\CsvValidatorService.cs" />
   </ItemGroup>
 </Project>

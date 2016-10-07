@@ -1,9 +1,8 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CsvExtensionsTest.cs" company="Orcomp development team">
-//   Copyright (c) 2008 - 2014 Orcomp development team. All rights reserved.
+// <copyright file="CsvExtensionsTest.cs" company="WildGums">
+//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-
 
 namespace Orc.Csv.Tests
 {
@@ -18,8 +17,7 @@ namespace Orc.Csv.Tests
     [TestFixture]
     public class CsvExtensionsTest
     {
-        #region Methods
-        [Test]
+	    [Test]
         public void FromCsvFile()
         {
             var serviceLocator = ServiceLocator.Default;
@@ -58,9 +56,8 @@ namespace Orc.Csv.Tests
             // clean up
             File.Delete(file);
         }
-        #endregion
 
-        #region Helpers
+	    #region Helpers
         private void AssertCollectionsAreEqual(IEnumerable<string> expectedCsvLines, IEnumerable<string> resultCsvLines)
         {
             var iterator = resultCsvLines.GetEnumerator();

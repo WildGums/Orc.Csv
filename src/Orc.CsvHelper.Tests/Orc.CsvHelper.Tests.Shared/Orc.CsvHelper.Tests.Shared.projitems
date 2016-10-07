@@ -6,18 +6,48 @@
     <SharedGUID>e07ab6f1-f7d7-4f54-8d07-badcdc85c0c1</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>Orc.CsvHelper.Tests.Shared</Import_RootNamespace>
+    <Import_RootNamespace>Orc.CsvHelper.Tests</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BugsTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CodeGenerationTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CsvExtensionsTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CsvMaps\OperationCsvMap.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Operation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ValidationServiceTest.cs" />
+    <None Include="$(MSBuildThisFileDirectory)Expected\OperationWithMissingColumn.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Expected\OperationWithMissingColumnMap.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Expected\Operation.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Expected\OperationMap.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
+    <None Include="$(MSBuildThisFileDirectory)TestData\2Operation.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)TestData\Operation2Duplicate.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)TestData\Operation2Invalid.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)TestData\OperationWithMissingColumn.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)TestData\Operations.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="$(MSBuildThisFileDirectory)TestData\Operation.csv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 </Project>

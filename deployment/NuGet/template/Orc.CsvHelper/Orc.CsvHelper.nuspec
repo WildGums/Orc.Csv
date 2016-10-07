@@ -4,8 +4,8 @@
     <id>Orc.CsvHelper</id>
     <version>[VERSION]</version>
     <title>Orc.CsvHelper</title>
-    <authors>OrchestraDevs</authors>
-    <owners>OrchestraDevs</owners>
+    <authors>WildGums</authors>
+    <owners>WildGums</owners>
 
 	<description>
         Extension methods / helper classes for CsvHelper.
@@ -16,16 +16,17 @@
     <tags>csv orcomp orc</tags>
 
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <copyright>Copyright Orchestra team 2010 - 2014</copyright>
+    <copyright>Copyright WildGums 2010 - 2016</copyright>
 
 	<language>en-US</language>
-	<projectUrl>https://github.com/Orcomp/Orc.CsvHelper</projectUrl>
+	<projectUrl>https://github.com/WildGums/Orc.CsvHelper</projectUrl>
 	<!--<licenseUrl>http://catel.codeplex.com/license</licenseUrl>-->
 	<!--<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>-->
     
     <dependencies>
       <dependency id="CsvHelper" version="[replaced]" />
       <dependency id="Catel.Core" version="[replaced]" />
+	  <dependency id="Orc.FileSystem" version="[replaced]" />
     </dependencies>    
   </metadata>
 </package>

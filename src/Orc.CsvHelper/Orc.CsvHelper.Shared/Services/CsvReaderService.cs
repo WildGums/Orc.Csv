@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CsvReaderService.cs" company="Orcomp development team">
-//   Copyright (c) 2008 - 2015 Orcomp development team. All rights reserved.
+// <copyright file="CsvReaderService.cs" company="WildGums">
+//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -12,16 +12,27 @@ namespace Orc.Csv
     using System.Globalization;
     using System.IO;
     using System.Text;
+    using Catel;
     using Catel.Logging;
     using Csv;
+    using FileSystem;
     using global::CsvHelper;
     using global::CsvHelper.Configuration;
 
     public class CsvReaderService : ICsvReaderService
     {
+        private readonly IFileService _fileService;
+
         #region Constants
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
         #endregion
+
+        public CsvReaderService(IFileService fileService)
+        {
+            Argument.IsNotNull(() => fileService);
+
+            _fileService = fileService;
+        }
 
         #region Methods
         public virtual IEnumerable<T> ReadCsv<T, TMap>(string csvFilePath, Action<T> initializer = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false)
@@ -38,9 +49,9 @@ namespace Orc.Csv
             }
         }
 
-        public virtual IEnumerable<T> ReadCsv<T>(string csvFilePath, CsvClassMap map, Action<T> initializer = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo culture = null)
+        public virtual IEnumerable<T> ReadCsv<T>(string csvFilePath, CsvClassMap csvMap, Action<T> initializer = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo culture = null)
         {
-            using (var csvReader = CreateReader(csvFilePath, map, csvConfiguration, culture))
+            using (var csvReader = CreateReader(csvFilePath, csvMap, csvConfiguration, culture))
             {
                 return ReadData(csvFilePath, initializer, throwOnError, csvReader);
             }
@@ -83,36 +94,46 @@ namespace Orc.Csv
             return items;
         }
 
-        public CsvReader CreateReader(string csvFilePath, Type classMapType = null, CsvConfiguration csvConfiguration = null, CultureInfo culture = null)
+        public CsvReader CreateReader(string csvFilePath, Type csvMapType = null, CsvConfiguration csvConfiguration = null, CultureInfo culture = null)
         {
+            if (csvConfiguration != null && culture != null)
+            {
+                csvConfiguration.CultureInfo = culture;
+            }
+
             var csvReader = CreateCsvReader(csvFilePath, csvConfiguration ?? CreateDefaultCsvConfiguration(culture));
 
-            if (classMapType != null)
+            if (csvMapType != null)
             {
-                csvReader.Configuration.RegisterClassMap(classMapType);
+                csvReader.Configuration.RegisterClassMap(csvMapType);
             }
 
             return csvReader;
         }
 
-        public CsvReader CreateReader(string csvFilePath, CsvClassMap classMap, CsvConfiguration csvConfiguration = null, CultureInfo culture = null)
+        public CsvReader CreateReader(string csvFilePath, CsvClassMap csvMap, CsvConfiguration csvConfiguration = null, CultureInfo culture = null)
         {
+            if (csvConfiguration != null && culture != null)
+            {
+                csvConfiguration.CultureInfo = culture;
+            }
+
             var csvReader = CreateCsvReader(csvFilePath, csvConfiguration ?? CreateDefaultCsvConfiguration(culture));
 
-            csvReader.Configuration.RegisterClassMap(classMap);
+            csvReader.Configuration.RegisterClassMap(csvMap);
 
             return csvReader;
         }
 
         protected virtual CsvReader CreateCsvReader(string csvFilePath, CsvConfiguration csvConfiguration)
         {
-            if (!File.Exists(csvFilePath))
+            if (!_fileService.Exists(csvFilePath))
             {
                 throw Log.ErrorAndCreateException<FileNotFoundException>("File '{0}' doesn't exist", csvFilePath);
             }
 
-            var fs = new FileStream(csvFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-            var stream = new StreamReader(fs, Encoding.Default);
+            var fileStream = _fileService.Open(csvFilePath, FileMode.Open, FileAccess.Read);
+            var stream = new StreamReader(fileStream, Encoding.Default);
 
             var csvReader = new CsvReader(stream, csvConfiguration);
             return csvReader;
@@ -120,14 +141,14 @@ namespace Orc.Csv
 
         protected virtual CsvConfiguration CreateDefaultCsvConfiguration(CultureInfo culture)
         {
-            var csvConfiguration1 = new CsvConfiguration();
-            csvConfiguration1.CultureInfo = culture ?? CsvEnvironment.DefaultCultureInfo;
-            csvConfiguration1.WillThrowOnMissingField = false;
-            csvConfiguration1.SkipEmptyRecords = true;
-            csvConfiguration1.HasHeaderRecord = true;
-            csvConfiguration1.TrimFields = true;
-            csvConfiguration1.TrimHeaders = true;
-            return csvConfiguration1;
+            var configuration = new CsvConfiguration();
+            configuration.CultureInfo = culture ?? CsvEnvironment.DefaultCultureInfo;
+            configuration.WillThrowOnMissingField = false;
+            configuration.SkipEmptyRecords = true;
+            configuration.HasHeaderRecord = true;
+            configuration.TrimFields = true;
+            configuration.TrimHeaders = true;
+            return configuration;
         }
         #endregion
     }

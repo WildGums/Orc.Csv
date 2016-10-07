@@ -19,9 +19,11 @@ TestResult.xml
 [Rr]elease/
 [Oo]utput*/
 [Pp]ackages*/
+.vs/
 bin
 obj
-[Ll]ib/
+[Ll]ib/*
+![Ll]ib/repositories.config
 *.ide/
 *_i.c
 *_p.c
