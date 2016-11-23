@@ -96,12 +96,7 @@ namespace Orc.Csv
 
         public CsvReader CreateReader(string csvFilePath, Type csvMapType = null, CsvConfiguration csvConfiguration = null, CultureInfo culture = null)
         {
-            if (csvConfiguration != null && culture != null)
-            {
-                csvConfiguration.CultureInfo = culture;
-            }
-
-            var csvReader = CreateCsvReader(csvFilePath, csvConfiguration ?? CreateDefaultCsvConfiguration(culture));
+            var csvReader = CreateReaderCore(csvFilePath, csvConfiguration, culture);
 
             if (csvMapType != null)
             {
@@ -113,15 +108,24 @@ namespace Orc.Csv
 
         public CsvReader CreateReader(string csvFilePath, CsvClassMap csvMap, CsvConfiguration csvConfiguration = null, CultureInfo culture = null)
         {
+            var csvReader = CreateReaderCore(csvFilePath, csvConfiguration, culture);
+
+            if (csvMap != null)
+            {
+                csvReader.Configuration.RegisterClassMap(csvMap);
+            }
+
+            return csvReader;
+        }
+
+        private CsvReader CreateReaderCore(string csvFilePath, CsvConfiguration csvConfiguration = null, CultureInfo culture = null)
+        {
             if (csvConfiguration != null && culture != null)
             {
                 csvConfiguration.CultureInfo = culture;
             }
 
             var csvReader = CreateCsvReader(csvFilePath, csvConfiguration ?? CreateDefaultCsvConfiguration(culture));
-
-            csvReader.Configuration.RegisterClassMap(csvMap);
-
             return csvReader;
         }
 
