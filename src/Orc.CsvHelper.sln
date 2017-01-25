@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26020.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{23912551-289D-43BF-9B2D-5385308A09E4}"
 EndProject
@@ -11,6 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.CsvHelper.Tests.NET40",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{F9F59E5A-A3B1-47AF-938E-35C8793BC341}"
 	ProjectSection(SolutionItems) = preProject
+		GlobalSuppressions.cs = GlobalSuppressions.cs
 		nuget.config = nuget.config
 		Orc.CsvHelper.sln.DotSettings = Orc.CsvHelper.sln.DotSettings
 		Settings.StyleCop = Settings.StyleCop
@@ -35,14 +36,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.CsvHelper.Tests.NET46",
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Orc.CsvHelper\Orc.CsvHelper.Shared\Orc.CsvHelper.Shared.projitems*{6f5eb0c1-7e36-413d-8463-968b7f86fe53}*SharedItemsImports = 4
-		Orc.CsvHelper\Orc.CsvHelper.Shared\Orc.CsvHelper.Shared.projitems*{3c0201f7-5000-4f18-8827-c47edad1df1d}*SharedItemsImports = 13
-		Orc.CsvHelper.Tests\Orc.CsvHelper.Tests.Shared\Orc.CsvHelper.Tests.Shared.projitems*{e07ab6f1-f7d7-4f54-8d07-badcdc85c0c1}*SharedItemsImports = 13
 		Orc.CsvHelper.Tests\Orc.CsvHelper.Tests.Shared\Orc.CsvHelper.Tests.Shared.projitems*{1e4a6610-74f8-477b-bb07-a9c2cc6763ed}*SharedItemsImports = 4
-		Orc.CsvHelper\Orc.CsvHelper.Shared\Orc.CsvHelper.Shared.projitems*{909f4b23-a485-45d2-b4be-f079c7d6b02a}*SharedItemsImports = 4
-		Orc.CsvHelper.Tests\Orc.CsvHelper.Tests.Shared\Orc.CsvHelper.Tests.Shared.projitems*{9484b0c0-5df6-43ba-9524-0d17d326e278}*SharedItemsImports = 4
+		Orc.CsvHelper\Orc.CsvHelper.Shared\Orc.CsvHelper.Shared.projitems*{3c0201f7-5000-4f18-8827-c47edad1df1d}*SharedItemsImports = 13
 		Orc.CsvHelper\Orc.CsvHelper.Shared\Orc.CsvHelper.Shared.projitems*{5c348a51-2341-4b55-97f4-b907d918aaca}*SharedItemsImports = 4
 		Orc.CsvHelper.Tests\Orc.CsvHelper.Tests.Shared\Orc.CsvHelper.Tests.Shared.projitems*{5c5fa65f-2778-4487-87a5-44084618567d}*SharedItemsImports = 4
+		Orc.CsvHelper\Orc.CsvHelper.Shared\Orc.CsvHelper.Shared.projitems*{6f5eb0c1-7e36-413d-8463-968b7f86fe53}*SharedItemsImports = 4
+		Orc.CsvHelper\Orc.CsvHelper.Shared\Orc.CsvHelper.Shared.projitems*{909f4b23-a485-45d2-b4be-f079c7d6b02a}*SharedItemsImports = 4
+		Orc.CsvHelper.Tests\Orc.CsvHelper.Tests.Shared\Orc.CsvHelper.Tests.Shared.projitems*{9484b0c0-5df6-43ba-9524-0d17d326e278}*SharedItemsImports = 4
+		Orc.CsvHelper.Tests\Orc.CsvHelper.Tests.Shared\Orc.CsvHelper.Tests.Shared.projitems*{e07ab6f1-f7d7-4f54-8d07-badcdc85c0c1}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
