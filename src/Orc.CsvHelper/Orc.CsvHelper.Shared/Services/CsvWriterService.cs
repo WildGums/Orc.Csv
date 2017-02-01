@@ -5,7 +5,10 @@ namespace Orc.Csv
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
+    using System.Threading;
+    using System.Threading.Tasks;
     using Catel.Logging;
+    using Catel.Threading;
     using CsvHelper;
     using CsvHelper.Configuration;
 
@@ -75,10 +78,9 @@ namespace Orc.Csv
         public virtual void WriteCsv<TRecord, TMap>(IEnumerable<TRecord> records, string csvFilePath, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
             where TMap : CsvClassMap
         {
-            WriteCsv<TRecord>(records, csvFilePath, typeof (TMap), csvConfiguration, throwOnError, cultureInfo);
+            WriteCsv(records, csvFilePath, typeof (TMap), csvConfiguration, throwOnError, cultureInfo);
         }
-
-
+        
         public virtual void WriteCsv(IEnumerable records, string csvFilePath, Type recordType, CsvClassMap csvMap, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
         {
             if (csvConfiguration != null && cultureInfo != null)
@@ -118,6 +120,37 @@ namespace Orc.Csv
         public virtual void WriteCsv<TRecord>(IEnumerable<TRecord> records, string csvFilePath, CsvClassMap csvMap, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
         {
             WriteCsv(records, csvFilePath, typeof(TRecord), csvMap, csvConfiguration, throwOnError, cultureInfo);
+        }
+
+        public virtual async Task WriteCsvAsync<TRecord, TMap>(IEnumerable<TRecord> records, string csvFilePath, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
+            where TMap : CsvClassMap
+        {
+            await WriteCsvAsync(records, csvFilePath, typeof(TMap), csvConfiguration, throwOnError, cultureInfo);
+        }
+
+        public virtual async Task WriteCsvAsync<TRecord>(IEnumerable<TRecord> records, StreamWriter streamWriter, Type csvMap = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
+        {
+            await TaskHelper.Run(() => WriteCsv(records, streamWriter, csvMap, csvConfiguration, throwOnError, cultureInfo), false, CancellationToken.None);
+        }
+
+        public virtual async Task WriteCsvAsync(IEnumerable records, string csvFilePath, Type recordType, CsvClassMap csvMap, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
+        {
+            await TaskHelper.Run(() => WriteCsv(records, csvFilePath, recordType, csvMap, csvConfiguration, throwOnError, cultureInfo), false, CancellationToken.None);
+        }
+
+        public virtual async Task WriteCsvAsync(IEnumerable records, StreamWriter streamWriter, Type recordType, CsvClassMap csvMap, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
+        {
+            await TaskHelper.Run(() => WriteCsv(records, streamWriter, recordType, csvMap, csvConfiguration, throwOnError, cultureInfo), false, CancellationToken.None);
+        }
+
+        public virtual async Task WriteCsvAsync<TRecord>(IEnumerable<TRecord> records, string csvFilePath, CsvClassMap csvMap, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
+        {
+            await WriteCsvAsync(records, csvFilePath, typeof(TRecord), csvMap, csvConfiguration, throwOnError, cultureInfo);
+        }
+
+        public virtual async Task WriteCsvAsync<TRecord>(IEnumerable<TRecord> records, string csvFilePath, Type csvMap = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
+        {
+            await TaskHelper.Run(() => WriteCsv(records, csvFilePath, csvMap, csvConfiguration, throwOnError, cultureInfo), false, CancellationToken.None);
         }
 
         public virtual CsvConfiguration CreateDefaultCsvConfiguration(CultureInfo cultureInfo = null)
