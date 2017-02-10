@@ -5,7 +5,9 @@ namespace Orc.Csv
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
+    using System.Linq;
     using Catel.Logging;
+    using Catel.Reflection;
     using CsvHelper;
     using CsvHelper.Configuration;
 
@@ -137,6 +139,26 @@ namespace Orc.Csv
             try
             {
                 csvWriter.WriteHeader(recordType);
+                
+                var writeRecord = csvWriter.GetType().GetMethodsEx()
+                    .FirstOrDefault(x => x.IsGenericMethod && string.Equals("WriteRecord", x.Name) && x.GetGenericArguments().Length == 1 && x.GetParameters().Length == 1)?
+                    .MakeGenericMethod(recordType);
+
+                if (!ReferenceEquals(writeRecord, null))
+                {
+                    foreach (var record in records)
+                    {
+                        // Note: we could use this method but it is obsolete
+                        //
+                        // csvWriter.WriteRecord(recordType, record);
+                        writeRecord.Invoke(csvWriter, new[] {record});
+                    }
+
+                    return;
+                }
+
+                // Note: unfortaunately this method sometimes works incorrectly
+                //       it is writing data into incorrect fields without any exception throwing
                 csvWriter.WriteRecords(records);
             }
             catch (Exception ex)
