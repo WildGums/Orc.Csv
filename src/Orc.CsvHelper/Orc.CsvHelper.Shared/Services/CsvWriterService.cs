@@ -15,6 +15,8 @@ namespace Orc.Csv
     {
         #region Constants
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        private static readonly object LockObject = new object();
         #endregion
 
         public virtual CsvWriter CreateWriter(string csvFilePath, CsvConfiguration csvConfiguration = null)
@@ -138,28 +140,32 @@ namespace Orc.Csv
         {
             try
             {
-                csvWriter.WriteHeader(recordType);
-                
-                var writeRecord = csvWriter.GetType().GetMethodsEx()
-                    .FirstOrDefault(x => x.IsGenericMethod && string.Equals("WriteRecord", x.Name) && x.GetGenericArguments().Length == 1 && x.GetParameters().Length == 1)?
-                    .MakeGenericMethod(recordType);
-
-                if (!ReferenceEquals(writeRecord, null))
+                // Note: in order to reduce writing bugs we have to prevent parallel writing
+                lock (LockObject)
                 {
-                    foreach (var record in records)
+                    csvWriter.WriteHeader(recordType);
+
+                    var writeRecord = csvWriter.GetType().GetMethodsEx()
+                        .FirstOrDefault(x => x.IsGenericMethod && string.Equals("WriteRecord", x.Name) && x.GetGenericArguments().Length == 1 && x.GetParameters().Length == 1)?
+                        .MakeGenericMethod(recordType);
+
+                    if (!ReferenceEquals(writeRecord, null))
                     {
-                        // Note: we could use this method but it is obsolete
-                        //
-                        // csvWriter.WriteRecord(recordType, record);
-                        writeRecord.Invoke(csvWriter, new[] {record});
+                        foreach (var record in records)
+                        {
+                            // Note: we could use this method but it is obsolete
+                            //
+                            // csvWriter.WriteRecord(recordType, record);
+                            writeRecord.Invoke(csvWriter, new[] { record });
+                        }
+
+                        return;
                     }
 
-                    return;
-                }
-
-                // Note: unfortaunately this method sometimes works incorrectly
-                //       it is writing data into incorrect fields without any exception throwing
-                csvWriter.WriteRecords(records);
+                    // Note: unfortaunately this method sometimes works incorrectly
+                    //       it is writing data into incorrect fields without any exception throwing
+                    csvWriter.WriteRecords(records);
+                }                
             }
             catch (Exception ex)
             {

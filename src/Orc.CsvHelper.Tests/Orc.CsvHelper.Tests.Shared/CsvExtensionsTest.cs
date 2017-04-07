@@ -41,22 +41,6 @@ namespace Orc.Csv.Tests
             }
         }
 
-        [Test]
-        public void ToCsvFile()
-        {
-            var file = @"Operation.csv";
-            var operations = CreateSampleOperations();
-            operations.ToCsv(file, typeof (OperationCsvMap));
-
-            var resultCsvLines = File.ReadAllLines(file) as IEnumerable<string>;
-
-            var expectedCsvLines = CreateSampleCsv();
-            AssertCollectionsAreEqual(expectedCsvLines, resultCsvLines);
-
-            // clean up
-            File.Delete(file);
-        }
-
 	    #region Helpers
         private void AssertCollectionsAreEqual(IEnumerable<string> expectedCsvLines, IEnumerable<string> resultCsvLines)
         {

@@ -16,6 +16,7 @@ namespace Orc.Csv
     [ObsoleteEx(RemoveInVersion = "2.0", TreatAsErrorFromVersion = "1.1", ReplacementTypeOrMember = "ICsvWriterService")]
     public static class CsvWriterHelper
     {
+        [ObsoleteEx(RemoveInVersion = "2.0", TreatAsErrorFromVersion = "1.1", Message = "use ICsvWriterService")]
         public static CsvWriter CreateWriter(string csvFilePath, CsvConfiguration csvConfiguration = null)
         {
             // No disposes are required, the user should dispose the csv class
@@ -29,6 +30,7 @@ namespace Orc.Csv
             return new CsvWriter(streamWriter, csvConfiguration);
         }
 
+        [ObsoleteEx(RemoveInVersion = "2.0", TreatAsErrorFromVersion = "1.1", Message = "use ICsvWriterService")]
         public static void WriteRecord(this CsvWriter writer, params object[] fields)
         {
             foreach (var field in fields)
@@ -39,12 +41,14 @@ namespace Orc.Csv
             writer.NextRecord();
         }
 
+        [ObsoleteEx(RemoveInVersion = "2.0", TreatAsErrorFromVersion = "1.1", Message = "use ICsvWriterService")]
         public static void WriteCsv<TRecord>(IEnumerable<TRecord> records, string csvFilePath, CsvConfiguration csvConfiguration = null, bool throwOnError = false)
         {
             Type csvMapType = null;
             records.ToCsv(csvFilePath, csvMapType, csvConfiguration, throwOnError);
         }
 
+        [ObsoleteEx(RemoveInVersion = "2.0", TreatAsErrorFromVersion = "1.1", Message = "use ICsvWriterService")]
         public static void WriteCsv<TRecord, TMap>(IEnumerable<TRecord> records, string csvFilePath, CsvConfiguration csvConfiguration = null, bool throwOnError = false)
             where TMap : CsvClassMap
         {
