@@ -10,9 +10,11 @@ namespace Orc.Csv.Tests
     using System.Collections.Generic;
     using System.IO;
     using Catel.IoC;
+    using CsvHelper.Tests;
     using Entities;
     using CsvMaps;
     using NUnit.Framework;
+    using Path = Catel.IO.Path;
 
     [TestFixture]
     public class CsvExtensionsTest
@@ -23,7 +25,7 @@ namespace Orc.Csv.Tests
             var serviceLocator = ServiceLocator.Default;
             var csvReaderService = serviceLocator.ResolveType<ICsvReaderService>();
 
-            var result = csvReaderService.ReadCsv<Operation, OperationCsvMap>(@"TestData\Operation.csv");
+            var result = csvReaderService.ReadCsv<Operation, OperationCsvMap>(Path.Combine(AssemblyDirectoryHelper.GetCurrentDirectory(), @"TestData\Operations.csv"));
             var expectedResult = CreateSampleOperations();
 
             var expectedEnumerator = expectedResult.GetEnumerator();

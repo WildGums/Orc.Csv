@@ -10,14 +10,15 @@ namespace Orc.Csv.Tests
     using System;
     using System.IO;
     using Catel.IoC;
+    using CsvHelper.Tests;
     using FileSystem;
     using NUnit.Framework;
 
     [TestFixture]
     public class CodeGenerationTest
     {
-        private const string TestInputFolder = @"TestData\";
-        private const string ExpectedFolder = @"Expected\";
+        private static readonly string TestInputFolder = Path.Combine(AssemblyDirectoryHelper.GetCurrentDirectory(), @"TestData\");
+        private static readonly string ExpectedFolder = Path.Combine(AssemblyDirectoryHelper.GetCurrentDirectory(), @"Expected\");
 
         //[TestCase("Parts", "Part")]
         //[TestCase("Entities", "Entity")]
