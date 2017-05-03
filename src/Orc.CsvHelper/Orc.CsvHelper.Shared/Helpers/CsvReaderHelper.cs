@@ -18,7 +18,7 @@ namespace Orc.Csv
     public static class CsvReaderHelper
     {
         #region Methods
-        public static IEnumerable<T> ReadCsv<T, TMap>(string csvFilePath, Action<T> initializer = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false)
+        public static IEnumerable<T> ReadCsv<T, TMap>(string csvFilePath, Action<T> initializer = null, CsvConfiguration csvConfiguration = null, bool throwOnError = true)
             where TMap : CsvClassMap
         {
             var serviceLocator = ServiceLocator.Default;
@@ -26,14 +26,14 @@ namespace Orc.Csv
             return csvReaderService.ReadCsv<T, TMap>(csvFilePath, initializer, csvConfiguration, throwOnError);
         }
 
-        public static IEnumerable<T> ReadCsv<T>(string csvFilePath, Action<T> initializer = null, Type mapType = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo culture = null)
+        public static IEnumerable<T> ReadCsv<T>(string csvFilePath, Action<T> initializer = null, Type mapType = null, CsvConfiguration csvConfiguration = null, bool throwOnError = true, CultureInfo culture = null)
         {
             var serviceLocator = ServiceLocator.Default;
             var csvReaderService = serviceLocator.ResolveType<ICsvReaderService>();
             return csvReaderService.ReadCsv<T>(csvFilePath, initializer, mapType, csvConfiguration, throwOnError, culture);
         }
 
-        public static IEnumerable<T> ReadCsv<T>(string csvFilePath, CsvClassMap csvMap, Action<T> initializer = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo culture = null)
+        public static IEnumerable<T> ReadCsv<T>(string csvFilePath, CsvClassMap csvMap, Action<T> initializer = null, CsvConfiguration csvConfiguration = null, bool throwOnError = true, CultureInfo culture = null)
         {
             var serviceLocator = ServiceLocator.Default;
             var csvReaderService = serviceLocator.ResolveType<ICsvReaderService>();
