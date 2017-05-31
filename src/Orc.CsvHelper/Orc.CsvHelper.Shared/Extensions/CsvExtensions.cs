@@ -32,11 +32,13 @@ namespace Orc.Csv
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         #region Methods
+        [ObsoleteEx(RemoveInVersion = "2.0", TreatAsErrorFromVersion = "1.1", Message = "use ICsvWriterService")]
         public static void ToCsv<TRecord, TMap>(this IEnumerable<TRecord> records, string csvFilePath, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
         {
             ToCsv(records, csvFilePath, typeof(TMap), csvConfiguration, throwOnError, cultureInfo);
         }
 
+        [ObsoleteEx(RemoveInVersion = "2.0", TreatAsErrorFromVersion = "1.1", Message = "use ICsvWriterService")]
         public static void ToCsv<TRecord>(this IEnumerable<TRecord> records, string csvFilePath, Type csvMap = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
         {
             if (csvConfiguration == null)
@@ -55,6 +57,7 @@ namespace Orc.Csv
             }
         }
 
+        [ObsoleteEx(RemoveInVersion = "2.0", TreatAsErrorFromVersion = "1.1", Message = "use ICsvWriterService")]
         private static CsvConfiguration CreateCsvConfiguration(CultureInfo cultureInfo = null)
         {
             var csvConfiguration = new CsvConfiguration
@@ -68,6 +71,7 @@ namespace Orc.Csv
             return csvConfiguration;
         }
 
+        [ObsoleteEx(RemoveInVersion = "2.0", TreatAsErrorFromVersion = "1.1", Message = "use ICsvWriterService")]
         public static void ToCsv<TRecord>(this IEnumerable<TRecord> records, string csvFilePath, CsvClassMap csvMap, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
         {
             if (csvConfiguration == null)
@@ -86,6 +90,7 @@ namespace Orc.Csv
             }
         }
 
+        [ObsoleteEx(RemoveInVersion = "2.0", TreatAsErrorFromVersion = "1.1", Message = "use ICsvWriterService")]
         public static void ToCsv(this IEnumerable records, string csvFilePath, Type recordType, CsvClassMap csvMap, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
         {
             if (csvConfiguration == null)
