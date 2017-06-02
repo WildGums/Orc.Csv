@@ -15,6 +15,7 @@ namespace Orc.Csv
     using System.Text;
     using System.Threading.Tasks;
     using Catel;
+    using Catel.IoC;
     using Catel.Logging;
     using CsvHelper;
     using CsvHelper.Configuration;
@@ -50,8 +51,10 @@ namespace Orc.Csv
         [ObsoleteEx(RemoveInVersion = "2.0", TreatAsErrorFromVersion = "1.1", Message = "use ICsvReaderServiceExtensions")]
         public virtual IEnumerable<T> ReadCsv<T>(string csvFilePath, Action<T> initializer = null, Type mapType = null, CsvConfiguration csvConfiguration = null, bool throwOnError = true, CultureInfo culture = null)
         {
-            var csvMapInstance = mapType?.CreateInstanceOfType<CsvClassMap>();
-            return ReadCsv(csvFilePath, csvMapInstance, initializer, csvConfiguration, throwOnError, culture);
+            using (var csvReader = ICsvReaderServiceExtensions.CreateReader(this, csvFilePath, mapType, csvConfiguration, culture))
+            {
+                return ReadData(csvFilePath, initializer, throwOnError, csvReader);
+            }
         }
 
         public virtual IEnumerable<T> ReadCsv<T>(string csvFilePath, CsvClassMap csvMap, Action<T> initializer = null, CsvConfiguration csvConfiguration = null, bool throwOnError = true, CultureInfo culture = null)
@@ -72,17 +75,18 @@ namespace Orc.Csv
             var buffer = await _fileService.ReadAllBytesAsync(csvFilePath);
             csvCofiguration = CreateCsvConfiguration(csvCofiguration, culture);
 
-            var memoryStream = new MemoryStream(buffer);
-            var stream = new StreamReader(memoryStream, Encoding.Default);
-
-            using (var csvReader = new CsvReader(stream, csvCofiguration))
+            using (var memoryStream = new MemoryStream(buffer))
             {
-                if (csvMap != null)
+                var stream = new StreamReader(memoryStream, Encoding.Default);
+                using (var csvReader = new CsvReader(stream, csvCofiguration))
                 {
-                    csvReader.Configuration.RegisterClassMap(csvMap);
-                }
+                    if (csvMap != null)
+                    {
+                        csvReader.Configuration.RegisterClassMap(csvMap);
+                    }
 
-                return ReadData(csvFilePath, initializer, throwOnError, csvReader).ToList();
+                    return ReadData(csvFilePath, initializer, throwOnError, csvReader).ToList();
+                }
             }
         }
 
@@ -122,14 +126,17 @@ namespace Orc.Csv
                 while (csvReader.Read())
                 {
                     var record = csvReader.GetRecord<T>();
-                    initializer?.Invoke(record);
+                    if (initializer != null)
+                    {
+                        initializer(record);
+                    }
 
                     items.Add(record);
                 }
             }
             catch (Exception ex)
             {
-                if (string.Equals(ex.Message, "No header record was found.", StringComparison.InvariantCultureIgnoreCase))
+                if (ex.Message.EqualsIgnoreCase("No header record was found."))
                 {
                     return new T[0];
                 }

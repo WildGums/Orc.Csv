@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TypeExtensions.cs" company="WildGums">
+// <copyright file="ITypeFactoryExtensions.cs" company="WildGums">
 //   Copyright (c) 2008 - 2017 WildGums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -9,16 +9,17 @@ namespace Orc.Csv
 {
     using System;
     using Catel;
+    using Catel.IoC;
+    using CsvHelper.Configuration;
 
-    internal static class TypeExtensions
+    internal static class ITypeFactoryExtensions
     {
         #region Methods
-        public static T CreateInstanceOfType<T>(this Type type)
+        public static CsvClassMap TryToCreateCsvClassMap(this ITypeFactory typeFactory, Type type)
         {
-            Argument.IsNotNull(() => type);
-            Argument.IsOfType(nameof(type), type, typeof(T));
+            Argument.IsNotNull(() => typeFactory);
 
-            return type != null ? (T) Activator.CreateInstance(type, new object[0]) : default(T);
+            return type != null ? typeFactory.CreateInstanceWithParametersAndAutoCompletion(type) as CsvClassMap : null;
         }
         #endregion
     }

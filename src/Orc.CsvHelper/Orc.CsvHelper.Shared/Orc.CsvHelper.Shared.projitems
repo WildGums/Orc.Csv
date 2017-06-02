@@ -19,8 +19,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\CsvExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ICsvReaderServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ICsvWriterServiceExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ITypeFactoryExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\TypeExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\CsvReaderHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\CsvWriterHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />

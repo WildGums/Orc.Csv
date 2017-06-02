@@ -12,11 +12,23 @@ namespace Orc.Csv
     using System.Globalization;
     using System.Threading.Tasks;
     using Catel;
+    using Catel.IoC;
     using CsvHelper;
     using CsvHelper.Configuration;
 
     public static class ICsvReaderServiceExtensions
     {
+        #region Constants
+        private static readonly ITypeFactory _typeFactory;
+        #endregion
+
+        #region Constructors
+        static ICsvReaderServiceExtensions()
+        {
+            _typeFactory = TypeFactory.Default;
+        }
+        #endregion
+
         #region Methods
         public static Task<IList<T>> ReadCsvAsync<T, TMap>(this ICsvReaderService csvReaderService, string csvFilePath, Action<T> initializer = null, CsvConfiguration csvConfiguration = null, bool throwOnError = true, CultureInfo culture = null)
             where TMap : CsvClassMap
@@ -30,7 +42,7 @@ namespace Orc.Csv
         {
             Argument.IsNotNull(() => csvReaderService);
 
-            var csvMapInstance = csvMapType?.CreateInstanceOfType<CsvClassMap>();
+            var csvMapInstance = _typeFactory.TryToCreateCsvClassMap(csvMapType);
             return csvReaderService.ReadCsvAsync(csvFilePath, csvMapInstance, initializer, csvCofiguration, throwOnError, culture);
         }
 
@@ -46,7 +58,7 @@ namespace Orc.Csv
         {
             Argument.IsNotNull(() => csvReaderService);
 
-            var csvMapInstance = csvMapType?.CreateInstanceOfType<CsvClassMap>();
+            var csvMapInstance = _typeFactory.TryToCreateCsvClassMap(csvMapType);
             return csvReaderService.ReadCsv(csvFilePath, csvMapInstance, initializer, csvConfiguration, throwOnError, culture);
         }
 
@@ -54,7 +66,7 @@ namespace Orc.Csv
         {
             Argument.IsNotNull(() => csvReaderService);
 
-            var csvMapInstance = csvMapType?.CreateInstanceOfType<CsvClassMap>();
+            var csvMapInstance = _typeFactory.TryToCreateCsvClassMap(csvMapType);
             return csvReaderService.CreateReader(csvFilePath, csvMapInstance, csvConfiguration, culture);
         }
         #endregion

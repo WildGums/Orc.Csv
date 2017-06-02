@@ -56,24 +56,23 @@ namespace Orc.Csv.Tests
             var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
             var csvWriterService = typeFactory.CreateInstanceWithParametersAndAutoCompletion<CsvWriterService>();
             var csvReaderService = typeFactory.CreateInstanceWithParametersAndAutoCompletion<CsvReaderService>();
-            const int operationCount = 5;
 
             using (var tempFilesContext = new TemporaryFilesContext("CsvWriterService"))
             {
                 var csvFilePath = tempFilesContext.GetFile("CsvWriterServiceTest.csv");
-                var originalData = CreateSampleOperations(operationCount).ToList();
+                var originalData = CreateSampleOperations(5).ToList();
                 await csvWriterService.WriteCsvAsync(originalData, csvFilePath);
 
-                var result = ICsvReaderServiceExtensions.ReadCsv<Operation, OperationCsvMap>(csvReaderService, csvFilePath)
-                    .ToList();
+                var result = ICsvReaderServiceExtensions.ReadCsv<Operation, OperationCsvMap>(csvReaderService, csvFilePath);
 
-                Assert.AreEqual(operationCount, result.Count);
+                var operationCounter = 0;
                 using (var expectedEnumerator = originalData.GetEnumerator())
                 {
                     foreach (var operation in result)
                     {
                         expectedEnumerator.MoveNext();
                         var expectedOperation = expectedEnumerator.Current;
+                        operationCounter++;
 
                         Assert.AreEqual(operation.Id, expectedOperation.Id);
                         Assert.AreEqual(operation.Name, expectedOperation.Name);
@@ -83,6 +82,8 @@ namespace Orc.Csv.Tests
                         Assert.AreEqual(operation.Enabled, expectedOperation.Enabled);
                     }
                 }
+
+                Assert.AreEqual(operationCounter, originalData.Count);
             }
         }
 
@@ -92,20 +93,21 @@ namespace Orc.Csv.Tests
             var serviceLocator = ServiceLocator.Default;
             var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
             var csvReaderService = typeFactory.CreateInstanceWithParametersAndAutoCompletion<CsvReaderService>();
-            var csvFilePath = Path.Combine(AssemblyDirectoryHelper.GetCurrentDirectory(), @"TestData\Operations.csv");
-            const int operationCount = 5;
+            var testDataDirectory = AssemblyDirectoryHelper.GetTestDataDirectory();
+            var csvFileName = "Operations.csv";
+            var csvFilePath = Path.Combine(testDataDirectory, csvFileName);
 
             var result = await csvReaderService.ReadCsvAsync<Operation, OperationCsvMap>(csvFilePath);
 
-            Assert.AreEqual(operationCount, result.Count);
-
-            var expectedResult = CreateSampleOperations(operationCount);
+            var expectedResult = CreateSampleOperations(5);
+            var operationCounter = 0;
             using (var expectedEnumerator = expectedResult.GetEnumerator())
             {
                 foreach (var operation in result)
                 {
                     expectedEnumerator.MoveNext();
                     var expectedOperation = expectedEnumerator.Current;
+                    operationCounter++;
 
                     Assert.AreEqual(operation.Id, expectedOperation.Id);
                     Assert.AreEqual(operation.Name, expectedOperation.Name);
@@ -115,6 +117,8 @@ namespace Orc.Csv.Tests
                     Assert.AreEqual(operation.Enabled, expectedOperation.Enabled);
                 }
             }
+
+            Assert.AreEqual(operationCounter, result.Count);
         }
     }
 }
