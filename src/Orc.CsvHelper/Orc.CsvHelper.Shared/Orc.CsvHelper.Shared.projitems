@@ -17,6 +17,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converters\YesNoToBooleanConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CsvEnvironment.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\CsvExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ICsvReaderServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ICsvWriterServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\TypeExtensions.cs" />

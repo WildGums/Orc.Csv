@@ -34,7 +34,7 @@ namespace Orc.CsvHelper.Tests
                 TrimHeaders = true,
             };
 
-            using (var csvReader = csvReaderService.CreateReader(csvFilePath, csvConfiguration: csvConfiguration))
+            using (var csvReader = ICsvReaderServiceExtensions.CreateReader(csvReaderService, csvFilePath, csvConfiguration: csvConfiguration))
             {
                 while (csvReader.Read())
                 {
