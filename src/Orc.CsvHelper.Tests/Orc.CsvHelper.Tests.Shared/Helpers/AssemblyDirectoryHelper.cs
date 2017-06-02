@@ -12,20 +12,16 @@ namespace Orc.CsvHelper.Tests
 
     internal static class AssemblyDirectoryHelper
     {
-        #region Constants
-        private static string _testDataDirectory;
-        private static string _currentDirectory;
-        #endregion
-
         #region Methods
         public static string GetCurrentDirectory()
         {
-            return _currentDirectory ?? (_currentDirectory = AppDomain.CurrentDomain.BaseDirectory);
+            var directory = AppDomain.CurrentDomain.BaseDirectory;
+            return directory;
         }
 
-        public static string GetTestDataDirectory()
+        public static string Resolve(string fileName)
         {
-            return _testDataDirectory ?? (_testDataDirectory = Path.Combine(AssemblyDirectoryHelper.GetCurrentDirectory(), "TestData"));
+            return Path.Combine(GetCurrentDirectory(), fileName);
         }
         #endregion
     }

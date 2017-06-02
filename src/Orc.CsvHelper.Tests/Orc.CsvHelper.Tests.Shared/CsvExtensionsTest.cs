@@ -50,7 +50,7 @@ namespace Orc.Csv.Tests
         #endregion
 
         [Test]
-        public async Task ToCsvFileAsync()
+        public async Task CorrectlyWriteToFileAsync()
         {
             var serviceLocator = ServiceLocator.Default;
             var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
@@ -88,14 +88,17 @@ namespace Orc.Csv.Tests
         }
 
         [Test]
-        public async Task FromCsvFileAsync()
+        public async Task CorrectlyReadOperationsFileAsync()
+        {
+            await FromCsvFileAsync("Operations");
+        }
+        
+        private async Task FromCsvFileAsync(string csvFileName)
         {
             var serviceLocator = ServiceLocator.Default;
             var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
             var csvReaderService = typeFactory.CreateInstanceWithParametersAndAutoCompletion<CsvReaderService>();
-            var testDataDirectory = AssemblyDirectoryHelper.GetTestDataDirectory();
-            var csvFileName = "Operations.csv";
-            var csvFilePath = Path.Combine(testDataDirectory, csvFileName);
+            var csvFilePath = AssemblyDirectoryHelper.Resolve($"TestData\\{csvFileName}.csv");
 
             var result = await csvReaderService.ReadCsvAsync<Operation, OperationCsvMap>(csvFilePath);
 
