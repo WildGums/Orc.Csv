@@ -26,32 +26,36 @@ namespace Orc.Csv.Tests
         public async Task ToCsvFileAsync()
         {
             var serviceLocator = ServiceLocator.Default;
-            var csvWriterService = serviceLocator.ResolveType<ICsvWriterService>();
+            var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+            var csvWriterService = typeFactory.CreateInstanceWithParametersAndAutoCompletion<CsvWriterService>();
+            var csvReaderService = typeFactory.CreateInstanceWithParametersAndAutoCompletion<CsvReaderService>();
+            const int operationCount = 5;
 
-            var csvFilePath = System.IO.Path.GetTempFileName();
-            var originalData = CreateSampleOperations(60).ToList();
-            await csvWriterService.WriteCsvAsync(originalData, csvFilePath);
-
-            var csvReaderService = serviceLocator.ResolveType<ICsvReaderService>();
-            var result = csvReaderService.ReadCsv<Operation, OperationCsvMap>(csvFilePath);
-
-            var expectedEnumerator = result.GetEnumerator();
-            foreach (var operation in result)
+            using (var tempFilesContext = new TemporaryFilesContext("CsvWriterService"))
             {
-                expectedEnumerator.MoveNext();
-                var expectedOperation = expectedEnumerator.Current;
+                var csvFilePath = tempFilesContext.GetFile("CsvWriterServiceTest.csv");
+                var originalData = CreateSampleOperations(operationCount).ToList();
+                await csvWriterService.WriteCsvAsync(originalData, csvFilePath);
 
-                Assert.AreEqual(operation.Id, expectedOperation.Id);
-                Assert.AreEqual(operation.Name, expectedOperation.Name);
-                Assert.AreEqual(operation.StartTime, expectedOperation.StartTime);
-                Assert.AreEqual(operation.Duration, expectedOperation.Duration);
-                Assert.AreEqual(operation.Quantity, expectedOperation.Quantity);
-                Assert.AreEqual(operation.Enabled, expectedOperation.Enabled);
-            }
+                var result = csvReaderService.ReadCsv<Operation, OperationCsvMap>(csvFilePath)
+                    .ToList();
 
-            if (File.Exists(csvFilePath))
-            {
-                File.Delete(csvFilePath);
+                Assert.AreEqual(operationCount, result.Count);
+                using (var expectedEnumerator = originalData.GetEnumerator())
+                {
+                    foreach (var operation in result)
+                    {
+                        expectedEnumerator.MoveNext();
+                        var expectedOperation = expectedEnumerator.Current;
+
+                        Assert.AreEqual(operation.Id, expectedOperation.Id);
+                        Assert.AreEqual(operation.Name, expectedOperation.Name);
+                        Assert.AreEqual(operation.StartTime, expectedOperation.StartTime);
+                        Assert.AreEqual(operation.Duration, expectedOperation.Duration);
+                        Assert.AreEqual(operation.Quantity, expectedOperation.Quantity);
+                        Assert.AreEqual(operation.Enabled, expectedOperation.Enabled);
+                    }
+                }
             }
         }
 
@@ -59,23 +63,31 @@ namespace Orc.Csv.Tests
         public void FromCsvFile()
         {
             var serviceLocator = ServiceLocator.Default;
-            var csvReaderService = serviceLocator.ResolveType<ICsvReaderService>();
+            var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+            var csvReaderService = typeFactory.CreateInstanceWithParametersAndAutoCompletion<CsvReaderService>();
+            var csvFilePath = Path.Combine(AssemblyDirectoryHelper.GetCurrentDirectory(), @"TestData\Operations.csv");
+            const int operationCount = 5;
 
-            var result = csvReaderService.ReadCsv<Operation, OperationCsvMap>(Path.Combine(AssemblyDirectoryHelper.GetCurrentDirectory(), @"TestData\Operations.csv"));
-            var expectedResult = CreateSampleOperations(5);
+            var result = csvReaderService.ReadCsv<Operation, OperationCsvMap>(csvFilePath)
+                .ToList();
 
-            var expectedEnumerator = expectedResult.GetEnumerator();
-            foreach (var operation in result)
+            Assert.AreEqual(operationCount, result.Count);
+
+            var expectedResult = CreateSampleOperations(operationCount);
+            using (var expectedEnumerator = expectedResult.GetEnumerator())
             {
-                expectedEnumerator.MoveNext();
-                var expectedOperation = expectedEnumerator.Current;
+                foreach (var operation in result)
+                {
+                    expectedEnumerator.MoveNext();
+                    var expectedOperation = expectedEnumerator.Current;
 
-                Assert.AreEqual(operation.Id, expectedOperation.Id);
-                Assert.AreEqual(operation.Name, expectedOperation.Name);
-                Assert.AreEqual(operation.StartTime, expectedOperation.StartTime);
-                Assert.AreEqual(operation.Duration, expectedOperation.Duration);
-                Assert.AreEqual(operation.Quantity, expectedOperation.Quantity);
-                Assert.AreEqual(operation.Enabled, expectedOperation.Enabled);
+                    Assert.AreEqual(operation.Id, expectedOperation.Id);
+                    Assert.AreEqual(operation.Name, expectedOperation.Name);
+                    Assert.AreEqual(operation.StartTime, expectedOperation.StartTime);
+                    Assert.AreEqual(operation.Duration, expectedOperation.Duration);
+                    Assert.AreEqual(operation.Quantity, expectedOperation.Quantity);
+                    Assert.AreEqual(operation.Enabled, expectedOperation.Enabled);
+                }
             }
         }
 
