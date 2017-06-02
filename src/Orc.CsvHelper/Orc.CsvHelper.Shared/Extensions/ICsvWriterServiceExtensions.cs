@@ -40,7 +40,7 @@ namespace Orc.Csv
 
             csvWriterService.WriteCsv(records, csvFilePath, typeof(TRecord), csvMap, csvConfiguration, throwOnError, cultureInfo);
         }
-        
+
         public static void WriteCsv<TRecord, TMap>(this ICsvWriterService csvWriterService, IEnumerable<TRecord> records, string csvFilePath, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
             where TMap : CsvClassMap
         {
