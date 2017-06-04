@@ -18,23 +18,13 @@ namespace Orc.Csv
 
     public static class ICsvWriterServiceExtensions
     {
-        #region Constants
-        private static readonly ITypeFactory _typeFactory;
-        #endregion
-
-        #region Constructors
-        static ICsvWriterServiceExtensions()
-        {
-            _typeFactory = TypeFactory.Default;
-        }
-        #endregion
-
         #region Methods
         public static void WriteCsv<TRecord>(this ICsvWriterService csvWriterService, IEnumerable<TRecord> records, string csvFilePath, Type csvMap = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
         {
             Argument.IsNotNull(() => csvWriterService);
 
-            var csvMapInstance = _typeFactory.TryToCreateCsvClassMap(csvMap);
+            var typeFactory = csvWriterService.GetTypeFactory();
+            var csvMapInstance = typeFactory.TryToCreateCsvClassMap(csvMap);
             csvWriterService.WriteCsv(records, csvFilePath, typeof(TRecord), csvMapInstance, csvConfiguration, throwOnError, cultureInfo);
         }
 
@@ -42,7 +32,8 @@ namespace Orc.Csv
         {
             Argument.IsNotNull(() => csvWriterService);
 
-            var csvMapInstance = _typeFactory.TryToCreateCsvClassMap(csvMap);
+            var typeFactory = csvWriterService.GetTypeFactory();
+            var csvMapInstance = typeFactory.TryToCreateCsvClassMap(csvMap);
             csvWriterService.WriteCsv(records, streamWriter, typeof(TRecord), csvMapInstance, csvConfiguration, throwOnError, cultureInfo);
         }
 
@@ -65,7 +56,8 @@ namespace Orc.Csv
         {
             Argument.IsNotNull(() => csvWriterService);
 
-            var csvMapInstance = _typeFactory.TryToCreateCsvClassMap(csvMap);
+            var typeFactory = csvWriterService.GetTypeFactory();
+            var csvMapInstance = typeFactory.TryToCreateCsvClassMap(csvMap);
             return csvWriterService.WriteCsvAsync(records, csvFilePath, typeof(TRecord), csvMapInstance, csvConfiguration, throwOnError, cultureInfo);
         }
 
