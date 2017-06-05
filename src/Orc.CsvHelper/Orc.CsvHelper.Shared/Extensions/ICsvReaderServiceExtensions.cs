@@ -27,13 +27,13 @@ namespace Orc.Csv
             return ReadCsvAsync<T>(csvReaderService, csvFilePath, typeof(TMap), initializer, csvConfiguration, throwOnError, culture);
         }
 
-        public static Task<IList<T>> ReadCsvAsync<T>(this ICsvReaderService csvReaderService, string csvFilePath, Type csvMapType = null, Action<T> initializer = null, CsvConfiguration csvCofiguration = null, bool throwOnError = true, CultureInfo culture = null)
+        public static Task<IList<T>> ReadCsvAsync<T>(this ICsvReaderService csvReaderService, string csvFilePath, Type csvMapType = null, Action<T> initializer = null, CsvConfiguration csvConfiguration = null, bool throwOnError = true, CultureInfo culture = null)
         {
             Argument.IsNotNull(() => csvReaderService);
 
             var typeFactory = csvReaderService.GetTypeFactory();
             var csvMapInstance = typeFactory.TryToCreateCsvClassMap(csvMapType);
-            return csvReaderService.ReadCsvAsync(csvFilePath, csvMapInstance, initializer, csvCofiguration, throwOnError, culture);
+            return csvReaderService.ReadCsvAsync(csvFilePath, csvMapInstance, initializer, csvConfiguration, throwOnError, culture);
         }
 
         public static IEnumerable<T> ReadCsv<T, TMap>(this ICsvReaderService csvReaderService, string csvFilePath, Action<T> initializer = null, CsvConfiguration csvConfiguration = null, bool throwOnError = true, CultureInfo culture = null)
