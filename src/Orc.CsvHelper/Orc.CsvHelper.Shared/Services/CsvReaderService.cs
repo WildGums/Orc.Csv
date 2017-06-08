@@ -65,7 +65,7 @@ namespace Orc.Csv
             }
         }
 
-        public async Task<IList<T>> ReadCsvAsync<T>(string csvFilePath, CsvClassMap csvMap, Action<T> initializer = null, CsvConfiguration csvCofiguration = null, bool throwOnError = true, CultureInfo culture = null)
+        public async Task<IList<T>> ReadCsvAsync<T>(string csvFilePath, CsvClassMap csvMap, Action<T> initializer = null, CsvConfiguration csvConfiguration = null, bool throwOnError = true, CultureInfo culture = null)
         {
             if (!_fileService.Exists(csvFilePath))
             {
@@ -73,12 +73,12 @@ namespace Orc.Csv
             }
 
             var buffer = await _fileService.ReadAllBytesAsync(csvFilePath);
-            csvCofiguration = CreateCsvConfiguration(csvCofiguration, culture);
+            csvConfiguration = CreateCsvConfiguration(csvConfiguration, culture);
 
             using (var memoryStream = new MemoryStream(buffer))
             {
                 var stream = new StreamReader(memoryStream, Encoding.Default);
-                using (var csvReader = new CsvReader(stream, csvCofiguration))
+                using (var csvReader = new CsvReader(stream, csvConfiguration))
                 {
                     if (csvMap != null)
                     {
