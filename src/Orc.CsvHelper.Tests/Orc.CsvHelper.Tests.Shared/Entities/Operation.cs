@@ -9,7 +9,7 @@ namespace Orc.Csv.Tests.Entities
 {
     using System;
 
-    public class Operation
+    public class Operation 
     {
         #region Properties
         public int Id { get; set; }
@@ -19,5 +19,18 @@ namespace Orc.Csv.Tests.Entities
         public double Quantity { get; set; }
         public bool Enabled { get; set; }
         #endregion
+
+        public Operation Clone()
+        {
+            return new Operation
+            {
+                Id = Id,
+                Name = Name,
+                StartTime = StartTime,
+                Duration = Duration,
+                Quantity = Quantity,
+                Enabled = Enabled,
+            };
+        }
     }
 }

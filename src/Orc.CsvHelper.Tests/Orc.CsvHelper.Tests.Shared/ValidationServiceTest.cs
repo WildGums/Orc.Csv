@@ -6,14 +6,16 @@
 
 namespace Orc.Csv.Tests
 {
-	using NUnit.Framework;
+    using Catel.IO;
+    using CsvHelper.Tests;
+    using NUnit.Framework;
 
 	[TestFixture]
 	public class ValidationServiceTest
 	{
-		private const string TestInputFolder = @"TestData\";
+		private static readonly string TestInputFolder = Path.Combine(AssemblyDirectoryHelper.GetCurrentDirectory(), @"TestData\");
 
-		[Test]
+        [Test]
 		[TestCase("Operation.csv", 0, 0)]
 		[TestCase("2Operation.csv", 1, 0)]
 		[TestCase("Operation2Invalid.csv", 0, 2)]

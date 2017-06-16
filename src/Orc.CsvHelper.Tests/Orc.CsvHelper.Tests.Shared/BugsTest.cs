@@ -7,6 +7,7 @@
 
 namespace Orc.CsvHelper.Tests
 {
+    using Catel.IO;
     using Csv;
     using FileSystem;
     using global::CsvHelper.Configuration;
@@ -15,7 +16,7 @@ namespace Orc.CsvHelper.Tests
     [TestFixture]
     public class BugsTest
     {
-        private const string TestInputFolder = @"TestData\";
+        private static readonly string TestInputFolder = Path.Combine(AssemblyDirectoryHelper.GetCurrentDirectory(), @"TestData\");
 
         [Test]
         public void GetFieldByColumnName_NoExceptionsShouldBeThrown()
@@ -33,7 +34,7 @@ namespace Orc.CsvHelper.Tests
                 TrimHeaders = true,
             };
 
-            using (var csvReader = csvReaderService.CreateReader(csvFilePath, csvConfiguration: csvConfiguration))
+            using (var csvReader = ICsvReaderServiceExtensions.CreateReader(csvReaderService, csvFilePath, csvConfiguration: csvConfiguration))
             {
                 while (csvReader.Read())
                 {

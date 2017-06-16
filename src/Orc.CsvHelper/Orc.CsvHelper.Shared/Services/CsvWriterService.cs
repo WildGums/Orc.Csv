@@ -1,3 +1,10 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CsvWriterService.cs" company="WildGums">
+//   Copyright (c) 2008 - 2017 WildGums. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+
 namespace Orc.Csv
 {
     using System;
@@ -5,41 +12,34 @@ namespace Orc.Csv
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
-    using System.Linq;
+    using System.Threading.Tasks;
+    using Catel;
     using Catel.Logging;
-    using Catel.Reflection;
     using CsvHelper;
     using CsvHelper.Configuration;
+    using FileSystem;
 
     public class CsvWriterService : ICsvWriterService
     {
         #region Constants
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
-        private static readonly object LockObject = new object();
         #endregion
 
-        public virtual CsvWriter CreateWriter(string csvFilePath, CsvConfiguration csvConfiguration = null)
+        #region Fields
+        private readonly IFileService _fileService;
+        #endregion
+
+        #region Constructors
+        public CsvWriterService(IFileService fileService)
         {
-            var streamWriter = new StreamWriter(csvFilePath, false);
-            return CreateWriter(streamWriter, csvConfiguration);
+            Argument.IsNotNull(() => fileService);
+
+            _fileService = fileService;
         }
+        #endregion
 
-        public virtual CsvWriter CreateWriter(StreamWriter streamWriter, CsvConfiguration csvConfiguration = null)
-        {
-            return new CsvWriter(streamWriter, csvConfiguration ?? CreateDefaultCsvConfiguration());
-        }
-
-        public virtual void WriteRecord(CsvWriter writer, params object[] fields)
-        {
-            foreach (var field in fields)
-            {
-                writer.WriteField(field);
-            }
-
-            writer.NextRecord();
-        }
-
+        #region ICsvWriterService Members
+        [ObsoleteEx(RemoveInVersion = "2.0", TreatAsErrorFromVersion = "1.1", Message = "use ICsvWriterServiceExtensions")]
         public virtual void WriteCsv<TRecord>(IEnumerable<TRecord> records, string csvFilePath, Type csvMap = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
         {
             if (csvConfiguration != null && cultureInfo != null)
@@ -58,6 +58,7 @@ namespace Orc.Csv
             }
         }
 
+        [ObsoleteEx(RemoveInVersion = "2.0", TreatAsErrorFromVersion = "1.1", Message = "use ICsvWriterServiceExtensions")]
         public virtual void WriteCsv<TRecord>(IEnumerable<TRecord> records, StreamWriter streamWriter, Type csvMap = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
         {
             if (csvConfiguration != null && cultureInfo != null)
@@ -76,12 +77,18 @@ namespace Orc.Csv
             }
         }
 
+        [ObsoleteEx(RemoveInVersion = "2.0", TreatAsErrorFromVersion = "1.1", Message = "use ICsvWriterServiceExtensions")]
+        public virtual void WriteCsv<TRecord>(IEnumerable<TRecord> records, string csvFilePath, CsvClassMap csvMap, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
+        {
+            WriteCsv(records, csvFilePath, typeof(TRecord), csvMap, csvConfiguration, throwOnError, cultureInfo);
+        }
+
+        [ObsoleteEx(RemoveInVersion = "2.0", TreatAsErrorFromVersion = "1.1", Message = "use ICsvWriterServiceExtensions")]
         public virtual void WriteCsv<TRecord, TMap>(IEnumerable<TRecord> records, string csvFilePath, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
             where TMap : CsvClassMap
         {
-            WriteCsv<TRecord>(records, csvFilePath, typeof (TMap), csvConfiguration, throwOnError, cultureInfo);
+            WriteCsv(records, csvFilePath, typeof(TMap), csvConfiguration, throwOnError, cultureInfo);
         }
-
 
         public virtual void WriteCsv(IEnumerable records, string csvFilePath, Type recordType, CsvClassMap csvMap, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
         {
@@ -109,7 +116,7 @@ namespace Orc.Csv
             }
 
             using (var csvWriter = CreateWriter(streamWriter, csvConfiguration ?? CreateDefaultCsvConfiguration(cultureInfo)))
-            { 
+            {
                 if (csvMap != null)
                 {
                     csvWriter.Configuration.RegisterClassMap(csvMap);
@@ -119,9 +126,19 @@ namespace Orc.Csv
             }
         }
 
-        public virtual void WriteCsv<TRecord>(IEnumerable<TRecord> records, string csvFilePath, CsvClassMap csvMap, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
+        public virtual async Task WriteCsvAsync(IEnumerable records, string csvFilePath, Type recordType, CsvClassMap csvMap = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
         {
-            WriteCsv(records, csvFilePath, typeof(TRecord), csvMap, csvConfiguration, throwOnError, cultureInfo);
+            byte[] buffer = null;
+            using (var memoryStream = new MemoryStream())
+            {
+                WriteCsv(records, new StreamWriter(memoryStream), recordType, csvMap, csvConfiguration, throwOnError, cultureInfo);
+                buffer = memoryStream.ToArray();
+            }
+
+            using (var fileStream = _fileService.Create(csvFilePath))
+            {
+                await fileStream.WriteAsync(buffer, 0, buffer.Length);
+            }
         }
 
         public virtual CsvConfiguration CreateDefaultCsvConfiguration(CultureInfo cultureInfo = null)
@@ -136,36 +153,35 @@ namespace Orc.Csv
             return csvConfiguration;
         }
 
+        public virtual CsvWriter CreateWriter(string csvFilePath, CsvConfiguration csvConfiguration = null)
+        {
+            var streamWriter = new StreamWriter(csvFilePath, false);
+            return CreateWriter(streamWriter, csvConfiguration);
+        }
+
+        public virtual CsvWriter CreateWriter(StreamWriter streamWriter, CsvConfiguration csvConfiguration = null)
+        {
+            return new CsvWriter(streamWriter, csvConfiguration ?? CreateDefaultCsvConfiguration());
+        }
+
+        public virtual void WriteRecord(CsvWriter writer, params object[] fields)
+        {
+            foreach (var field in fields)
+            {
+                writer.WriteField(field);
+            }
+
+            writer.NextRecord();
+        }
+        #endregion
+
+        #region Methods
         protected virtual void WriteRecords(IEnumerable records, Type recordType, bool throwOnError, CsvWriter csvWriter)
         {
             try
             {
-                // Note: in order to reduce writing bugs we have to prevent parallel writing
-                lock (LockObject)
-                {
-                    csvWriter.WriteHeader(recordType);
-
-                    var writeRecord = csvWriter.GetType().GetMethodsEx()
-                        .FirstOrDefault(x => x.IsGenericMethod && string.Equals("WriteRecord", x.Name) && x.GetGenericArguments().Length == 1 && x.GetParameters().Length == 1)?
-                        .MakeGenericMethod(recordType);
-
-                    if (!ReferenceEquals(writeRecord, null))
-                    {
-                        foreach (var record in records)
-                        {
-                            // Note: we could use this method but it is obsolete
-                            //
-                            // csvWriter.WriteRecord(recordType, record);
-                            writeRecord.Invoke(csvWriter, new[] { record });
-                        }
-
-                        return;
-                    }
-
-                    // Note: unfortaunately this method sometimes works incorrectly
-                    //       it is writing data into incorrect fields without any exception throwing
-                    csvWriter.WriteRecords(records);
-                }                
+                csvWriter.WriteHeader(recordType);
+                csvWriter.WriteRecords(records);
             }
             catch (Exception ex)
             {
@@ -179,5 +195,6 @@ namespace Orc.Csv
                 }
             }
         }
+        #endregion
     }
 }
