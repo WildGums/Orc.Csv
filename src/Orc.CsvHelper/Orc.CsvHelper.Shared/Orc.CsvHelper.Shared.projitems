@@ -16,13 +16,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converters\TypeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\YesNoToBooleanConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CsvEnvironment.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\CsvExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ICsvReaderServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ICsvWriterServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ITypeFactoryExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\CsvReaderHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\CsvWriterHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

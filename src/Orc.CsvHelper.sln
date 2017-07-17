@@ -5,9 +5,9 @@ VisualStudioVersion = 15.0.26020.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{23912551-289D-43BF-9B2D-5385308A09E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.CsvHelper.NET40", "Orc.CsvHelper\Orc.CsvHelper.NET40\Orc.CsvHelper.NET40.csproj", "{6F5EB0C1-7E36-413D-8463-968B7F86FE53}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.CsvHelper.NET47", "Orc.CsvHelper\Orc.CsvHelper.NET47\Orc.CsvHelper.NET47.csproj", "{6F5EB0C1-7E36-413D-8463-968B7F86FE53}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.CsvHelper.Tests.NET40", "Orc.CsvHelper.Tests\Orc.CsvHelper.Tests.NET40\Orc.CsvHelper.Tests.NET40.csproj", "{1E4A6610-74F8-477B-BB07-A9C2CC6763ED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.CsvHelper.Tests.NET47", "Orc.CsvHelper.Tests\Orc.CsvHelper.Tests.NET47\Orc.CsvHelper.Tests.NET47.csproj", "{1E4A6610-74F8-477B-BB07-A9C2CC6763ED}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{F9F59E5A-A3B1-47AF-938E-35C8793BC341}"
 	ProjectSection(SolutionItems) = preProject

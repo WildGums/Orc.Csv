@@ -41,22 +41,6 @@ namespace Orc.Csv
         #endregion
 
         #region ICsvReaderService Members
-        [ObsoleteEx(RemoveInVersion = "2.0", TreatAsErrorFromVersion = "1.1", Message = "use ICsvReaderServiceExtensions")]
-        public virtual IEnumerable<T> ReadCsv<T, TMap>(string csvFilePath, Action<T> initializer = null, CsvConfiguration csvConfiguration = null, bool throwOnError = true)
-            where TMap : CsvClassMap
-        {
-            return ReadCsv<T>(csvFilePath, initializer, typeof(TMap), csvConfiguration, throwOnError);
-        }
-
-        [ObsoleteEx(RemoveInVersion = "2.0", TreatAsErrorFromVersion = "1.1", Message = "use ICsvReaderServiceExtensions")]
-        public virtual IEnumerable<T> ReadCsv<T>(string csvFilePath, Action<T> initializer = null, Type mapType = null, CsvConfiguration csvConfiguration = null, bool throwOnError = true, CultureInfo culture = null)
-        {
-            using (var csvReader = ICsvReaderServiceExtensions.CreateReader(this, csvFilePath, mapType, csvConfiguration, culture))
-            {
-                return ReadData(csvFilePath, initializer, throwOnError, csvReader);
-            }
-        }
-
         public virtual IEnumerable<T> ReadCsv<T>(string csvFilePath, CsvClassMap csvMap, Action<T> initializer = null, CsvConfiguration csvConfiguration = null, bool throwOnError = true, CultureInfo culture = null)
         {
             using (var csvReader = CreateReader(csvFilePath, csvMap, csvConfiguration, culture))
@@ -88,19 +72,6 @@ namespace Orc.Csv
                     return ReadData(csvFilePath, initializer, throwOnError, csvReader).ToList();
                 }
             }
-        }
-
-        [ObsoleteEx(RemoveInVersion = "2.0", TreatAsErrorFromVersion = "1.1", Message = "use ICsvReaderServiceExtensions")]
-        public CsvReader CreateReader(string csvFilePath, Type csvMapType = null, CsvConfiguration csvConfiguration = null, CultureInfo culture = null)
-        {
-            var csvReader = CreateReaderCore(csvFilePath, csvConfiguration, culture);
-
-            if (csvMapType != null)
-            {
-                csvReader.Configuration.RegisterClassMap(csvMapType);
-            }
-
-            return csvReader;
         }
 
         public CsvReader CreateReader(string csvFilePath, CsvClassMap csvMap, CsvConfiguration csvConfiguration = null, CultureInfo culture = null)

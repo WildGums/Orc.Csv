@@ -23,13 +23,17 @@ namespace Orc.Csv
 
 		#region Fields
 		private readonly IEntityPluralService _pluralService;
-		#endregion
+	    private readonly ICsvReaderService _csvReaderService;
+	    #endregion
 
 		#region Constructors
-		public CsvValidationService(IEntityPluralService pluralService)
+		public CsvValidationService(IEntityPluralService pluralService, ICsvReaderService csvReaderService)
 		{
 			Argument.IsNotNull(() => pluralService);
-			_pluralService = pluralService;
+		    Argument.IsNotNull(() => csvReaderService);
+
+            _pluralService = pluralService;
+		    _csvReaderService = csvReaderService;
 		}
 		#endregion
 
@@ -37,15 +41,18 @@ namespace Orc.Csv
 		public IValidationContext Validate(string csvFilePath)
 		{
 			var className = _pluralService.ToSingular(Path.GetFileNameWithoutExtension(csvFilePath).ToCamelCase());
-			var csvReader = CsvReaderHelper.CreateReader(csvFilePath);
-			csvReader.Read();
 
-			var propertyNames =
-				from fieldHeader in csvReader.FieldHeaders
-				where !string.IsNullOrEmpty(fieldHeader)
-				select fieldHeader.ToCamelCase();
+		    using (var csvReader = _csvReaderService.CreateReader(csvFilePath))
+		    {
+		        csvReader.Read();
 
-			return Validate(csvFilePath, className, propertyNames);
+		        var propertyNames =
+		            from fieldHeader in csvReader.FieldHeaders
+		            where !string.IsNullOrEmpty(fieldHeader)
+		            select fieldHeader.ToCamelCase();
+
+		        return Validate(csvFilePath, className, propertyNames);
+		    }
 		}
 
 		public IValidationContext Validate(string csvFilePath, string className, IEnumerable<string> propertyNames)
@@ -54,7 +61,7 @@ namespace Orc.Csv
 
 			if (!CodeGenerator.IsValidLanguageIndependentIdentifier(className))
 			{
-				result.AddBusinessRuleValidationResult(new BusinessRuleValidationResult(ValidationResultType.Error, $"Inferred class name '{className}' is invalid. File: {csvFilePath}"));
+				result.Add(new BusinessRuleValidationResult(ValidationResultType.Error, $"Inferred class name '{className}' is invalid. File: {csvFilePath}"));
 			}
 			var propertyNameList = propertyNames.ToList();
 
@@ -62,7 +69,7 @@ namespace Orc.Csv
 			{
 				if (!CodeGenerator.IsValidLanguageIndependentIdentifier(propertyName))
 				{
-					result.AddFieldValidationResult(new FieldValidationResult(propertyName, ValidationResultType.Error, $"Inferred property name '{propertyName}' is invalid. File: {csvFilePath}"));
+					result.Add(new FieldValidationResult(propertyName, ValidationResultType.Error, $"Inferred property name '{propertyName}' is invalid. File: {csvFilePath}"));
 				}
 			}
 
@@ -73,7 +80,7 @@ namespace Orc.Csv
 
 			foreach (var duplicate in duplicates)
 			{
-				result.AddFieldValidationResult(new FieldValidationResult(duplicate, ValidationResultType.Error, $"Inferred property name '{duplicate}' is occurs more than once. File: {csvFilePath}"));
+				result.Add(new FieldValidationResult(duplicate, ValidationResultType.Error, $"Inferred property name '{duplicate}' is occurs more than once. File: {csvFilePath}"));
 			}
 
 			return result;

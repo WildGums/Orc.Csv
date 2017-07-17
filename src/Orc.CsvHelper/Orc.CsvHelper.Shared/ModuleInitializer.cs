@@ -1,7 +1,6 @@
 ﻿
 using Catel.IoC;
 using Catel.Services;
-using Catel.Services.Models;
 using Orc.Csv;
 
 /// <summary>
