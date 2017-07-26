@@ -8,6 +8,7 @@ namespace Orc.Csv.Tests
 {
     using Catel.IO;
     using CsvHelper.Tests;
+    using FileSystem;
     using NUnit.Framework;
 
 	[TestFixture]
@@ -27,7 +28,7 @@ namespace Orc.Csv.Tests
 			var csvFilePath = $"{TestInputFolder}{fileName}";
 
 			// Act
-			var service = new CsvValidationService(new EntityPluralService());
+			var service = new CsvValidationService(new EntityPluralService(), new CsvReaderService(new FileService()));
 			var result = service.Validate(csvFilePath);
 
 			// Assert:

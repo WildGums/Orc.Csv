@@ -26,16 +26,20 @@ namespace Orc.Csv
         private readonly IEntityPluralService _entityPluralService;
         private readonly IFileService _fileService;
         private readonly IDirectoryService _directoryService;
+        private readonly ICsvReaderService _csvReaderService;
 
-        public CodeGenerationService(IEntityPluralService entityPluralService, IFileService fileService, IDirectoryService directoryService)
+        public CodeGenerationService(IEntityPluralService entityPluralService, IFileService fileService,
+            IDirectoryService directoryService, ICsvReaderService csvReaderService)
         {
             Argument.IsNotNull(() => entityPluralService);
             Argument.IsNotNull(() => fileService);
             Argument.IsNotNull(() => directoryService);
+            Argument.IsNotNull(() => csvReaderService);
 
             _entityPluralService = entityPluralService;
             _fileService = fileService;
             _directoryService = directoryService;
+            _csvReaderService = csvReaderService;
         }
 
         public void CreateCSharpFilesForAllCsvFiles(string inputFoler, string namespaceName, string outputFolder)
@@ -59,27 +63,28 @@ namespace Orc.Csv
             var className = fileName.ToCamelCase();
             className = _entityPluralService.ToSingular(className);
 
-            var csvReader = CsvReaderHelper.CreateReader(csvFilePath);
-
             var properties = new List<string>();
             var propertyMaps = new List<string>();
 
-            var getSet = "{ get; set; }";
-
-            csvReader.Read();
-
-            for (int index = 0; index < csvReader.FieldHeaders.Length; index++)
+            using (var csvReader = _csvReaderService.CreateReader(csvFilePath))
             {
-                var fieldHeader = csvReader.FieldHeaders[index];
-                if (string.IsNullOrEmpty(fieldHeader))
-                {
-                    Log.Warning($"Skipping column #{index} in data file {fileName} because its column header is missing.");
-                    continue;
-                }
+                var getSet = "{ get; set; }";
 
-                var propertyName = fieldHeader.ToCamelCase();
-                properties.Add($"public string {propertyName} {getSet}");
-                propertyMaps.Add($"Map(x => x.{propertyName}).Name(\"{fieldHeader}\");");
+                csvReader.Read();
+
+                for (int index = 0; index < csvReader.FieldHeaders.Length; index++)
+                {
+                    var fieldHeader = csvReader.FieldHeaders[index];
+                    if (string.IsNullOrEmpty(fieldHeader))
+                    {
+                        Log.Warning($"Skipping column #{index} in data file {fileName} because its column header is missing.");
+                        continue;
+                    }
+
+                    var propertyName = fieldHeader.ToCamelCase();
+                    properties.Add($"public string {propertyName} {getSet}");
+                    propertyMaps.Add($"Map(x => x.{propertyName}).Name(\"{fieldHeader}\");");
+                }
             }
 
             _directoryService.Create(outputFolder);

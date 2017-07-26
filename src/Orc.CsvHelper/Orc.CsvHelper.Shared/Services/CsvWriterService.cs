@@ -39,57 +39,6 @@ namespace Orc.Csv
         #endregion
 
         #region ICsvWriterService Members
-        [ObsoleteEx(RemoveInVersion = "2.0", TreatAsErrorFromVersion = "1.1", Message = "use ICsvWriterServiceExtensions")]
-        public virtual void WriteCsv<TRecord>(IEnumerable<TRecord> records, string csvFilePath, Type csvMap = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
-        {
-            if (csvConfiguration != null && cultureInfo != null)
-            {
-                csvConfiguration.CultureInfo = cultureInfo;
-            }
-
-            using (var csvWriter = CreateWriter(csvFilePath, csvConfiguration ?? CreateDefaultCsvConfiguration(cultureInfo)))
-            {
-                if (csvMap != null)
-                {
-                    csvWriter.Configuration.RegisterClassMap(csvMap);
-                }
-
-                WriteRecords(records, typeof(TRecord), throwOnError, csvWriter);
-            }
-        }
-
-        [ObsoleteEx(RemoveInVersion = "2.0", TreatAsErrorFromVersion = "1.1", Message = "use ICsvWriterServiceExtensions")]
-        public virtual void WriteCsv<TRecord>(IEnumerable<TRecord> records, StreamWriter streamWriter, Type csvMap = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
-        {
-            if (csvConfiguration != null && cultureInfo != null)
-            {
-                csvConfiguration.CultureInfo = cultureInfo;
-            }
-
-            using (var csvWriter = CreateWriter(streamWriter, csvConfiguration ?? CreateDefaultCsvConfiguration(cultureInfo)))
-            {
-                if (csvMap != null)
-                {
-                    csvWriter.Configuration.RegisterClassMap(csvMap);
-                }
-
-                WriteRecords(records, typeof(TRecord), throwOnError, csvWriter);
-            }
-        }
-
-        [ObsoleteEx(RemoveInVersion = "2.0", TreatAsErrorFromVersion = "1.1", Message = "use ICsvWriterServiceExtensions")]
-        public virtual void WriteCsv<TRecord>(IEnumerable<TRecord> records, string csvFilePath, CsvClassMap csvMap, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
-        {
-            WriteCsv(records, csvFilePath, typeof(TRecord), csvMap, csvConfiguration, throwOnError, cultureInfo);
-        }
-
-        [ObsoleteEx(RemoveInVersion = "2.0", TreatAsErrorFromVersion = "1.1", Message = "use ICsvWriterServiceExtensions")]
-        public virtual void WriteCsv<TRecord, TMap>(IEnumerable<TRecord> records, string csvFilePath, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
-            where TMap : CsvClassMap
-        {
-            WriteCsv(records, csvFilePath, typeof(TMap), csvConfiguration, throwOnError, cultureInfo);
-        }
-
         public virtual void WriteCsv(IEnumerable records, string csvFilePath, Type recordType, CsvClassMap csvMap, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
         {
             if (csvConfiguration != null && cultureInfo != null)
