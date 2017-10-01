@@ -16,7 +16,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)CsvExtensionsTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CsvMaps\OperationCsvMap.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Operation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GlobalInitialization.approvaltests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\AssemblyDirectoryHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PublicApiFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TemporaryFileContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ValidationServiceTest.cs" />
     <None Include="$(MSBuildThisFileDirectory)Expected\OperationWithMissingColumn.cs">
