@@ -18,15 +18,16 @@ namespace Orc.Csv
                 return null;
             }
 
-            var value = ConvertStringToActualType(text);
+            var value = ConvertStringToActualType(options, text);
             return value;
         }
 
         /// <summary>
         /// Converts the string to the actual type. The null checks are already performed.
         /// </summary>
+        /// <param name="options">The options.</param>
         /// <param name="text">The text.</param>
         /// <returns></returns>
-        protected abstract TNullable ConvertStringToActualType(string text);
+        protected abstract TNullable ConvertStringToActualType(TypeConverterOptions options, string text);
     }
 }

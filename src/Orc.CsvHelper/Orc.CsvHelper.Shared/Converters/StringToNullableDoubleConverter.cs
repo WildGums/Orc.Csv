@@ -7,13 +7,14 @@
 
 namespace Orc.Csv
 {
+    using CsvHelper.TypeConversion;
     using System;
 
     public class StringToNullableDoubleConverter : StringToNullableTypeConverterBase<double?>
     {
-        protected override double? ConvertStringToActualType(string text)
+        protected override double? ConvertStringToActualType(TypeConverterOptions options, string text)
         {
-            var value = Convert.ToDouble(text);
+            var value = Convert.ToDouble(text, options.CultureInfo);
             if (double.IsNaN(value))
             {
                 return null;

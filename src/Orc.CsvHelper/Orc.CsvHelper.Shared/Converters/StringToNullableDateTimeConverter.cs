@@ -8,12 +8,13 @@
 namespace Orc.Csv
 {
     using System;
+    using CsvHelper.TypeConversion;
 
     public class StringToNullableDateTimeConverter : StringToNullableTypeConverterBase<DateTime?>
     {
-        protected override DateTime? ConvertStringToActualType(string text)
+        protected override DateTime? ConvertStringToActualType(TypeConverterOptions options, string text)
         {
-            var value = Convert.ToDateTime(text);
+            var value = Convert.ToDateTime(text, options.CultureInfo);
             if (value == CsvEnvironment.ExcelNullDate)
             {
                 return null;

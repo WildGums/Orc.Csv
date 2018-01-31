@@ -131,19 +131,19 @@ namespace Orc.Csv
     public class StringToNullableDateTimeConverter : Orc.Csv.StringToNullableTypeConverterBase<System.Nullable<System.DateTime>>
     {
         public StringToNullableDateTimeConverter() { }
-        protected override System.Nullable<System.DateTime> ConvertStringToActualType(string text) { }
+        protected override System.Nullable<System.DateTime> ConvertStringToActualType(CsvHelper.TypeConversion.TypeConverterOptions options, string text) { }
     }
     public class StringToNullableDoubleConverter : Orc.Csv.StringToNullableTypeConverterBase<System.Nullable<double>>
     {
         public StringToNullableDoubleConverter() { }
-        protected override System.Nullable<double> ConvertStringToActualType(string text) { }
+        protected override System.Nullable<double> ConvertStringToActualType(CsvHelper.TypeConversion.TypeConverterOptions options, string text) { }
     }
     public abstract class StringToNullableTypeConverterBase<TNullable> : Orc.Csv.TypeConverterBase<TNullable>
     
     {
         protected StringToNullableTypeConverterBase() { }
         public override object ConvertFromString(CsvHelper.TypeConversion.TypeConverterOptions options, string text) { }
-        protected abstract TNullable ConvertStringToActualType(string text);
+        protected abstract TNullable ConvertStringToActualType(CsvHelper.TypeConversion.TypeConverterOptions options, string text);
     }
     public class TypeConverter<T> : CsvHelper.TypeConversion.ITypeConverter
     

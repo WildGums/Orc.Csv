@@ -27,7 +27,8 @@ namespace Orc.Csv
         /// <returns></returns>
         public virtual string ConvertToString(TypeConverterOptions options, object value)
         {
-            return value.ToString();
+            var stringValue = Convert.ToString(value, options.CultureInfo);
+            return stringValue;
         }
 
         public abstract object ConvertFromString(TypeConverterOptions options, string text);
