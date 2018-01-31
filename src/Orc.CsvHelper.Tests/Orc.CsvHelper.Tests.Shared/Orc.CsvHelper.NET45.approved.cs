@@ -128,10 +128,22 @@ namespace Orc.Csv
     {
         public static string ToCamelCase(this string input) { }
     }
-    public class StringToNullableDateTimeConverter : Orc.Csv.TypeConverter<System.Nullable<System.DateTime>>
+    public class StringToNullableDateTimeConverter : Orc.Csv.StringToNullableTypeConverterBase<System.Nullable<System.DateTime>>
     {
         public StringToNullableDateTimeConverter() { }
-        public StringToNullableDateTimeConverter(string defaultInput) { }
+        protected override System.Nullable<System.DateTime> ConvertStringToActualType(string text) { }
+    }
+    public class StringToNullableDoubleConverter : Orc.Csv.StringToNullableTypeConverterBase<System.Nullable<double>>
+    {
+        public StringToNullableDoubleConverter() { }
+        protected override System.Nullable<double> ConvertStringToActualType(string text) { }
+    }
+    public abstract class StringToNullableTypeConverterBase<TNullable> : Orc.Csv.TypeConverterBase<TNullable>
+    
+    {
+        protected StringToNullableTypeConverterBase() { }
+        public override object ConvertFromString(CsvHelper.TypeConversion.TypeConverterOptions options, string text) { }
+        protected abstract TNullable ConvertStringToActualType(string text);
     }
     public class TypeConverter<T> : CsvHelper.TypeConversion.ITypeConverter
     
@@ -142,6 +154,15 @@ namespace Orc.Csv
         public bool CanConvertTo(System.Type type) { }
         public object ConvertFromString(CsvHelper.TypeConversion.TypeConverterOptions options, string text) { }
         public string ConvertToString(CsvHelper.TypeConversion.TypeConverterOptions options, object value) { }
+    }
+    public abstract class TypeConverterBase<T> : CsvHelper.TypeConversion.ITypeConverter
+    
+    {
+        public TypeConverterBase() { }
+        public bool CanConvertFrom(System.Type type) { }
+        public bool CanConvertTo(System.Type type) { }
+        public abstract object ConvertFromString(CsvHelper.TypeConversion.TypeConverterOptions options, string text);
+        public virtual string ConvertToString(CsvHelper.TypeConversion.TypeConverterOptions options, object value) { }
     }
     public class YesNoToBooleanConverter : Orc.Csv.TypeConverter<bool>
     {

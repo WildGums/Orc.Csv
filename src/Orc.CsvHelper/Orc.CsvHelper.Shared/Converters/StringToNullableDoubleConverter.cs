@@ -9,12 +9,12 @@ namespace Orc.Csv
 {
     using System;
 
-    public class StringToNullableDateTimeConverter : StringToNullableTypeConverterBase<DateTime?>
+    public class StringToNullableDoubleConverter : StringToNullableTypeConverterBase<double?>
     {
-        protected override DateTime? ConvertStringToActualType(string text)
+        protected override double? ConvertStringToActualType(string text)
         {
-            var value = Convert.ToDateTime(text);
-            if (value == CsvEnvironment.ExcelNullDate)
+            var value = Convert.ToDouble(text);
+            if (double.IsNaN(value))
             {
                 return null;
             }
