@@ -25,16 +25,15 @@ namespace Orc.CsvHelper.Tests
             var csvFilePath = $"{TestInputFolder}{"Operation.csv"}";
 
             var csvReaderService = new CsvReaderService(new FileService());
-            var csvConfiguration = new CsvConfiguration
+            var configuration = new global::CsvHelper.Configuration.Configuration
             {
-                WillThrowOnMissingField = false,
-                SkipEmptyRecords = true,
+                MissingFieldFound = null,
+                IgnoreBlankLines = true,
                 HasHeaderRecord = true,
-                TrimFields = true,
-                TrimHeaders = true,
+                TrimOptions = TrimOptions.Trim
             };
 
-            using (var csvReader = ICsvReaderServiceExtensions.CreateReader(csvReaderService, csvFilePath, csvConfiguration: csvConfiguration))
+            using (var csvReader = ICsvReaderServiceExtensions.CreateReader(csvReaderService, csvFilePath, configuration: configuration))
             {
                 while (csvReader.Read())
                 {

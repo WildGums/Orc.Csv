@@ -2,7 +2,7 @@ namespace nameSpace
 {
     using CsvHelper.Configuration;
 
-    public sealed class OperationWithMissingColumnMap : CsvClassMap<OperationWithMissingColumn>
+    public sealed class OperationWithMissingColumnMap : ClassMap<OperationWithMissingColumn>
     {
         public OperationWithMissingColumnMap()
         {

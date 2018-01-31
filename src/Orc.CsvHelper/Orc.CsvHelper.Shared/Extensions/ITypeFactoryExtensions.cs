@@ -15,11 +15,11 @@ namespace Orc.Csv
     internal static class ITypeFactoryExtensions
     {
         #region Methods
-        public static CsvClassMap TryToCreateCsvClassMap(this ITypeFactory typeFactory, Type type)
+        public static ClassMap TryToCreateClassMap(this ITypeFactory typeFactory, Type type)
         {
             Argument.IsNotNull(() => typeFactory);
 
-            return type != null ? typeFactory.CreateInstanceWithParametersAndAutoCompletion(type) as CsvClassMap : null;
+            return type != null ? typeFactory.CreateInstanceWithParametersAndAutoCompletion(type) as ClassMap : null;
         }
         #endregion
     }

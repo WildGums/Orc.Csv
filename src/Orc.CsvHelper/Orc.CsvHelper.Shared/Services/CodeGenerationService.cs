@@ -125,7 +125,7 @@ namespace Orc.Csv
             sb.AppendLine("{");
             sb.AppendLine($"{Spaces(4)}using CsvHelper.Configuration;");
             sb.AppendLine("");
-            sb.AppendLine($"{Spaces(4)}public sealed class {classNameMap} : CsvClassMap<{className}>");
+            sb.AppendLine($"{Spaces(4)}public sealed class {classNameMap} : ClassMap<{className}>");
             sb.AppendLine(Spaces(4) + "{");
             sb.AppendLine($"{Spaces(8)}public {classNameMap}()");
             sb.AppendLine(Spaces(8) + "{");

@@ -39,14 +39,14 @@ namespace Orc.Csv
         #endregion
 
         #region ICsvWriterService Members
-        public virtual void WriteCsv(IEnumerable records, string csvFilePath, Type recordType, CsvClassMap csvMap, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
+        public virtual void WriteCsv(IEnumerable records, string csvFilePath, Type recordType, ClassMap csvMap, Configuration configuration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
         {
-            if (csvConfiguration != null && cultureInfo != null)
+            if (configuration != null && cultureInfo != null)
             {
-                csvConfiguration.CultureInfo = cultureInfo;
+                configuration.CultureInfo = cultureInfo;
             }
 
-            using (var csvWriter = CreateWriter(csvFilePath, csvConfiguration ?? CreateDefaultCsvConfiguration(cultureInfo)))
+            using (var csvWriter = CreateWriter(csvFilePath, configuration ?? CreateDefaultConfiguration(cultureInfo)))
             {
                 if (csvMap != null)
                 {
@@ -57,14 +57,14 @@ namespace Orc.Csv
             }
         }
 
-        public virtual void WriteCsv(IEnumerable records, StreamWriter streamWriter, Type recordType, CsvClassMap csvMap, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
+        public virtual void WriteCsv(IEnumerable records, StreamWriter streamWriter, Type recordType, ClassMap csvMap, Configuration configuration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
         {
-            if (csvConfiguration != null && cultureInfo != null)
+            if (configuration != null && cultureInfo != null)
             {
-                csvConfiguration.CultureInfo = cultureInfo;
+                configuration.CultureInfo = cultureInfo;
             }
 
-            using (var csvWriter = CreateWriter(streamWriter, csvConfiguration ?? CreateDefaultCsvConfiguration(cultureInfo)))
+            using (var csvWriter = CreateWriter(streamWriter, configuration ?? CreateDefaultConfiguration(cultureInfo)))
             {
                 if (csvMap != null)
                 {
@@ -75,12 +75,12 @@ namespace Orc.Csv
             }
         }
 
-        public virtual async Task WriteCsvAsync(IEnumerable records, string csvFilePath, Type recordType, CsvClassMap csvMap = null, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
+        public virtual async Task WriteCsvAsync(IEnumerable records, string csvFilePath, Type recordType, ClassMap csvMap = null, Configuration configuration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
         {
             byte[] buffer = null;
             using (var memoryStream = new MemoryStream())
             {
-                WriteCsv(records, new StreamWriter(memoryStream), recordType, csvMap, csvConfiguration, throwOnError, cultureInfo);
+                WriteCsv(records, new StreamWriter(memoryStream), recordType, csvMap, configuration, throwOnError, cultureInfo);
                 buffer = memoryStream.ToArray();
             }
 
@@ -90,27 +90,27 @@ namespace Orc.Csv
             }
         }
 
-        public virtual CsvConfiguration CreateDefaultCsvConfiguration(CultureInfo cultureInfo = null)
+        public virtual Configuration CreateDefaultConfiguration(CultureInfo cultureInfo = null)
         {
-            var csvConfiguration = new CsvConfiguration
+            var configuration = new Configuration
             {
                 CultureInfo = cultureInfo ?? CsvEnvironment.DefaultCultureInfo,
                 WillThrowOnMissingField = false,
                 HasHeaderRecord = true
             };
 
-            return csvConfiguration;
+            return configuration;
         }
 
-        public virtual CsvWriter CreateWriter(string csvFilePath, CsvConfiguration csvConfiguration = null)
+        public virtual CsvWriter CreateWriter(string csvFilePath, Configuration configuration = null)
         {
             var streamWriter = new StreamWriter(csvFilePath, false);
-            return CreateWriter(streamWriter, csvConfiguration);
+            return CreateWriter(streamWriter, configuration);
         }
 
-        public virtual CsvWriter CreateWriter(StreamWriter streamWriter, CsvConfiguration csvConfiguration = null)
+        public virtual CsvWriter CreateWriter(StreamWriter streamWriter, Configuration configuration = null)
         {
-            return new CsvWriter(streamWriter, csvConfiguration ?? CreateDefaultCsvConfiguration());
+            return new CsvWriter(streamWriter, configuration ?? CreateDefaultConfiguration());
         }
 
         public virtual void WriteRecord(CsvWriter writer, params object[] fields)

@@ -63,7 +63,7 @@ namespace Orc.Csv.Tests
                 var originalData = CreateSampleOperations(5).ToList();
                 await csvWriterService.WriteCsvAsync(originalData, csvFilePath);
 
-                var result = ICsvReaderServiceExtensions.ReadCsv<Operation, OperationCsvMap>(csvReaderService, csvFilePath);
+                var result = ICsvReaderServiceExtensions.ReadCsv<Operation, OperationMap>(csvReaderService, csvFilePath);
 
                 var operationCounter = 0;
                 using (var expectedEnumerator = originalData.GetEnumerator())
@@ -100,7 +100,7 @@ namespace Orc.Csv.Tests
             var csvReaderService = typeFactory.CreateInstanceWithParametersAndAutoCompletion<CsvReaderService>();
             var csvFilePath = AssemblyDirectoryHelper.Resolve($"TestData\\{csvFileName}.csv");
 
-            var result = await csvReaderService.ReadCsvAsync<Operation, OperationCsvMap>(csvFilePath);
+            var result = await csvReaderService.ReadCsvAsync<Operation, OperationMap>(csvFilePath);
 
             var expectedResult = CreateSampleOperations(5);
             var operationCounter = 0;

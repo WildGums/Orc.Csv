@@ -19,17 +19,17 @@ namespace Orc.Csv
     public interface ICsvWriterService
     {
         #region Methods
-        Task WriteCsvAsync(IEnumerable records, string csvFilePath, Type recordType, CsvClassMap csvMap, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null);
+        Task WriteCsvAsync(IEnumerable records, string csvFilePath, Type recordType, ClassMap csvMap, Configuration configuration = null, bool throwOnError = false, CultureInfo cultureInfo = null);
 
-        void WriteCsv(IEnumerable records, StreamWriter streamWriter, Type recordType, CsvClassMap csvMap, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null);
+        void WriteCsv(IEnumerable records, StreamWriter streamWriter, Type recordType, ClassMap csvMap, Configuration configuration = null, bool throwOnError = false, CultureInfo cultureInfo = null);
 
-        void WriteCsv(IEnumerable records, string csvFilePath, Type recordType, CsvClassMap csvMap, CsvConfiguration csvConfiguration = null, bool throwOnError = false, CultureInfo cultureInfo = null);
+        void WriteCsv(IEnumerable records, string csvFilePath, Type recordType, ClassMap csvMap, Configuration configuration = null, bool throwOnError = false, CultureInfo cultureInfo = null);
 
-        CsvConfiguration CreateDefaultCsvConfiguration(CultureInfo cultureInfo = null);
+        Configuration CreateDefaultConfiguration(CultureInfo cultureInfo = null);
 
-        CsvWriter CreateWriter(string csvFilePath, CsvConfiguration csvConfiguration = null);
+        CsvWriter CreateWriter(string csvFilePath, Configuration configuration = null);
 
-        CsvWriter CreateWriter(StreamWriter streamWriter, CsvConfiguration csvConfiguration = null);
+        CsvWriter CreateWriter(StreamWriter streamWriter, Configuration configuration = null);
 
         void WriteRecord(CsvWriter writer, params object[] fields);
         #endregion

@@ -41,15 +41,15 @@ namespace Orc.Csv
         #endregion
 
         #region ICsvReaderService Members
-        public virtual IEnumerable<T> ReadCsv<T>(string csvFilePath, CsvClassMap csvMap, Action<T> initializer = null, CsvConfiguration csvConfiguration = null, bool throwOnError = true, CultureInfo culture = null)
+        public virtual IEnumerable<T> ReadCsv<T>(string csvFilePath, ClassMap csvMap, Action<T> initializer = null, Configuration configuration = null, bool throwOnError = true, CultureInfo culture = null)
         {
-            using (var csvReader = CreateReader(csvFilePath, csvMap, csvConfiguration, culture))
+            using (var csvReader = CreateReader(csvFilePath, csvMap, configuration, culture))
             {
                 return ReadData(csvFilePath, initializer, throwOnError, csvReader);
             }
         }
 
-        public async Task<IList<T>> ReadCsvAsync<T>(string csvFilePath, CsvClassMap csvMap, Action<T> initializer = null, CsvConfiguration csvConfiguration = null, bool throwOnError = true, CultureInfo culture = null)
+        public async Task<IList<T>> ReadCsvAsync<T>(string csvFilePath, ClassMap csvMap, Action<T> initializer = null, Configuration configuration = null, bool throwOnError = true, CultureInfo culture = null)
         {
             if (!_fileService.Exists(csvFilePath))
             {
@@ -57,12 +57,12 @@ namespace Orc.Csv
             }
 
             var buffer = await _fileService.ReadAllBytesAsync(csvFilePath);
-            csvConfiguration = CreateCsvConfiguration(csvConfiguration, culture);
+            configuration = CreateConfiguration(configuration, culture);
 
             using (var memoryStream = new MemoryStream(buffer))
             {
                 var stream = new StreamReader(memoryStream, Encoding.Default);
-                using (var csvReader = new CsvReader(stream, csvConfiguration))
+                using (var csvReader = new CsvReader(stream, configuration))
                 {
                     if (csvMap != null)
                     {
@@ -74,9 +74,9 @@ namespace Orc.Csv
             }
         }
 
-        public CsvReader CreateReader(string csvFilePath, CsvClassMap csvMap, CsvConfiguration csvConfiguration = null, CultureInfo culture = null)
+        public CsvReader CreateReader(string csvFilePath, ClassMap csvMap, Configuration configuration = null, CultureInfo culture = null)
         {
-            var csvReader = CreateReaderCore(csvFilePath, csvConfiguration, culture);
+            var csvReader = CreateReaderCore(csvFilePath, configuration, culture);
 
             if (csvMap != null)
             {
@@ -125,14 +125,14 @@ namespace Orc.Csv
             return items;
         }
 
-        private CsvReader CreateReaderCore(string csvFilePath, CsvConfiguration csvConfiguration = null, CultureInfo culture = null)
+        private CsvReader CreateReaderCore(string csvFilePath, Configuration configuration = null, CultureInfo culture = null)
         {
-            csvConfiguration = CreateCsvConfiguration(csvConfiguration, culture);
-            var csvReader = CreateCsvReader(csvFilePath, csvConfiguration);
+            configuration = CreateConfiguration(configuration, culture);
+            var csvReader = CreateCsvReader(csvFilePath, configuration);
             return csvReader;
         }
 
-        protected virtual CsvReader CreateCsvReader(string csvFilePath, CsvConfiguration csvConfiguration)
+        protected virtual CsvReader CreateCsvReader(string csvFilePath, Configuration configuration)
         {
             if (!_fileService.Exists(csvFilePath))
             {
@@ -142,13 +142,13 @@ namespace Orc.Csv
             var fileStream = _fileService.Open(csvFilePath, FileMode.Open, FileAccess.Read);
             var stream = new StreamReader(fileStream, Encoding.Default);
 
-            var csvReader = new CsvReader(stream, csvConfiguration);
+            var csvReader = new CsvReader(stream, configuration);
             return csvReader;
         }
 
-        protected virtual CsvConfiguration CreateDefaultCsvConfiguration(CultureInfo culture)
+        protected virtual Configuration CreateDefaultConfiguration(CultureInfo culture)
         {
-            var configuration = new CsvConfiguration
+            var configuration = new Configuration
             {
                 CultureInfo = culture ?? CsvEnvironment.DefaultCultureInfo,
                 WillThrowOnMissingField = false,
@@ -160,14 +160,14 @@ namespace Orc.Csv
             return configuration;
         }
 
-        private CsvConfiguration CreateCsvConfiguration(CsvConfiguration csvConfiguration, CultureInfo culture)
+        private Configuration CreateConfiguration(Configuration configuration, CultureInfo culture)
         {
-            if (csvConfiguration != null && culture != null)
+            if (configuration != null && culture != null)
             {
-                csvConfiguration.CultureInfo = culture;
+                configuration.CultureInfo = culture;
             }
 
-            return csvConfiguration ?? CreateDefaultCsvConfiguration(culture);
+            return configuration ?? CreateDefaultConfiguration(culture);
         }
         #endregion
     }

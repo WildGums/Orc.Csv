@@ -2,7 +2,7 @@ namespace nameSpace
 {
     using CsvHelper.Configuration;
 
-    public sealed class OperationMap : CsvClassMap<Operation>
+    public sealed class OperationMap : ClassMap<Operation>
     {
         public OperationMap()
         {

@@ -10,10 +10,10 @@ namespace Orc.Csv.Tests.CsvMaps
     using Entities;
     using global::CsvHelper.Configuration;
 
-    public class OperationCsvMap : CsvClassMap<Operation>
+    public class OperationMap : ClassMap<Operation>
     {
         #region Constructors
-        public OperationCsvMap()
+        public OperationMap()
         {
             Map(x => x.Id).Name("Id");
             Map(x => x.Name).Name("Name");
