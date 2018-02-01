@@ -114,10 +114,6 @@ namespace Orc.Csv
                     return new object[0];
                 }
 
-                var errorMessage = ex.Data["CsvHelper"].ToString();
-
-                Log.Error("Cannot read row from stream. Error Details: {1}", errorMessage);
-
                 if (csvContext.ThrowOnError)
                 {
                     throw;
