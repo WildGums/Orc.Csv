@@ -19,6 +19,6 @@ public static class ModuleInitializer
         serviceLocator.RegisterType<ICsvWriterService, CsvWriterService>();
 
         var languageService = serviceLocator.ResolveType<ILanguageService>();
-        languageService.RegisterLanguageSource(new LanguageResourceSource("Orc.CsvHelper", "Orc.Csv.Properties", "Resources"));
+        languageService.RegisterLanguageSource(new LanguageResourceSource("Orc.Csv", "Orc.Csv.Properties", "Resources"));
     }
 }

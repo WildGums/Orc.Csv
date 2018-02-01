@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0"?>
 <package>
   <metadata>
-    <id>Orc.CsvHelper</id>
+    <id>Orc.Csv</id>
     <version>[VERSION]</version>
-    <title>Orc.CsvHelper</title>
+    <title>Orc.Csv</title>
     <authors>WildGums</authors>
     <owners>WildGums</owners>
 
@@ -16,10 +16,10 @@
     <tags>csv orcomp orc</tags>
 
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <copyright>Copyright WildGums 2010 - 2016</copyright>
+    <copyright>Copyright WildGums 2010 - 2018</copyright>
 
 	<language>en-US</language>
-	<projectUrl>https://github.com/WildGums/Orc.CsvHelper</projectUrl>
+	<projectUrl>https://github.com/WildGums/Orc.Csv</projectUrl>
 	<!--<licenseUrl>http://catel.codeplex.com/license</licenseUrl>-->
 	<!--<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>-->
     
