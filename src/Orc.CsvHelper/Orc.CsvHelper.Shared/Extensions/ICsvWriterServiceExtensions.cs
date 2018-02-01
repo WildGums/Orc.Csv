@@ -7,73 +7,60 @@
 
 namespace Orc.Csv
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
+    using System.Collections;
     using System.IO;
     using System.Threading.Tasks;
     using Catel;
     using Catel.IoC;
-    using CsvHelper.Configuration;
+    using CsvHelper;
+    using FileSystem;
 
     public static class ICsvWriterServiceExtensions
     {
         #region Methods
-        public static void WriteCsv<TRecord>(this ICsvWriterService csvWriterService, IEnumerable<TRecord> records, string csvFilePath, Type csvMap = null, Configuration configuration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
+        public static void WriteRecords(this ICsvWriterService csvWriterService, IEnumerable records, string fileName, ICsvContext csvContext)
         {
             Argument.IsNotNull(() => csvWriterService);
 
-            var typeFactory = csvWriterService.GetTypeFactory();
-            var csvMapInstance = typeFactory.TryToCreateClassMap(csvMap);
-            csvWriterService.WriteCsv(records, csvFilePath, typeof(TRecord), csvMapInstance, configuration, throwOnError, cultureInfo);
+            var dependencyResolver = csvWriterService.GetDependencyResolver();
+            var fileService = dependencyResolver.Resolve<IFileService>();
+
+            using (var stream = fileService.OpenWrite(fileName))
+            {
+                using (var streamWriter = new StreamWriter(stream))
+                {
+                    csvWriterService.WriteRecords(records, streamWriter, csvContext);
+                }
+            }
         }
 
-        public static void WriteCsv<TRecord>(this ICsvWriterService csvWriterService, IEnumerable<TRecord> records, StreamWriter streamWriter, Type csvMap = null, Configuration configuration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
+        public static async Task WriteRecordsAsync(this ICsvWriterService csvWriterService, IEnumerable records, string fileName, ICsvContext csvContext)
         {
             Argument.IsNotNull(() => csvWriterService);
 
-            var typeFactory = csvWriterService.GetTypeFactory();
-            var csvMapInstance = typeFactory.TryToCreateClassMap(csvMap);
-            csvWriterService.WriteCsv(records, streamWriter, typeof(TRecord), csvMapInstance, configuration, throwOnError, cultureInfo);
+            var dependencyResolver = csvWriterService.GetDependencyResolver();
+            var fileService = dependencyResolver.Resolve<IFileService>();
+
+            using (var stream = fileService.OpenWrite(fileName))
+            {
+                using (var streamWriter = new StreamWriter(stream))
+                {
+                    await csvWriterService.WriteRecordsAsync(records, streamWriter, csvContext);
+                }
+            }
         }
 
-        public static void WriteCsv<TRecord>(this ICsvWriterService csvWriterService, IEnumerable<TRecord> records, string csvFilePath, ClassMap csvMap, Configuration configuration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
+        public static CsvWriter CreateWriter(this ICsvWriterService csvWriterService, string fileName, ICsvContext csvContext)
         {
             Argument.IsNotNull(() => csvWriterService);
 
-            csvWriterService.WriteCsv(records, csvFilePath, typeof(TRecord), csvMap, configuration, throwOnError, cultureInfo);
-        }
+            var dependencyResolver = csvWriterService.GetDependencyResolver();
+            var fileService = dependencyResolver.Resolve<IFileService>();
 
-        public static void WriteCsv<TRecord, TMap>(this ICsvWriterService csvWriterService, IEnumerable<TRecord> records, string csvFilePath, Configuration configuration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
-            where TMap : ClassMap
-        {
-            Argument.IsNotNull(() => csvWriterService);
-
-            csvWriterService.WriteCsv(records, csvFilePath, typeof(TMap), configuration, throwOnError, cultureInfo);
-        }
-
-        public static Task WriteCsvAsync<TRecord>(this ICsvWriterService csvWriterService, IEnumerable<TRecord> records, string csvFilePath, Type csvMap = null, Configuration configuration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
-        {
-            Argument.IsNotNull(() => csvWriterService);
-
-            var typeFactory = csvWriterService.GetTypeFactory();
-            var csvMapInstance = typeFactory.TryToCreateClassMap(csvMap);
-            return csvWriterService.WriteCsvAsync(records, csvFilePath, typeof(TRecord), csvMapInstance, configuration, throwOnError, cultureInfo);
-        }
-
-        public static Task WriteCsvAsync<TRecord, TMap>(this ICsvWriterService csvWriterService, IEnumerable<TRecord> records, string csvFilePath, Configuration configuration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
-            where TMap : ClassMap
-        {
-            Argument.IsNotNull(() => csvWriterService);
-
-            return csvWriterService.WriteCsvAsync(records, csvFilePath, typeof(TMap), configuration, throwOnError, cultureInfo);
-        }
-
-        public static Task WriteCsvAsync<TRecord>(this ICsvWriterService csvWriterService, IEnumerable<TRecord> records, string csvFilePath, ClassMap csvMap, Configuration configuration = null, bool throwOnError = false, CultureInfo cultureInfo = null)
-        {
-            Argument.IsNotNull(() => csvWriterService);
-
-            return csvWriterService.WriteCsvAsync(records, csvFilePath, typeof(TRecord), csvMap, configuration, throwOnError, cultureInfo);
+            // Note: don't dispose, the writer cannot be used when disposed
+            var stream = fileService.OpenWrite(fileName);
+            var streamWriter = new StreamWriter(stream);
+            return csvWriterService.CreateWriter(streamWriter, csvContext);
         }
         #endregion
     }

@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.CsvHelper.Tests
+namespace Orc.Csv.Tests
 {
     using Catel.IO;
     using Csv;
@@ -24,7 +24,7 @@ namespace Orc.CsvHelper.Tests
             // Arrange
             var csvFilePath = $"{TestInputFolder}{"Operation.csv"}";
 
-            var csvReaderService = new CsvReaderService(new FileService());
+            var csvReaderService = new CsvReaderService();
             var configuration = new global::CsvHelper.Configuration.Configuration
             {
                 MissingFieldFound = null,
@@ -33,7 +33,12 @@ namespace Orc.CsvHelper.Tests
                 TrimOptions = TrimOptions.Trim
             };
 
-            using (var csvReader = ICsvReaderServiceExtensions.CreateReader(csvReaderService, csvFilePath, configuration: configuration))
+            var csvContext = new CsvContext<object>
+            {
+                Configuration = configuration
+            };
+
+            using (var csvReader = ICsvReaderServiceExtensions.CreateReader(csvReaderService, csvFilePath, csvContext))
             {
                 while (csvReader.Read())
                 {

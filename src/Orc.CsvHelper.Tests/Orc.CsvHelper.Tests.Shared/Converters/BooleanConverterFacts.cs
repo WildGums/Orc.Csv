@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.CsvHelper.Tests.Converters
+namespace Orc.Csv.Tests.Converters
 {
     using Catel.Fody;
     using Csv;

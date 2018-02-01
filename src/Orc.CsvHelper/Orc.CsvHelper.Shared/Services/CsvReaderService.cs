@@ -8,79 +8,53 @@
 namespace Orc.Csv
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
     using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
     using Catel;
-    using Catel.IoC;
     using Catel.Logging;
     using CsvHelper;
     using CsvHelper.Configuration;
-    using FileSystem;
 
-    public class CsvReaderService : ICsvReaderService
+    public class CsvReaderService : CsvServiceBase, ICsvReaderService
     {
         #region Constants
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
         #endregion
 
-        #region Fields
-        private readonly IFileService _fileService;
-        #endregion
-
-        #region Constructors
-        public CsvReaderService(IFileService fileService)
-        {
-            Argument.IsNotNull(() => fileService);
-
-            _fileService = fileService;
-        }
-        #endregion
-
         #region ICsvReaderService Members
-        public virtual IEnumerable<T> ReadCsv<T>(string csvFilePath, ClassMap csvMap, Action<T> initializer = null, Configuration configuration = null, bool throwOnError = true, CultureInfo cultureInfo = null)
+        public virtual IEnumerable ReadRecords(StreamReader streamReader, ICsvContext csvContext)
         {
-            using (var csvReader = CreateReader(csvFilePath, csvMap, configuration, cultureInfo))
+            Argument.IsNotNull(() => streamReader);
+            Argument.IsNotNull(() => csvContext);
+
+            using (var csvReader = CreateReader(streamReader, csvContext))
             {
-                return ReadData(csvFilePath, initializer, throwOnError, csvReader);
+                var data = ReadData(csvReader, csvContext);
+                return data;
             }
         }
 
-        public async Task<IList<T>> ReadCsvAsync<T>(string csvFilePath, ClassMap csvMap, Action<T> initializer = null, Configuration configuration = null, bool throwOnError = true, CultureInfo cultureInfo = null)
+        public async Task<IEnumerable> ReadRecordsAsync(StreamReader streamReader, ICsvContext csvContext)
         {
-            if (!_fileService.Exists(csvFilePath))
+            using (var csvReader = CreateReader(streamReader, csvContext))
             {
-                throw Log.ErrorAndCreateException<FileNotFoundException>("File '{0}' doesn't exist", csvFilePath);
-            }
-
-            var buffer = await _fileService.ReadAllBytesAsync(csvFilePath);
-            configuration = CreateConfiguration(configuration, cultureInfo);
-
-            using (var memoryStream = new MemoryStream(buffer))
-            {
-                var stream = new StreamReader(memoryStream, Encoding.Default);
-                using (var csvReader = new CsvReader(stream, configuration))
-                {
-                    if (csvMap != null)
-                    {
-                        csvReader.Configuration.RegisterClassMap(csvMap);
-                    }
-
-                    return ReadData(csvFilePath, initializer, throwOnError, csvReader).ToList();
-                }
+                var data = await ReadDataAsync(csvReader, csvContext);
+                return data;
             }
         }
 
-        public CsvReader CreateReader(string csvFilePath, ClassMap csvMap, Configuration configuration = null, CultureInfo cultureInfo = null)
+        public CsvReader CreateReader(StreamReader streamReader, ICsvContext csvContext)
         {
-            var csvReader = CreateReaderCore(csvFilePath, configuration, cultureInfo);
+            var configuration = EnsureCorrectConfiguration(csvContext.Configuration, csvContext.CultureInfo);
 
-            if (csvMap != null)
+            var csvReader = new CsvReader(streamReader, configuration);
+            if (csvContext.ClassMap != null)
             {
-                csvReader.Configuration.RegisterClassMap(csvMap);
+                csvReader.Configuration.RegisterClassMap(csvContext.ClassMap);
             }
 
             return csvReader;
@@ -88,15 +62,17 @@ namespace Orc.Csv
         #endregion
 
         #region Methods
-        protected virtual IEnumerable<T> ReadData<T>(string csvFilePath, Action<T> initializer, bool throwOnError, CsvReader csvReader)
+        protected virtual IEnumerable ReadData(CsvReader csvReader, ICsvContext csvContext)
         {
-            var items = new List<T>();
+            var recordType = csvContext.RecordType;
+            var initializer = csvContext.Initializer;
+            var items = new List<object>();
 
             try
             {
                 while (csvReader.Read())
                 {
-                    var record = csvReader.GetRecord<T>();
+                    var record = csvReader.GetRecord(recordType);
                     if (initializer != null)
                     {
                         initializer(record);
@@ -109,14 +85,14 @@ namespace Orc.Csv
             {
                 if (ex.Message.EqualsIgnoreCase("No header record was found."))
                 {
-                    return new T[0];
+                    return new object[0];
                 }
 
                 var errorMessage = ex.Data["CsvHelper"].ToString();
 
-                Log.Error("Cannot read row in '{0}'. Error Details: {1}", Path.GetFileName(csvFilePath), errorMessage);
+                Log.Error("Cannot read row from stream. Error Details: {1}", errorMessage);
 
-                if (throwOnError)
+                if (csvContext.ThrowOnError)
                 {
                     throw;
                 }
@@ -125,49 +101,43 @@ namespace Orc.Csv
             return items;
         }
 
-        private CsvReader CreateReaderCore(string csvFilePath, Configuration configuration = null, CultureInfo cultureInfo = null)
+        protected virtual async Task<IEnumerable> ReadDataAsync(CsvReader csvReader, ICsvContext csvContext)
         {
-            configuration = CreateConfiguration(configuration, cultureInfo);
-            var csvReader = CreateCsvReader(csvFilePath, configuration);
-            return csvReader;
-        }
+            var recordType = csvContext.RecordType;
+            var initializer = csvContext.Initializer;
+            var items = new List<object>();
 
-        protected virtual CsvReader CreateCsvReader(string csvFilePath, Configuration configuration)
-        {
-            if (!_fileService.Exists(csvFilePath))
+            try
             {
-                throw Log.ErrorAndCreateException<FileNotFoundException>("File '{0}' doesn't exist", csvFilePath);
+                while (await csvReader.ReadAsync())
+                {
+                    var record = csvReader.GetRecord(recordType);
+                    if (initializer != null)
+                    {
+                        initializer(record);
+                    }
+
+                    items.Add(record);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.EqualsIgnoreCase("No header record was found."))
+                {
+                    return new object[0];
+                }
+
+                var errorMessage = ex.Data["CsvHelper"].ToString();
+
+                Log.Error("Cannot read row from stream. Error Details: {1}", errorMessage);
+
+                if (csvContext.ThrowOnError)
+                {
+                    throw;
+                }
             }
 
-            var fileStream = _fileService.Open(csvFilePath, FileMode.Open, FileAccess.Read);
-            var stream = new StreamReader(fileStream, Encoding.Default);
-
-            var csvReader = new CsvReader(stream, configuration);
-            return csvReader;
-        }
-
-        protected virtual Configuration CreateDefaultConfiguration(CultureInfo cultureInfo)
-        {
-            var configuration = new Configuration
-            {
-                CultureInfo = cultureInfo ?? CsvEnvironment.DefaultCultureInfo,
-                MissingFieldFound = null,
-                TrimOptions = TrimOptions.Trim,
-                IgnoreBlankLines = true,
-                HasHeaderRecord = true,
-            };
-
-            return configuration;
-        }
-
-        private Configuration CreateConfiguration(Configuration configuration, CultureInfo cultureInfo)
-        {
-            if (configuration != null && cultureInfo != null)
-            {
-                configuration.CultureInfo = cultureInfo;
-            }
-
-            return configuration ?? CreateDefaultConfiguration(cultureInfo);
+            return items;
         }
         #endregion
     }

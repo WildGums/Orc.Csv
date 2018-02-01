@@ -7,9 +7,9 @@
 
 namespace Orc.Csv
 {
-    using System;
-    using System.Collections.Generic;
+    using System.Collections;
     using System.Globalization;
+    using System.IO;
     using System.Threading.Tasks;
     using CsvHelper;
     using CsvHelper.Configuration;
@@ -17,11 +17,13 @@ namespace Orc.Csv
     public interface ICsvReaderService
     {
         #region Methods
-        Task<IList<T>> ReadCsvAsync<T>(string csvFilePath, ClassMap csvMap, Action<T> initializer = null, Configuration configuration = null, bool throwOnError = true, CultureInfo cultureInfo = null);
+        IEnumerable ReadRecords(StreamReader streamReader, ICsvContext csvContext);
 
-        IEnumerable<T> ReadCsv<T>(string csvFilePath, ClassMap csvMap, Action<T> initializer = null, Configuration configuration = null, bool throwOnError = true, CultureInfo cultureInfo = null);
+        Task<IEnumerable> ReadRecordsAsync(StreamReader streamReader, ICsvContext csvContext);
 
-        CsvReader CreateReader(string csvFilePath, ClassMap csvMap, Configuration configuration = null, CultureInfo cultureInfo = null);
+        CsvReader CreateReader(StreamReader streamReader, ICsvContext csvContext);
+
+        Configuration CreateDefaultConfiguration(CultureInfo cultureInfo = null);
         #endregion
     }
 }

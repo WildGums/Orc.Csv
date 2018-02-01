@@ -10,9 +10,9 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("Orc.CsvHelper")]
-[assembly: AssemblyProduct("Orc.CsvHelper")]
-[assembly: AssemblyDescription("Orc.CsvHelper library")]
+[assembly: AssemblyTitle("Orc.Csv")]
+[assembly: AssemblyProduct("Orc.Csv")]
+[assembly: AssemblyDescription("Orc.Csv library")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 

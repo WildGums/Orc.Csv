@@ -9,7 +9,6 @@ namespace Orc.Csv
 {
     using System;
     using System.Collections;
-    using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
     using System.Threading.Tasks;
@@ -19,19 +18,13 @@ namespace Orc.Csv
     public interface ICsvWriterService
     {
         #region Methods
-        Task WriteCsvAsync(IEnumerable records, string csvFilePath, Type recordType, ClassMap csvMap, Configuration configuration = null, bool throwOnError = false, CultureInfo cultureInfo = null);
+        void WriteRecords(IEnumerable records, StreamWriter streamWriter, ICsvContext csvContext);
 
-        void WriteCsv(IEnumerable records, StreamWriter streamWriter, Type recordType, ClassMap csvMap, Configuration configuration = null, bool throwOnError = false, CultureInfo cultureInfo = null);
+        Task WriteRecordsAsync(IEnumerable records, StreamWriter streamWriter, ICsvContext csvContext);
 
-        void WriteCsv(IEnumerable records, string csvFilePath, Type recordType, ClassMap csvMap, Configuration configuration = null, bool throwOnError = false, CultureInfo cultureInfo = null);
+        CsvWriter CreateWriter(StreamWriter streamWriter, ICsvContext csvContext);
 
         Configuration CreateDefaultConfiguration(CultureInfo cultureInfo = null);
-
-        CsvWriter CreateWriter(string csvFilePath, Configuration configuration = null);
-
-        CsvWriter CreateWriter(StreamWriter streamWriter, Configuration configuration = null);
-
-        void WriteRecord(CsvWriter writer, params object[] fields);
         #endregion
     }
 }

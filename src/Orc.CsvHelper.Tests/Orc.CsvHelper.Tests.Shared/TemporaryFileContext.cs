@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.CsvHelper.Tests
+namespace Orc.Csv.Tests
 {
     using System;
     using System.IO;
@@ -30,7 +30,7 @@ namespace Orc.CsvHelper.Tests
                 name = _randomGuid.ToString();
             }
 
-            _rootDirectory = Path.Combine(Path.GetTempPath(), "Orc.CsvHelper.Tests", name);
+            _rootDirectory = Path.Combine(Path.GetTempPath(), "Orc.Csv.Tests", name);
 
             Directory.CreateDirectory(_rootDirectory);
         }

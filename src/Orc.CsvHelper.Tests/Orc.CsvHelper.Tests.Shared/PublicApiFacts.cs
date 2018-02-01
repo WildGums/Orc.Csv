@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.CsvHelper.Tests
+namespace Orc.Csv.Tests
 {
     using ApiApprover;
     using Csv;

@@ -7,59 +7,100 @@
 
 namespace Orc.Csv
 {
-    using System;
+    using System.Collections;
     using System.Collections.Generic;
-    using System.Globalization;
+    using System.IO;
+    using System.Linq;
     using System.Threading.Tasks;
     using Catel;
     using Catel.IoC;
     using CsvHelper;
-    using CsvHelper.Configuration;
+    using FileSystem;
 
     public static class ICsvReaderServiceExtensions
     {
         #region Methods
-        public static Task<IList<T>> ReadCsvAsync<T, TMap>(this ICsvReaderService csvReaderService, string csvFilePath, Action<T> initializer = null, Configuration configuration = null, bool throwOnError = true, CultureInfo cultureInfo = null)
-            where TMap : ClassMap
+        public static List<TRecord> ReadRecords<TRecord>(this ICsvReaderService csvReaderService, StreamReader streamReader, ICsvContext csvContext)
         {
             Argument.IsNotNull(() => csvReaderService);
+            Argument.IsOfType("csvContext.RecordType", csvContext.RecordType, typeof(TRecord));
 
-            return ReadCsvAsync<T>(csvReaderService, csvFilePath, typeof(TMap), initializer, configuration, throwOnError, cultureInfo);
+            var records = csvReaderService.ReadRecords(streamReader, csvContext);
+            return records.Cast<TRecord>().ToList();
         }
 
-        public static Task<IList<T>> ReadCsvAsync<T>(this ICsvReaderService csvReaderService, string csvFilePath, Type csvMapType = null, Action<T> initializer = null, Configuration configuration = null, bool throwOnError = true, CultureInfo cultureInfo = null)
+        public static async Task<List<TRecord>> ReadRecordsAsync<TRecord>(this ICsvReaderService csvReaderService, StreamReader streamReader, ICsvContext csvContext)
         {
             Argument.IsNotNull(() => csvReaderService);
+            Argument.IsOfType("csvContext.RecordType", csvContext.RecordType, typeof(TRecord));
 
-            var typeFactory = csvReaderService.GetTypeFactory();
-            var csvMapInstance = typeFactory.TryToCreateClassMap(csvMapType);
-            return csvReaderService.ReadCsvAsync(csvFilePath, csvMapInstance, initializer, configuration, throwOnError, cultureInfo);
+            var records = await csvReaderService.ReadRecordsAsync(streamReader, csvContext);
+            return records.Cast<TRecord>().ToList();
         }
 
-        public static IEnumerable<T> ReadCsv<T, TMap>(this ICsvReaderService csvReaderService, string csvFilePath, Action<T> initializer = null, Configuration configuration = null, bool throwOnError = true, CultureInfo cultureInfo = null)
-            where TMap : ClassMap
+        public static IEnumerable ReadRecords(this ICsvReaderService csvReaderService, string fileName, ICsvContext csvContext)
         {
             Argument.IsNotNull(() => csvReaderService);
 
-            return csvReaderService.ReadCsv<T>(csvFilePath, initializer, typeof(TMap), configuration, throwOnError, cultureInfo);
+            var dependencyResolver = csvReaderService.GetDependencyResolver();
+            var fileService = dependencyResolver.Resolve<IFileService>();
+
+            using (var stream = fileService.OpenRead(fileName))
+            {
+                using (var streamReader = new StreamReader(stream))
+                {
+                    var records = csvReaderService.ReadRecords(streamReader, csvContext);
+                    return records;
+                }
+            }
         }
 
-        public static IEnumerable<T> ReadCsv<T>(this ICsvReaderService csvReaderService, string csvFilePath, Action<T> initializer = null, Type csvMapType = null, Configuration configuration = null, bool throwOnError = true, CultureInfo cultureInfo = null)
+        public static async Task<IEnumerable> ReadRecordsAsync(this ICsvReaderService csvReaderService, string fileName, ICsvContext csvContext)
         {
             Argument.IsNotNull(() => csvReaderService);
 
-            var typeFactory = csvReaderService.GetTypeFactory();
-            var csvMapInstance = typeFactory.TryToCreateClassMap(csvMapType);
-            return csvReaderService.ReadCsv(csvFilePath, csvMapInstance, initializer, configuration, throwOnError, cultureInfo);
+            var dependencyResolver = csvReaderService.GetDependencyResolver();
+            var fileService = dependencyResolver.Resolve<IFileService>();
+
+            using (var stream = fileService.OpenRead(fileName))
+            {
+                using (var streamReader = new StreamReader(stream))
+                {
+                    var records = await csvReaderService.ReadRecordsAsync(streamReader, csvContext);
+                    return records;
+                }
+            }
         }
 
-        public static CsvReader CreateReader(this ICsvReaderService csvReaderService, string csvFilePath, Type csvMapType = null, Configuration configuration = null, CultureInfo cultureInfo = null)
+        public static List<TRecord> ReadRecords<TRecord>(this ICsvReaderService csvReaderService, string fileName, ICsvContext csvContext)
+        {
+            Argument.IsNotNull(() => csvReaderService);
+            Argument.IsOfType("csvContext.RecordType", csvContext.RecordType, typeof(TRecord));
+
+            var records = csvReaderService.ReadRecords(fileName, csvContext);
+            return records.Cast<TRecord>().ToList();
+        }
+
+        public static async Task<List<TRecord>> ReadRecordsAsync<TRecord>(this ICsvReaderService csvReaderService, string fileName, ICsvContext csvContext)
+        {
+            Argument.IsNotNull(() => csvReaderService);
+            Argument.IsOfType("csvContext.RecordType", csvContext.RecordType, typeof(TRecord));
+
+            var records = await csvReaderService.ReadRecordsAsync(fileName, csvContext);
+            return records.Cast<TRecord>().ToList();
+        }
+
+        public static CsvReader CreateReader(this ICsvReaderService csvReaderService, string fileName, ICsvContext csvContext)
         {
             Argument.IsNotNull(() => csvReaderService);
 
-            var typeFactory = csvReaderService.GetTypeFactory();
-            var csvMapInstance = typeFactory.TryToCreateClassMap(csvMapType);
-            return csvReaderService.CreateReader(csvFilePath, csvMapInstance, configuration, cultureInfo);
+            var dependencyResolver = csvReaderService.GetDependencyResolver();
+            var fileService = dependencyResolver.Resolve<IFileService>();
+
+            // Note: don't dispose, the reader cannot be used when disposed
+            var stream = fileService.OpenRead(fileName);
+            var streamReader = new StreamReader(stream);
+            return csvReaderService.CreateReader(streamReader, csvContext);
         }
         #endregion
     }

@@ -1,15 +1,17 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IEntityPluralService.cs" company="WildGums">
-//   Copyright (c) 2008 - 2016 WildGums. All rights reserved.
+// <copyright file="CsvReaderServiceFacts.cs" company="WildGums">
+//   Copyright (c) 2008 - 2018 WildGums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.Csv
+namespace Orc.Csv.Tests.Services
 {
-    public interface IEntityPluralService
+    using NUnit.Framework;
+
+    [TestFixture]
+    public class CsvReaderServiceFacts
     {
-        string ToPlural(string entity);
-        string ToSingular(string entity);
+
     }
 }
