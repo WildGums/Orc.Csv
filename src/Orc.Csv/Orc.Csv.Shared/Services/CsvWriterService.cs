@@ -55,6 +55,7 @@ namespace Orc.Csv
             try
             {
                 csvWriter.WriteHeader(csvContext.RecordType);
+                csvWriter.NextRecord();
                 csvWriter.WriteRecords(records);
             }
             catch (Exception)
