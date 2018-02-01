@@ -20,8 +20,12 @@ namespace Orc.Csv
         where T : struct, IComparable, IFormattable
     {
         public EnumConverter()
+            : this(default(T))
         {
-            DefaultValue = default(T);
+        }
+        public EnumConverter(T defaultValue)
+        {
+            DefaultValue = defaultValue;
         }
 
         public T DefaultValue { get; set; }

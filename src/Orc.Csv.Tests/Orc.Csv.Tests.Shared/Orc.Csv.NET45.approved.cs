@@ -92,6 +92,7 @@ namespace Orc.Csv
         where T :  struct, System.IComparable, System.IFormattable
     {
         public EnumConverter() { }
+        public EnumConverter(T defaultValue) { }
         public T DefaultValue { get; set; }
         public override object ConvertFromString(string text, CsvHelper.IReaderRow row, CsvHelper.Configuration.MemberMapData memberMapData) { }
     }
