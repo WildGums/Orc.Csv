@@ -17,8 +17,8 @@ namespace Orc.Csv
     {
         public BooleanConverter()
         {
-            TrueValues = new List<string>(new [] { "yes", "1", "on", "true" });
-            FalseValues = new List<string>(new[] { "no", "0", "off", "false" });
+            TrueValues = new List<string>(new [] { "yes", "1", "on", "true", "y", "t" });
+            FalseValues = new List<string>(new[] { "no", "0", "off", "false", "n", "f" });
         }
 
         public List<string> TrueValues { get; private set; }
