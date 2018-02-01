@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>3c0201f7-5000-4f18-8827-c47edad1df1d</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Orc.Csv</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\GlobalSuppressions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\NullableBooleanConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\EnumConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\NullableDecimalConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\NullableLongConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\NullableUIntConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\NullableULongConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\NullableUShortConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\NullableShortConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\NullableIntConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\NullableDoubleConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\NullableDateTimeConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\NullableTypeConverterBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\TypeConverterBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\BooleanConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CsvEnvironment.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ICsvReaderServiceExtensions.file.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ICsvWriterServiceExtensions.file.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\PropertyMapExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ICsvReaderServiceExtensions.stream.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ICsvWriterServiceExtensions.stream.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ITypeFactoryExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Maps\ClassMapBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\CsvContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Interfaces\ICsvContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Services\CsvReaderService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\CsvServiceBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\CsvWriterService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ICsvReaderService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ICsvWriterService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Models\Interfaces\" />
+  </ItemGroup>
+</Project>

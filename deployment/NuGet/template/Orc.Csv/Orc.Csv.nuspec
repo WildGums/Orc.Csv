@@ -1,0 +1,32 @@
+﻿<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>Orc.Csv</id>
+    <version>[VERSION]</version>
+    <title>Orc.Csv</title>
+    <authors>WildGums</authors>
+    <owners>WildGums</owners>
+
+	<description>
+        Extension methods / helper classes for CsvHelper.
+	</description>
+	<summary>
+	</summary>
+
+    <tags>csv orcomp orc</tags>
+
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <copyright>Copyright WildGums 2010 - 2018</copyright>
+
+	<language>en-US</language>
+	<projectUrl>https://github.com/WildGums/Orc.Csv</projectUrl>
+	<!--<licenseUrl>http://catel.codeplex.com/license</licenseUrl>-->
+	<!--<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>-->
+    
+    <dependencies>
+      <dependency id="CsvHelper" version="[replaced]" />
+      <dependency id="Catel.Core" version="[replaced]" />
+	  <dependency id="Orc.FileSystem" version="[replaced]" />
+    </dependencies>    
+  </metadata>
+</package>
