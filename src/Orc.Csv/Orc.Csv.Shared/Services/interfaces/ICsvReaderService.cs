@@ -23,7 +23,7 @@ namespace Orc.Csv
 
         CsvReader CreateReader(StreamReader streamReader, ICsvContext csvContext);
 
-        Configuration CreateDefaultConfiguration(CultureInfo cultureInfo = null);
+        Configuration CreateDefaultConfiguration(ICsvContext csvContext);
         #endregion
     }
 }

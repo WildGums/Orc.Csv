@@ -48,6 +48,23 @@ namespace Orc.Csv
         public static readonly System.Globalization.CultureInfo DefaultCultureInfo;
         public static readonly System.DateTime ExcelNullDate;
     }
+    public class static CsvHelperExtensions
+    {
+        public static CsvHelper.Configuration.MemberMap AsBool(this CsvHelper.Configuration.MemberMap map) { }
+        public static CsvHelper.Configuration.MemberMap AsDateTime(this CsvHelper.Configuration.MemberMap map) { }
+        public static CsvHelper.Configuration.MemberMap AsDecimal(this CsvHelper.Configuration.MemberMap map) { }
+        public static CsvHelper.Configuration.MemberMap AsDouble(this CsvHelper.Configuration.MemberMap map) { }
+        public static CsvHelper.Configuration.MemberMap AsInt(this CsvHelper.Configuration.MemberMap map) { }
+        public static CsvHelper.Configuration.MemberMap AsLong(this CsvHelper.Configuration.MemberMap map) { }
+        public static CsvHelper.Configuration.MemberMap AsNullableBool(this CsvHelper.Configuration.MemberMap map) { }
+        public static CsvHelper.Configuration.MemberMap AsNullableDateTime(this CsvHelper.Configuration.MemberMap map) { }
+        public static CsvHelper.Configuration.MemberMap AsNullableDecimal(this CsvHelper.Configuration.MemberMap map) { }
+        public static CsvHelper.Configuration.MemberMap AsNullableDouble(this CsvHelper.Configuration.MemberMap map) { }
+        public static CsvHelper.Configuration.MemberMap AsNullableInt(this CsvHelper.Configuration.MemberMap map) { }
+        public static CsvHelper.Configuration.MemberMap AsNullableLong(this CsvHelper.Configuration.MemberMap map) { }
+        public static CsvHelper.Configuration.MemberMap AsNullableShort(this CsvHelper.Configuration.MemberMap map) { }
+        public static CsvHelper.Configuration.MemberMap AsShort(this CsvHelper.Configuration.MemberMap map) { }
+    }
     public class CsvReaderService : Orc.Csv.CsvServiceBase, Orc.Csv.ICsvReaderService
     {
         public CsvReaderService() { }
@@ -60,8 +77,8 @@ namespace Orc.Csv
     public abstract class CsvServiceBase
     {
         protected CsvServiceBase() { }
-        public virtual CsvHelper.Configuration.Configuration CreateDefaultConfiguration(System.Globalization.CultureInfo cultureInfo) { }
-        protected CsvHelper.Configuration.Configuration EnsureCorrectConfiguration(CsvHelper.Configuration.Configuration configuration, System.Globalization.CultureInfo cultureInfo) { }
+        public virtual CsvHelper.Configuration.Configuration CreateDefaultConfiguration(Orc.Csv.ICsvContext csvContext) { }
+        protected virtual CsvHelper.Configuration.Configuration EnsureCorrectConfiguration(CsvHelper.Configuration.Configuration configuration, Orc.Csv.ICsvContext csvContext) { }
     }
     public class CsvWriterService : Orc.Csv.CsvServiceBase, Orc.Csv.ICsvWriterService
     {
@@ -89,7 +106,7 @@ namespace Orc.Csv
     }
     public interface ICsvReaderService
     {
-        CsvHelper.Configuration.Configuration CreateDefaultConfiguration(System.Globalization.CultureInfo cultureInfo = null);
+        CsvHelper.Configuration.Configuration CreateDefaultConfiguration(Orc.Csv.ICsvContext csvContext);
         CsvHelper.CsvReader CreateReader(System.IO.StreamReader streamReader, Orc.Csv.ICsvContext csvContext);
         System.Collections.IEnumerable ReadRecords(System.IO.StreamReader streamReader, Orc.Csv.ICsvContext csvContext);
         System.Threading.Tasks.Task<System.Collections.IEnumerable> ReadRecordsAsync(System.IO.StreamReader streamReader, Orc.Csv.ICsvContext csvContext);
@@ -97,16 +114,28 @@ namespace Orc.Csv
     public class static ICsvReaderServiceExtensions
     {
         public static CsvHelper.CsvReader CreateReader(this Orc.Csv.ICsvReaderService csvReaderService, string fileName, Orc.Csv.ICsvContext csvContext) { }
-        public static System.Collections.Generic.List<TRecord> ReadRecords<TRecord>(this Orc.Csv.ICsvReaderService csvReaderService, System.IO.StreamReader streamReader, Orc.Csv.ICsvContext csvContext) { }
         public static System.Collections.IEnumerable ReadRecords(this Orc.Csv.ICsvReaderService csvReaderService, string fileName, Orc.Csv.ICsvContext csvContext) { }
         public static System.Collections.Generic.List<TRecord> ReadRecords<TRecord>(this Orc.Csv.ICsvReaderService csvReaderService, string fileName, Orc.Csv.ICsvContext csvContext) { }
-        public static System.Threading.Tasks.Task<System.Collections.Generic.List<TRecord>> ReadRecordsAsync<TRecord>(this Orc.Csv.ICsvReaderService csvReaderService, System.IO.StreamReader streamReader, Orc.Csv.ICsvContext csvContext) { }
+        public static System.Collections.Generic.List<TRecord> ReadRecords<TRecord, TRecordMap>(this Orc.Csv.ICsvReaderService csvReaderService, string fileName, Orc.Csv.ICsvContext csvContext = null)
+        
+            where TRecordMap : CsvHelper.Configuration.ClassMap, new () { }
+        public static System.Collections.Generic.List<TRecord> ReadRecords<TRecord>(this Orc.Csv.ICsvReaderService csvReaderService, System.IO.StreamReader streamReader, Orc.Csv.ICsvContext csvContext) { }
+        public static System.Collections.Generic.List<TRecord> ReadRecords<TRecord, TRecordMap>(this Orc.Csv.ICsvReaderService csvReaderService, System.IO.StreamReader streamReader, Orc.Csv.ICsvContext csvContext = null)
+        
+            where TRecordMap : CsvHelper.Configuration.ClassMap, new () { }
         public static System.Threading.Tasks.Task<System.Collections.IEnumerable> ReadRecordsAsync(this Orc.Csv.ICsvReaderService csvReaderService, string fileName, Orc.Csv.ICsvContext csvContext) { }
         public static System.Threading.Tasks.Task<System.Collections.Generic.List<TRecord>> ReadRecordsAsync<TRecord>(this Orc.Csv.ICsvReaderService csvReaderService, string fileName, Orc.Csv.ICsvContext csvContext) { }
+        public static System.Threading.Tasks.Task<System.Collections.Generic.List<TRecord>> ReadRecordsAsync<TRecord, TRecordMap>(this Orc.Csv.ICsvReaderService csvReaderService, string fileName, Orc.Csv.ICsvContext csvContext = null)
+        
+            where TRecordMap : CsvHelper.Configuration.ClassMap, new () { }
+        public static System.Threading.Tasks.Task<System.Collections.Generic.List<TRecord>> ReadRecordsAsync<TRecord>(this Orc.Csv.ICsvReaderService csvReaderService, System.IO.StreamReader streamReader, Orc.Csv.ICsvContext csvContext) { }
+        public static System.Threading.Tasks.Task<System.Collections.Generic.List<TRecord>> ReadRecordsAsync<TRecord, TRecordMap>(this Orc.Csv.ICsvReaderService csvReaderService, System.IO.StreamReader streamReader, Orc.Csv.ICsvContext csvContext = null)
+        
+            where TRecordMap : CsvHelper.Configuration.ClassMap, new () { }
     }
     public interface ICsvWriterService
     {
-        CsvHelper.Configuration.Configuration CreateDefaultConfiguration(System.Globalization.CultureInfo cultureInfo = null);
+        CsvHelper.Configuration.Configuration CreateDefaultConfiguration(Orc.Csv.ICsvContext csvContext);
         CsvHelper.CsvWriter CreateWriter(System.IO.StreamWriter streamWriter, Orc.Csv.ICsvContext csvContext);
         void WriteRecords(System.Collections.IEnumerable records, System.IO.StreamWriter streamWriter, Orc.Csv.ICsvContext csvContext);
         System.Threading.Tasks.Task WriteRecordsAsync(System.Collections.IEnumerable records, System.IO.StreamWriter streamWriter, Orc.Csv.ICsvContext csvContext);
@@ -115,7 +144,19 @@ namespace Orc.Csv
     {
         public static CsvHelper.CsvWriter CreateWriter(this Orc.Csv.ICsvWriterService csvWriterService, string fileName, Orc.Csv.ICsvContext csvContext) { }
         public static void WriteRecords(this Orc.Csv.ICsvWriterService csvWriterService, System.Collections.IEnumerable records, string fileName, Orc.Csv.ICsvContext csvContext) { }
+        public static void WriteRecords<TRecord, TRecordMap>(this Orc.Csv.ICsvWriterService csvWriterService, System.Collections.Generic.IEnumerable<TRecord> records, string fileName, Orc.Csv.ICsvContext csvContext = null)
+        
+            where TRecordMap : CsvHelper.Configuration.ClassMap, new () { }
+        public static void WriteRecords<TRecord, TRecordMap>(this Orc.Csv.ICsvWriterService csvWriterService, System.Collections.Generic.IEnumerable<TRecord> records, System.IO.StreamWriter streamWriter, Orc.Csv.ICsvContext csvContext = null)
+        
+            where TRecordMap : CsvHelper.Configuration.ClassMap, new () { }
         public static System.Threading.Tasks.Task WriteRecordsAsync(this Orc.Csv.ICsvWriterService csvWriterService, System.Collections.IEnumerable records, string fileName, Orc.Csv.ICsvContext csvContext) { }
+        public static System.Threading.Tasks.Task WriteRecordsAsync<TRecord, TRecordMap>(this Orc.Csv.ICsvWriterService csvWriterService, System.Collections.Generic.IEnumerable<TRecord> records, string fileName, Orc.Csv.ICsvContext csvContext = null)
+        
+            where TRecordMap : CsvHelper.Configuration.ClassMap, new () { }
+        public static System.Threading.Tasks.Task WriteRecordsAsync<TRecord, TRecordMap>(this Orc.Csv.ICsvWriterService csvWriterService, System.Collections.Generic.IEnumerable<TRecord> records, System.IO.StreamWriter streamWriter, Orc.Csv.ICsvContext csvContext = null)
+        
+            where TRecordMap : CsvHelper.Configuration.ClassMap, new () { }
     }
     public class NullableBooleanConverter : Orc.Csv.NullableTypeConverterBase<System.Nullable<bool>>
     {
@@ -185,7 +226,7 @@ namespace Orc.Csv
     {
         protected TypeConverterBase() { }
         public abstract object ConvertFromString(string text, CsvHelper.IReaderRow row, CsvHelper.Configuration.MemberMapData memberMapData);
-        public string ConvertToString(object value, CsvHelper.IWriterRow row, CsvHelper.Configuration.MemberMapData memberMapData) { }
+        public virtual string ConvertToString(object value, CsvHelper.IWriterRow row, CsvHelper.Configuration.MemberMapData memberMapData) { }
         protected System.Globalization.CultureInfo GetCultureInfo(CsvHelper.IWriterRow row) { }
         protected System.Globalization.CultureInfo GetCultureInfo(CsvHelper.IReaderRow row) { }
     }

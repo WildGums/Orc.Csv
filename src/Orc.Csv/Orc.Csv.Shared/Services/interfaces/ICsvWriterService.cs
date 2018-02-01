@@ -24,7 +24,7 @@ namespace Orc.Csv
 
         CsvWriter CreateWriter(StreamWriter streamWriter, ICsvContext csvContext);
 
-        Configuration CreateDefaultConfiguration(CultureInfo cultureInfo = null);
+        Configuration CreateDefaultConfiguration(ICsvContext csvContext);
         #endregion
     }
 }

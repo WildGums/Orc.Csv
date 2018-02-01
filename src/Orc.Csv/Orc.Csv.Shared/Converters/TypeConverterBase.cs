@@ -15,7 +15,7 @@ namespace Orc.Csv
 
     public abstract class TypeConverterBase<T> : ITypeConverter
     {
-        public string ConvertToString(object value, IWriterRow row, MemberMapData memberMapData)
+        public virtual string ConvertToString(object value, IWriterRow row, MemberMapData memberMapData)
         {
             var stringValue = Convert.ToString(value, GetCultureInfo(row));
             return stringValue;

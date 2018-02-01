@@ -10,14 +10,11 @@ namespace Orc.Csv
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.IO;
-    using System.Linq;
     using System.Threading.Tasks;
     using Catel;
     using Catel.Logging;
     using CsvHelper;
-    using CsvHelper.Configuration;
 
     public class CsvReaderService : CsvServiceBase, ICsvReaderService
     {
@@ -49,14 +46,8 @@ namespace Orc.Csv
 
         public CsvReader CreateReader(StreamReader streamReader, ICsvContext csvContext)
         {
-            var configuration = EnsureCorrectConfiguration(csvContext.Configuration, csvContext.CultureInfo);
-
+            var configuration = EnsureCorrectConfiguration(csvContext.Configuration, csvContext);
             var csvReader = new CsvReader(streamReader, configuration);
-            if (csvContext.ClassMap != null)
-            {
-                csvReader.Configuration.RegisterClassMap(csvContext.ClassMap);
-            }
-
             return csvReader;
         }
         #endregion
@@ -87,10 +78,6 @@ namespace Orc.Csv
                 {
                     return new object[0];
                 }
-
-                var errorMessage = ex.Data["CsvHelper"].ToString();
-
-                Log.Error("Cannot read row from stream. Error Details: {1}", errorMessage);
 
                 if (csvContext.ThrowOnError)
                 {

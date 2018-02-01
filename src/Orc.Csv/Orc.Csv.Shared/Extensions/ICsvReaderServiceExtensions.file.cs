@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ICsvReaderServiceExtensions.cs" company="WildGums">
-//   Copyright (c) 2008 - 2017 WildGums. All rights reserved.
+// <copyright file="ICsvReaderServiceExtensions.file.cs" company="WildGums">
+//   Copyright (c) 2008 - 2018 WildGums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -15,29 +15,11 @@ namespace Orc.Csv
     using Catel;
     using Catel.IoC;
     using CsvHelper;
+    using CsvHelper.Configuration;
     using FileSystem;
 
-    public static class ICsvReaderServiceExtensions
+    public static partial class ICsvReaderServiceExtensions
     {
-        #region Methods
-        public static List<TRecord> ReadRecords<TRecord>(this ICsvReaderService csvReaderService, StreamReader streamReader, ICsvContext csvContext)
-        {
-            Argument.IsNotNull(() => csvReaderService);
-            Argument.IsOfType("csvContext.RecordType", csvContext.RecordType, typeof(TRecord));
-
-            var records = csvReaderService.ReadRecords(streamReader, csvContext);
-            return records.Cast<TRecord>().ToList();
-        }
-
-        public static async Task<List<TRecord>> ReadRecordsAsync<TRecord>(this ICsvReaderService csvReaderService, StreamReader streamReader, ICsvContext csvContext)
-        {
-            Argument.IsNotNull(() => csvReaderService);
-            Argument.IsOfType("csvContext.RecordType", csvContext.RecordType, typeof(TRecord));
-
-            var records = await csvReaderService.ReadRecordsAsync(streamReader, csvContext);
-            return records.Cast<TRecord>().ToList();
-        }
-
         public static IEnumerable ReadRecords(this ICsvReaderService csvReaderService, string fileName, ICsvContext csvContext)
         {
             Argument.IsNotNull(() => csvReaderService);
@@ -90,6 +72,32 @@ namespace Orc.Csv
             return records.Cast<TRecord>().ToList();
         }
 
+        public static List<TRecord> ReadRecords<TRecord, TRecordMap>(this ICsvReaderService csvReaderService, string fileName, ICsvContext csvContext = null)
+            where TRecordMap : ClassMap, new()
+        {
+            Argument.IsNotNull(() => csvReaderService);
+
+            if (csvContext == null)
+            {
+                csvContext = new CsvContext<TRecord, TRecordMap>();
+            }
+
+            return ReadRecords<TRecord>(csvReaderService, fileName, csvContext);
+        }
+
+        public static Task<List<TRecord>> ReadRecordsAsync<TRecord, TRecordMap>(this ICsvReaderService csvReaderService, string fileName, ICsvContext csvContext = null)
+            where TRecordMap : ClassMap, new()
+        {
+            Argument.IsNotNull(() => csvReaderService);
+
+            if (csvContext == null)
+            {
+                csvContext = new CsvContext<TRecord, TRecordMap>();
+            }
+
+            return ReadRecordsAsync<TRecord>(csvReaderService, fileName, csvContext);
+        }
+
         public static CsvReader CreateReader(this ICsvReaderService csvReaderService, string fileName, ICsvContext csvContext)
         {
             Argument.IsNotNull(() => csvReaderService);
@@ -102,6 +110,5 @@ namespace Orc.Csv
             var streamReader = new StreamReader(stream);
             return csvReaderService.CreateReader(streamReader, csvContext);
         }
-        #endregion
     }
 }

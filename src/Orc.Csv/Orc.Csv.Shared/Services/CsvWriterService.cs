@@ -43,14 +43,8 @@ namespace Orc.Csv
 
         public virtual CsvWriter CreateWriter(StreamWriter streamWriter, ICsvContext csvContext)
         {
-            var configuration = EnsureCorrectConfiguration(csvContext.Configuration, csvContext.CultureInfo);
-
+            var configuration = EnsureCorrectConfiguration(csvContext.Configuration, csvContext);
             var csvWriter = new CsvWriter(streamWriter, configuration);
-            if (csvContext.ClassMap != null)
-            {
-                csvWriter.Configuration.RegisterClassMap(csvContext.ClassMap);
-            }
-
             return csvWriter;
         }
         #endregion
@@ -63,12 +57,8 @@ namespace Orc.Csv
                 csvWriter.WriteHeader(csvContext.RecordType);
                 csvWriter.WriteRecords(records);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                var errorMessage = ex.Data["CsvHelper"].ToString();
-
-                Log.Error("Cannot write row to csv. Error Details: {0}", errorMessage);
-
                 if (csvContext.ThrowOnError)
                 {
                     throw;

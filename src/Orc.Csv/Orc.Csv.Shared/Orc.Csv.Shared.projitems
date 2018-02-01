@@ -26,9 +26,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converters\TypeConverterBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\BooleanConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CsvEnvironment.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ICsvReaderServiceExtensions.file.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ICsvWriterServiceExtensions.file.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\PropertyMapExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ICsvReaderServiceExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ICsvWriterServiceExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ICsvReaderServiceExtensions.stream.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ICsvWriterServiceExtensions.stream.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ITypeFactoryExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Maps\ClassMapBase.cs" />
