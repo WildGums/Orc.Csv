@@ -92,6 +92,7 @@
     </Reference>
     <Reference Include="System.Data.Entity.Design" />
     <Reference Include="System.Net" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
