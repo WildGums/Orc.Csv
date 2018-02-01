@@ -13,6 +13,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)..\..\GlobalSuppressions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BugsTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CodeGenerationTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\BooleanConverterFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CsvExtensionsTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CsvMaps\OperationMap.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Operation.cs" />

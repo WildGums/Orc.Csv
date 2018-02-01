@@ -41,15 +41,15 @@ namespace Orc.Csv
         #endregion
 
         #region ICsvReaderService Members
-        public virtual IEnumerable<T> ReadCsv<T>(string csvFilePath, ClassMap csvMap, Action<T> initializer = null, Configuration configuration = null, bool throwOnError = true, CultureInfo culture = null)
+        public virtual IEnumerable<T> ReadCsv<T>(string csvFilePath, ClassMap csvMap, Action<T> initializer = null, Configuration configuration = null, bool throwOnError = true, CultureInfo cultureInfo = null)
         {
-            using (var csvReader = CreateReader(csvFilePath, csvMap, configuration, culture))
+            using (var csvReader = CreateReader(csvFilePath, csvMap, configuration, cultureInfo))
             {
                 return ReadData(csvFilePath, initializer, throwOnError, csvReader);
             }
         }
 
-        public async Task<IList<T>> ReadCsvAsync<T>(string csvFilePath, ClassMap csvMap, Action<T> initializer = null, Configuration configuration = null, bool throwOnError = true, CultureInfo culture = null)
+        public async Task<IList<T>> ReadCsvAsync<T>(string csvFilePath, ClassMap csvMap, Action<T> initializer = null, Configuration configuration = null, bool throwOnError = true, CultureInfo cultureInfo = null)
         {
             if (!_fileService.Exists(csvFilePath))
             {
@@ -57,7 +57,7 @@ namespace Orc.Csv
             }
 
             var buffer = await _fileService.ReadAllBytesAsync(csvFilePath);
-            configuration = CreateConfiguration(configuration, culture);
+            configuration = CreateConfiguration(configuration, cultureInfo);
 
             using (var memoryStream = new MemoryStream(buffer))
             {
@@ -74,9 +74,9 @@ namespace Orc.Csv
             }
         }
 
-        public CsvReader CreateReader(string csvFilePath, ClassMap csvMap, Configuration configuration = null, CultureInfo culture = null)
+        public CsvReader CreateReader(string csvFilePath, ClassMap csvMap, Configuration configuration = null, CultureInfo cultureInfo = null)
         {
-            var csvReader = CreateReaderCore(csvFilePath, configuration, culture);
+            var csvReader = CreateReaderCore(csvFilePath, configuration, cultureInfo);
 
             if (csvMap != null)
             {
@@ -125,9 +125,9 @@ namespace Orc.Csv
             return items;
         }
 
-        private CsvReader CreateReaderCore(string csvFilePath, Configuration configuration = null, CultureInfo culture = null)
+        private CsvReader CreateReaderCore(string csvFilePath, Configuration configuration = null, CultureInfo cultureInfo = null)
         {
-            configuration = CreateConfiguration(configuration, culture);
+            configuration = CreateConfiguration(configuration, cultureInfo);
             var csvReader = CreateCsvReader(csvFilePath, configuration);
             return csvReader;
         }
@@ -146,28 +146,28 @@ namespace Orc.Csv
             return csvReader;
         }
 
-        protected virtual Configuration CreateDefaultConfiguration(CultureInfo culture)
+        protected virtual Configuration CreateDefaultConfiguration(CultureInfo cultureInfo)
         {
             var configuration = new Configuration
             {
-                CultureInfo = culture ?? CsvEnvironment.DefaultCultureInfo,
-                WillThrowOnMissingField = false,
-                SkipEmptyRecords = true,
+                CultureInfo = cultureInfo ?? CsvEnvironment.DefaultCultureInfo,
+                MissingFieldFound = null,
+                TrimOptions = TrimOptions.Trim,
+                IgnoreBlankLines = true,
                 HasHeaderRecord = true,
-                TrimFields = true,
-                TrimHeaders = true
             };
+
             return configuration;
         }
 
-        private Configuration CreateConfiguration(Configuration configuration, CultureInfo culture)
+        private Configuration CreateConfiguration(Configuration configuration, CultureInfo cultureInfo)
         {
-            if (configuration != null && culture != null)
+            if (configuration != null && cultureInfo != null)
             {
-                configuration.CultureInfo = culture;
+                configuration.CultureInfo = cultureInfo;
             }
 
-            return configuration ?? CreateDefaultConfiguration(culture);
+            return configuration ?? CreateDefaultConfiguration(cultureInfo);
         }
         #endregion
     }

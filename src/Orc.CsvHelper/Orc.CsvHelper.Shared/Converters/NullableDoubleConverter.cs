@@ -7,15 +7,17 @@
 
 namespace Orc.Csv
 {
-    using System;
     using CsvHelper.TypeConversion;
+    using System;
+    using CsvHelper;
+    using CsvHelper.Configuration;
 
-    public class StringToNullableDateTimeConverter : StringToNullableTypeConverterBase<DateTime?>
+    public class NullableDoubleConverter : NullableTypeConverterBase<double?>
     {
-        protected override DateTime? ConvertStringToActualType(TypeConverterOptions options, string text)
+        protected override double? ConvertStringToActualType(IReaderRow row, string text)
         {
-            var value = Convert.ToDateTime(text, options.CultureInfo);
-            if (value == CsvEnvironment.ExcelNullDate)
+            var value = Convert.ToDouble(text, GetCultureInfo(row));
+            if (double.IsNaN(value))
             {
                 return null;
             }

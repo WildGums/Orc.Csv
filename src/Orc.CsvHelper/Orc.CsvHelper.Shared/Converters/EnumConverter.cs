@@ -9,70 +9,36 @@ namespace Orc.Csv
 {
     using System;
     using Catel;
-    using global::CsvHelper.TypeConversion;
+    using CsvHelper;
+    using CsvHelper.Configuration;
 
     /// <summary>
     /// Generic enum converter which can be used with CsvHelper
     /// </summary>
     /// <typeparam name="T">Type of enum</typeparam>
-    public class EnumConverter<T> : ITypeConverter 
+    public class EnumConverter<T> : TypeConverterBase<T>
         where T : struct, IComparable, IFormattable
     {
-        private readonly T _defaultEnumValue;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
         public EnumConverter()
-            : this((T)Enum.ToObject(typeof(T), 0))
         {
+            DefaultValue = default(T);
         }
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="defaultEnumValue">the default enum value which will be used if value cannot be parsed</param>
-        public EnumConverter(T defaultEnumValue)
-        {
-            _defaultEnumValue = defaultEnumValue;
-        }
+        public T DefaultValue { get; set; }
 
-        public string ConvertToString(TypeConverterOptions options, object value)
-        {
-            throw new NotImplementedException();
-        }
-
-        public object ConvertFromString(TypeConverterOptions options, string text)
+        public override object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData)
         {
             if (string.IsNullOrEmpty(text))
             {
-                return _defaultEnumValue;
+                return DefaultValue;
             }
 
-            T result;
-
-            var success = Enum<T>.TryParse(text, true, out result);
-            if (success)
+            if (Enum<T>.TryParse(text, true, out T result))
             {
                 return result;
             }
 
-            return _defaultEnumValue;
-        }
-
-        public bool CanConvertFrom(Type type)
-        {
-            if (type == typeof(string))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public bool CanConvertTo(Type type)
-        {
-            throw new NotImplementedException();
+            return DefaultValue;
         }
     }
 }

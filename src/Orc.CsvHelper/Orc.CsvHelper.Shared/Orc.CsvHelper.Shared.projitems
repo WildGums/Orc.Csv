@@ -12,12 +12,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)..\..\GlobalSuppressions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\EnumConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Converters\StringToNullableDoubleConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Converters\StringToNullableDateTimeConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Converters\StringToNullableTypeConverterBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\NullableDoubleConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\NullableDateTimeConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\NullableTypeConverterBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\TypeConverterBase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Converters\TypeConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Converters\YesNoToBooleanConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\BooleanConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CsvEnvironment.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ICsvReaderServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ICsvWriterServiceExtensions.cs" />

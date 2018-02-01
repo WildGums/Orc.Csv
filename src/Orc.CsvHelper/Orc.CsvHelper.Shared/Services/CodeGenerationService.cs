@@ -72,9 +72,11 @@ namespace Orc.Csv
 
                 csvReader.Read();
 
-                for (int index = 0; index < csvReader.FieldHeaders.Length; index++)
+                var headerRecord = csvReader.Context.HeaderRecord;
+
+                for (var index = 0; index < headerRecord.Length; index++)
                 {
-                    var fieldHeader = csvReader.FieldHeaders[index];
+                    var fieldHeader = headerRecord[index];
                     if (string.IsNullOrEmpty(fieldHeader))
                     {
                         Log.Warning($"Skipping column #{index} in data file {fileName} because its column header is missing.");

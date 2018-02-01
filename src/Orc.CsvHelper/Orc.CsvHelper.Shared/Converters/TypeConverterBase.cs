@@ -8,45 +8,31 @@
 namespace Orc.Csv
 {
     using System;
+    using System.Globalization;
+    using CsvHelper;
+    using CsvHelper.Configuration;
     using global::CsvHelper.TypeConversion;
 
     public abstract class TypeConverterBase<T> : ITypeConverter
     {
-        #region Constructors
-        public TypeConverterBase()
+        public string ConvertToString(object value, IWriterRow row, MemberMapData memberMapData)
         {
-        }
-        #endregion
-
-        #region ITypeConverter Members
-        /// <summary>
-        /// Note: No conversion is undertaken. The value is simply returned as a string.
-        /// </summary>
-        /// <param name="options"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public virtual string ConvertToString(TypeConverterOptions options, object value)
-        {
-            var stringValue = Convert.ToString(value, options.CultureInfo);
+            var stringValue = Convert.ToString(value, GetCultureInfo(row));
             return stringValue;
         }
 
-        public abstract object ConvertFromString(TypeConverterOptions options, string text);
+        public abstract object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData);
 
-        public bool CanConvertFrom(Type type)
+        protected CultureInfo GetCultureInfo(IWriterRow row)
         {
-            if (type == typeof(string))
-            {
-                return true;
-            }
-
-            return false;
+            var culture = row?.Configuration?.CultureInfo ?? CsvEnvironment.DefaultCultureInfo;
+            return culture;
         }
 
-        public bool CanConvertTo(Type type)
+        protected CultureInfo GetCultureInfo(IReaderRow row)
         {
-            return true;
+            var culture = row?.Configuration?.CultureInfo ?? CsvEnvironment.DefaultCultureInfo;
+            return culture;
         }
-        #endregion
     }
 }

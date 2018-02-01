@@ -7,27 +7,30 @@
 
 namespace Orc.Csv
 {
-    using CsvHelper.TypeConversion;
+    using CsvHelper;
+    using CsvHelper.Configuration;
 
-    public abstract class StringToNullableTypeConverterBase<TNullable> : TypeConverterBase<TNullable>
+    public abstract class NullableTypeConverterBase<TNullable> : TypeConverterBase<TNullable>
     {
-        public override object ConvertFromString(TypeConverterOptions options, string text)
+        #region Methods
+        public override object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData)
         {
             if (string.IsNullOrEmpty(text))
             {
                 return null;
             }
 
-            var value = ConvertStringToActualType(options, text);
+            var value = ConvertStringToActualType(row, text);
             return value;
         }
 
         /// <summary>
         /// Converts the string to the actual type. The null checks are already performed.
         /// </summary>
-        /// <param name="options">The options.</param>
+        /// <param name="row">The row.</param>
         /// <param name="text">The text.</param>
         /// <returns></returns>
-        protected abstract TNullable ConvertStringToActualType(TypeConverterOptions options, string text);
+        protected abstract TNullable ConvertStringToActualType(IReaderRow row, string text);
+        #endregion
     }
 }

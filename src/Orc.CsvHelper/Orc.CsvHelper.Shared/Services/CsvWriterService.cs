@@ -95,8 +95,10 @@ namespace Orc.Csv
             var configuration = new Configuration
             {
                 CultureInfo = cultureInfo ?? CsvEnvironment.DefaultCultureInfo,
-                WillThrowOnMissingField = false,
-                HasHeaderRecord = true
+                MissingFieldFound = null,
+                TrimOptions = TrimOptions.Trim,
+                IgnoreBlankLines = true,
+                HasHeaderRecord = true,
             };
 
             return configuration;
