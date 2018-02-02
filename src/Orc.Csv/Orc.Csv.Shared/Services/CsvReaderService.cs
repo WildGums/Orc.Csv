@@ -63,13 +63,7 @@ namespace Orc.Csv
             {
                 while (csvReader.Read())
                 {
-                    var record = csvReader.GetRecord(recordType);
-                    if (initializer != null)
-                    {
-                        initializer(record);
-                    }
-
-                    items.Add(record);
+                    AddCurrentRecord(csvReader, items, recordType, initializer);
                 }
             }
             catch (Exception ex)
@@ -98,19 +92,7 @@ namespace Orc.Csv
             {
                 while (await csvReader.ReadAsync())
                 {
-                    var record = csvReader.GetRecord(recordType);
-                    if (record == null)
-                    {
-                        Log.Debug($"Read record resulting in null at row '{csvReader.Context.Row}'");
-                        continue;
-                    }
-
-                    if (initializer != null)
-                    {
-                        initializer(record);
-                    }
-
-                    items.Add(record);
+                    AddCurrentRecord(csvReader, items, recordType, initializer);
                 }
             }
             catch (Exception ex)
@@ -127,6 +109,24 @@ namespace Orc.Csv
             }
 
             return items;
+        }
+
+        private void AddCurrentRecord(CsvReader csvReader, List<object> items, Type recordType, Action<object> initializer)
+        {
+            var record = csvReader.GetRecord(recordType);
+            if (record == null)
+            {
+                Log.Debug($"Read record results in null at row '{csvReader.Context.Row}'");
+                continue;
+            }
+
+
+            if (initializer != null)
+            {
+                initializer(record);
+            }
+
+            items.Add(record);
         }
         #endregion
     }
