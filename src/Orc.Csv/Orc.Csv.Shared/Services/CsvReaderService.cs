@@ -117,9 +117,8 @@ namespace Orc.Csv
             if (record == null)
             {
                 Log.Debug($"Read record results in null at row '{csvReader.Context.Row}'");
-                continue;
+                return;
             }
-
 
             if (initializer != null)
             {
