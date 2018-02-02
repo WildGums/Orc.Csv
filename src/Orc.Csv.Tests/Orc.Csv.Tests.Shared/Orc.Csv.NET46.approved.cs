@@ -22,6 +22,10 @@ namespace Orc.Csv
     {
         protected ClassMapBase() { }
     }
+    public class static ClassMapExtensions
+    {
+        public static System.Type GetRecordType(this CsvHelper.Configuration.ClassMap classMap) { }
+    }
     public class CsvContext : Orc.Csv.ICsvContext
     {
         public CsvContext(System.Type recordType) { }
@@ -47,23 +51,6 @@ namespace Orc.Csv
     {
         public static readonly System.Globalization.CultureInfo DefaultCultureInfo;
         public static readonly System.DateTime ExcelNullDate;
-    }
-    public class static CsvHelperExtensions
-    {
-        public static CsvHelper.Configuration.MemberMap AsBool(this CsvHelper.Configuration.MemberMap map) { }
-        public static CsvHelper.Configuration.MemberMap AsDateTime(this CsvHelper.Configuration.MemberMap map) { }
-        public static CsvHelper.Configuration.MemberMap AsDecimal(this CsvHelper.Configuration.MemberMap map) { }
-        public static CsvHelper.Configuration.MemberMap AsDouble(this CsvHelper.Configuration.MemberMap map) { }
-        public static CsvHelper.Configuration.MemberMap AsInt(this CsvHelper.Configuration.MemberMap map) { }
-        public static CsvHelper.Configuration.MemberMap AsLong(this CsvHelper.Configuration.MemberMap map) { }
-        public static CsvHelper.Configuration.MemberMap AsNullableBool(this CsvHelper.Configuration.MemberMap map) { }
-        public static CsvHelper.Configuration.MemberMap AsNullableDateTime(this CsvHelper.Configuration.MemberMap map) { }
-        public static CsvHelper.Configuration.MemberMap AsNullableDecimal(this CsvHelper.Configuration.MemberMap map) { }
-        public static CsvHelper.Configuration.MemberMap AsNullableDouble(this CsvHelper.Configuration.MemberMap map) { }
-        public static CsvHelper.Configuration.MemberMap AsNullableInt(this CsvHelper.Configuration.MemberMap map) { }
-        public static CsvHelper.Configuration.MemberMap AsNullableLong(this CsvHelper.Configuration.MemberMap map) { }
-        public static CsvHelper.Configuration.MemberMap AsNullableShort(this CsvHelper.Configuration.MemberMap map) { }
-        public static CsvHelper.Configuration.MemberMap AsShort(this CsvHelper.Configuration.MemberMap map) { }
     }
     public class CsvReaderService : Orc.Csv.CsvServiceBase, Orc.Csv.ICsvReaderService
     {
@@ -158,6 +145,23 @@ namespace Orc.Csv
         public static System.Threading.Tasks.Task WriteRecordsAsync<TRecord, TRecordMap>(this Orc.Csv.ICsvWriterService csvWriterService, System.Collections.Generic.IEnumerable<TRecord> records, System.IO.StreamWriter streamWriter, Orc.Csv.ICsvContext csvContext = null)
         
             where TRecordMap : CsvHelper.Configuration.ClassMap, new () { }
+    }
+    public class static MemberMapExtensions
+    {
+        public static CsvHelper.Configuration.MemberMap AsBool(this CsvHelper.Configuration.MemberMap map) { }
+        public static CsvHelper.Configuration.MemberMap AsDateTime(this CsvHelper.Configuration.MemberMap map) { }
+        public static CsvHelper.Configuration.MemberMap AsDecimal(this CsvHelper.Configuration.MemberMap map) { }
+        public static CsvHelper.Configuration.MemberMap AsDouble(this CsvHelper.Configuration.MemberMap map) { }
+        public static CsvHelper.Configuration.MemberMap AsInt(this CsvHelper.Configuration.MemberMap map) { }
+        public static CsvHelper.Configuration.MemberMap AsLong(this CsvHelper.Configuration.MemberMap map) { }
+        public static CsvHelper.Configuration.MemberMap AsNullableBool(this CsvHelper.Configuration.MemberMap map) { }
+        public static CsvHelper.Configuration.MemberMap AsNullableDateTime(this CsvHelper.Configuration.MemberMap map) { }
+        public static CsvHelper.Configuration.MemberMap AsNullableDecimal(this CsvHelper.Configuration.MemberMap map) { }
+        public static CsvHelper.Configuration.MemberMap AsNullableDouble(this CsvHelper.Configuration.MemberMap map) { }
+        public static CsvHelper.Configuration.MemberMap AsNullableInt(this CsvHelper.Configuration.MemberMap map) { }
+        public static CsvHelper.Configuration.MemberMap AsNullableLong(this CsvHelper.Configuration.MemberMap map) { }
+        public static CsvHelper.Configuration.MemberMap AsNullableShort(this CsvHelper.Configuration.MemberMap map) { }
+        public static CsvHelper.Configuration.MemberMap AsShort(this CsvHelper.Configuration.MemberMap map) { }
     }
     public class NullableBooleanConverter : Orc.Csv.NullableTypeConverterBase<System.Nullable<bool>>
     {

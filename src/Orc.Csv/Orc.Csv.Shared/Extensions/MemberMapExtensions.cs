@@ -10,7 +10,7 @@ namespace Orc.Csv
     using CsvHelper.Configuration;
     using CsvHelper.TypeConversion;
 
-    public static class CsvHelperExtensions
+    public static class MemberMapExtensions
     {
         #region Methods
         public static MemberMap AsDateTime(this MemberMap map)
