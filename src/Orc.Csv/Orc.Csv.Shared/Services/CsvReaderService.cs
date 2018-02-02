@@ -99,6 +99,12 @@ namespace Orc.Csv
                 while (await csvReader.ReadAsync())
                 {
                     var record = csvReader.GetRecord(recordType);
+                    if (record == null)
+                    {
+                        Log.Debug($"Read record resulting in null at row '{csvReader.Context.Row}'");
+                        continue;
+                    }
+
                     if (initializer != null)
                     {
                         initializer(record);
