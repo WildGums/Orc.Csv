@@ -21,6 +21,20 @@ namespace Orc.Csv
             FalseValues = new List<string>(new[] { "no", "0", "off", "false", "n", "f" });
         }
 
+        public BooleanConverter(string[] additionalTrueValues, string[] additionalFalseValues)
+            : this()
+        {
+            if (additionalTrueValues != null)
+            {
+                TrueValues.AddRange(additionalTrueValues);
+            }
+
+            if (additionalFalseValues != null)
+            {
+                FalseValues.AddRange(additionalFalseValues);
+            }
+        }
+
         public List<string> TrueValues { get; private set; }
 
         public List<string> FalseValues { get; private set; }

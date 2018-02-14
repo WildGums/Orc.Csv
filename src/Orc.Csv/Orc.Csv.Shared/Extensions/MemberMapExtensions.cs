@@ -78,6 +78,12 @@ namespace Orc.Csv
             return map.TypeConverter<BooleanConverter>();
         }
 
+        public static MemberMap AsBool(this MemberMap map, string[] additionalTrueValues, string[] additionalFalseValues)
+        {
+            var typeConverter = new BooleanConverter(additionalTrueValues, additionalFalseValues);
+            return map.TypeConverter(typeConverter);
+        }
+
         public static MemberMap AsNullableBool(this MemberMap map)
         {
             return map.TypeConverter<NullableBooleanConverter>();

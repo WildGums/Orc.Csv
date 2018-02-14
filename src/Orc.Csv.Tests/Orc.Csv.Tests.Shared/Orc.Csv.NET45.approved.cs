@@ -13,6 +13,7 @@ namespace Orc.Csv
     public class BooleanConverter : Orc.Csv.TypeConverterBase<bool>
     {
         public BooleanConverter() { }
+        public BooleanConverter(string[] additionalTrueValues, string[] additionalFalseValues) { }
         public System.Collections.Generic.List<string> FalseValues { get; }
         public System.Collections.Generic.List<string> TrueValues { get; }
         public override object ConvertFromString(string text, CsvHelper.IReaderRow row, CsvHelper.Configuration.MemberMapData memberMapData) { }
@@ -149,6 +150,7 @@ namespace Orc.Csv
     public class static MemberMapExtensions
     {
         public static CsvHelper.Configuration.MemberMap AsBool(this CsvHelper.Configuration.MemberMap map) { }
+        public static CsvHelper.Configuration.MemberMap AsBool(this CsvHelper.Configuration.MemberMap map, string[] additionalTrueValues, string[] additionalFalseValues) { }
         public static CsvHelper.Configuration.MemberMap AsDateTime(this CsvHelper.Configuration.MemberMap map) { }
         public static CsvHelper.Configuration.MemberMap AsDecimal(this CsvHelper.Configuration.MemberMap map) { }
         public static CsvHelper.Configuration.MemberMap AsDouble(this CsvHelper.Configuration.MemberMap map) { }
