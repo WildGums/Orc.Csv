@@ -116,7 +116,7 @@ namespace Orc.Csv
             var record = csvReader.GetRecord(recordType);
             if (record == null)
             {
-                Log.Debug($"Read record results in null at row '{csvReader.Context.Row}'");
+                Log.Debug($"Read record results in null at row '{csvReader.Context.Row}', raw row content: '{csvReader.Context.RawRecord}'");
                 return;
             }
 
