@@ -81,7 +81,7 @@ namespace Orc.Csv
 
             finalConfiguration.BadDataFound = (context) =>
             {
-                Log.Warning($"Found bad data, row '{context.Row}', char position '{context.CharPosition}'");
+                Log.Warning($"Found bad data, row '{context.Row}', char position '{context.CharPosition}', field '{context.Field}'");
 
                 var handler = configuration.BadDataFound;
                 if (handler != null)
@@ -124,7 +124,7 @@ namespace Orc.Csv
                 var readingContext = ex.ReadingContext;
                 if (readingContext != null)
                 {
-                    message += $", row '{readingContext.Row}', char position '{readingContext.CharPosition}'";
+                    message += $", row '{readingContext.Row}', char position '{readingContext.CharPosition}', field '{readingContext.Field}'";
                 }
 
                 var writingContext = ex.WritingContext;
