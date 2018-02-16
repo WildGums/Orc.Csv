@@ -20,6 +20,10 @@ namespace Orc.Csv
                 return null;
             }
 
+            // Note: we could (should?) respect the trim option here, but since we really want to convert types,
+            // we need to trim
+            text = text.Trim();
+
             var value = ConvertStringToActualType(row, text);
             return value;
         }

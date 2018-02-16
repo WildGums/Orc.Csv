@@ -25,13 +25,6 @@ namespace Orc.Csv
 
         protected override bool? ConvertStringToActualType(IReaderRow row, string text)
         {
-            if (string.IsNullOrEmpty(text))
-            {
-                return false;
-            }
-
-            text = text.Trim();
-
             if (text.EqualsAnyIgnoreCase(TrueValues.ToArray()))
             {
                 return true;
