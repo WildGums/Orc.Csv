@@ -27,7 +27,7 @@ namespace Orc.Csv
         {
             var configuration = new Configuration
             {
-                CultureInfo = csvContext?.CultureInfo ?? CsvEnvironment.DefaultCultureInfo,
+                CultureInfo = csvContext?.Culture ?? CsvEnvironment.DefaultCultureInfo,
                 MissingFieldFound = null,
                 TrimOptions = TrimOptions.Trim,
                 IgnoreBlankLines = true,

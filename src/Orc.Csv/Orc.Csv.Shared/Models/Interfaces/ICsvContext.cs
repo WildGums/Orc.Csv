@@ -15,7 +15,9 @@ namespace Orc.Csv
     {
         #region Properties
         Type RecordType { get; set; }
+        [ObsoleteEx(ReplacementTypeOrMember = "Culture", TreatAsErrorFromVersion = "3.0", RemoveInVersion = "3.1")]
         CultureInfo CultureInfo { get; set; }
+        CultureInfo Culture { get; set; }
         Configuration Configuration { get; set; }
         Action<object> Initializer { get; set; }
         bool ThrowOnError { get; set; }
