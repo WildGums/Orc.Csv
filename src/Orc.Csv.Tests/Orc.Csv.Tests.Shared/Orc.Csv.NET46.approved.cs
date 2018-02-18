@@ -158,6 +158,8 @@ namespace Orc.Csv
         public static CsvHelper.Configuration.MemberMap AsDateTime(this CsvHelper.Configuration.MemberMap map) { }
         public static CsvHelper.Configuration.MemberMap AsDecimal(this CsvHelper.Configuration.MemberMap map) { }
         public static CsvHelper.Configuration.MemberMap AsDouble(this CsvHelper.Configuration.MemberMap map) { }
+        public static CsvHelper.Configuration.MemberMap AsEnum<TEnum>(this CsvHelper.Configuration.MemberMap map, TEnum defaultValue = null)
+            where TEnum :  struct, System.IComparable, System.IFormattable { }
         public static CsvHelper.Configuration.MemberMap AsInt(this CsvHelper.Configuration.MemberMap map) { }
         public static CsvHelper.Configuration.MemberMap AsLong(this CsvHelper.Configuration.MemberMap map) { }
         public static CsvHelper.Configuration.MemberMap AsNullableBool(this CsvHelper.Configuration.MemberMap map) { }
@@ -169,6 +171,7 @@ namespace Orc.Csv
         public static CsvHelper.Configuration.MemberMap AsNullableShort(this CsvHelper.Configuration.MemberMap map) { }
         public static CsvHelper.Configuration.MemberMap AsNullableTimeSpan(this CsvHelper.Configuration.MemberMap map) { }
         public static CsvHelper.Configuration.MemberMap AsShort(this CsvHelper.Configuration.MemberMap map) { }
+        public static CsvHelper.Configuration.MemberMap AsString(this CsvHelper.Configuration.MemberMap map) { }
         public static CsvHelper.Configuration.MemberMap AsTimeSpan(this CsvHelper.Configuration.MemberMap map) { }
     }
     public class NullableBooleanConverter : Orc.Csv.NullableTypeConverterBase<System.Nullable<bool>>

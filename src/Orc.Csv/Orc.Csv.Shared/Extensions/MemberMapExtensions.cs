@@ -7,12 +7,26 @@
 
 namespace Orc.Csv
 {
+    using System;
     using CsvHelper.Configuration;
     using CsvHelper.TypeConversion;
 
     public static class MemberMapExtensions
     {
         #region Methods
+        public static MemberMap AsString(this MemberMap map)
+        {
+            // Dummy wrapper
+            return map.Default(string.Empty);
+        }
+
+        public static MemberMap AsEnum<TEnum>(this MemberMap map, TEnum defaultValue = default(TEnum))
+            where TEnum : struct, IComparable, IFormattable
+        {
+            var enumConverter = new EnumConverter<TEnum>(defaultValue);
+            return map.TypeConverter(enumConverter);
+        }
+
         public static MemberMap AsDateTime(this MemberMap map)
         {
             return map.TypeConverter<DateTimeConverter>();
