@@ -108,7 +108,13 @@ namespace Orc.Csv
 
             finalConfiguration.MissingFieldFound = (fields, position, context) =>
             {
-                Log.Warning("Found '{0}' missing fields: '{1}'", fields.Length, string.Join(",", fields));
+                if (fields == null)
+                {
+                    // TODO: Replace with ArrayShim from Catel
+                    fields = new string[] { };
+                }
+
+                Log.Warning("Found '{0}' missing fields at position '{1}': '{2}'", fields.Length, position, string.Join(",", fields));
 
                 var handler = configuration.MissingFieldFound;
                 if (handler != null)

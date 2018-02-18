@@ -54,8 +54,17 @@ namespace Orc.Csv
         {
             try
             {
-                csvWriter.WriteHeader(csvContext.RecordType);
-                csvWriter.NextRecord();
+                var configuration = csvWriter.Configuration;
+                if (configuration.HasHeaderRecord)
+                {
+                    Log.Debug($"Writing header record");
+
+                    csvWriter.WriteHeader(csvContext.RecordType);
+                    csvWriter.NextRecord();
+                }
+
+                Log.Debug($"Writing records");
+
                 csvWriter.WriteRecords(records);
             }
             catch (Exception)

@@ -61,6 +61,21 @@ namespace Orc.Csv
 
             try
             {
+                var configuration = csvReader.Configuration;
+                if (configuration.HasHeaderRecord)
+                {
+                    if (csvReader.Context.HeaderRecord == null)
+                    {
+                        Log.Debug("Reading header");
+
+                        // Yes, we need a double read
+                        csvReader.Read();
+                        csvReader.ReadHeader();
+                    }
+                }
+
+                Log.Debug("Reading records");
+
                 while (csvReader.Read())
                 {
                     AddCurrentRecord(csvReader, items, recordType, initializer);
@@ -90,6 +105,21 @@ namespace Orc.Csv
 
             try
             {
+                var configuration = csvReader.Configuration;
+                if (configuration.HasHeaderRecord)
+                {
+                    if (csvReader.Context.HeaderRecord == null)
+                    {
+                        Log.Debug("Reading header");
+
+                        // Yes, we need a double read
+                        await csvReader.ReadAsync();
+                        csvReader.ReadHeader();
+                    }
+                }
+
+                Log.Debug("Reading records");
+
                 while (await csvReader.ReadAsync())
                 {
                     AddCurrentRecord(csvReader, items, recordType, initializer);
