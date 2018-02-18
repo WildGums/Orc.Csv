@@ -167,7 +167,9 @@ namespace Orc.Csv
         public static CsvHelper.Configuration.MemberMap AsNullableInt(this CsvHelper.Configuration.MemberMap map) { }
         public static CsvHelper.Configuration.MemberMap AsNullableLong(this CsvHelper.Configuration.MemberMap map) { }
         public static CsvHelper.Configuration.MemberMap AsNullableShort(this CsvHelper.Configuration.MemberMap map) { }
+        public static CsvHelper.Configuration.MemberMap AsNullableTimeSpan(this CsvHelper.Configuration.MemberMap map) { }
         public static CsvHelper.Configuration.MemberMap AsShort(this CsvHelper.Configuration.MemberMap map) { }
+        public static CsvHelper.Configuration.MemberMap AsTimeSpan(this CsvHelper.Configuration.MemberMap map) { }
     }
     public class NullableBooleanConverter : Orc.Csv.NullableTypeConverterBase<System.Nullable<bool>>
     {
@@ -205,6 +207,11 @@ namespace Orc.Csv
     {
         public NullableShortConverter() { }
         protected override System.Nullable<short> ConvertStringToActualType(CsvHelper.IReaderRow row, string text) { }
+    }
+    public class NullableTimeSpanConverter : Orc.Csv.NullableTypeConverterBase<System.Nullable<System.TimeSpan>>
+    {
+        public NullableTimeSpanConverter() { }
+        protected override System.Nullable<System.TimeSpan> ConvertStringToActualType(CsvHelper.IReaderRow row, string text) { }
     }
     public abstract class NullableTypeConverterBase<TNullable> : Orc.Csv.TypeConverterBase<TNullable>
     

@@ -23,6 +23,16 @@ namespace Orc.Csv
             return map.TypeConverter<NullableDateTimeConverter>();
         }
 
+        public static MemberMap AsTimeSpan(this MemberMap map)
+        {
+            return map.TypeConverter<TimeSpanConverter>();
+        }
+
+        public static MemberMap AsNullableTimeSpan(this MemberMap map)
+        {
+            return map.TypeConverter<NullableTimeSpanConverter>();
+        }
+
         public static MemberMap AsDouble(this MemberMap map)
         {
             return map.TypeConverter<DoubleConverter>();

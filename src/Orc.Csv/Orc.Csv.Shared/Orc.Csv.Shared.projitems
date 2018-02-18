@@ -13,6 +13,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)..\..\GlobalSuppressions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\NullableBooleanConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\EnumConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\NullableTimeSpanConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\NullableDecimalConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\NullableLongConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\NullableUIntConverter.cs" />
