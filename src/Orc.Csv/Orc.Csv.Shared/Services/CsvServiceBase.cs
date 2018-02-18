@@ -8,6 +8,7 @@
 namespace Orc.Csv
 {
     using System.Globalization;
+    using System.Linq;
     using Catel;
     using Catel.Logging;
     using CsvHelper.Configuration;
@@ -108,13 +109,35 @@ namespace Orc.Csv
 
             finalConfiguration.MissingFieldFound = (fields, position, context) =>
             {
-                if (fields == null)
+                // Don't log when fields are null, special case for which we don't want to pollute the logs
+                if (fields != null)
                 {
-                    // TODO: Replace with ArrayShim from Catel
-                    fields = new string[] { };
-                }
+                    var ignoreWarning = true;
 
-                Log.Warning("Found '{0}' missing fields at position '{1}': '{2}'", fields.Length, position, string.Join(",", fields));
+                    // This could be a *mapped* field that is not part of the file (thus should not have a header record entry either)
+                    var headerRecord = context.HeaderRecord;
+                    if (headerRecord != null)
+                    {
+                        foreach (var field in fields)
+                        {
+                            if (headerRecord.Contains(field))
+                            {
+                                ignoreWarning = false;
+                            }
+                            else if (context.Row <= 2)
+                            {
+                                var classMap = csvContext.ClassMap?.GetType()?.Name ?? "no-class-map";
+
+                                Log.Warning("Found field '{0}' defined in class map '{1}', but it's not defined in the actual content", field, classMap);
+                            }
+                        }
+                    }
+
+                    if (!ignoreWarning)
+                    {
+                        Log.Warning("Found '{0}' missing fields at row '{1}', char position '{1}': '{2}'", fields.Length, context.Row, position, string.Join(",", fields));
+                    }
+                }
 
                 var handler = configuration.MissingFieldFound;
                 if (handler != null)
