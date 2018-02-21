@@ -28,13 +28,6 @@ namespace Orc.Csv
 
         public Configuration Configuration { get; set; }
 
-        [ObsoleteEx(ReplacementTypeOrMember = "Culture", TreatAsErrorFromVersion = "3.0", RemoveInVersion = "3.1")]
-        public CultureInfo CultureInfo
-        {
-            get { return Culture; }
-            set { Culture = value; }
-        }
-
         public CultureInfo Culture { get; set; }
 
         public Action<object> Initializer { get; set; }
