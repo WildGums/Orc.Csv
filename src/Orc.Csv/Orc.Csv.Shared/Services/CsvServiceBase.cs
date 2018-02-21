@@ -50,7 +50,7 @@ namespace Orc.Csv
                 BuildRequiredQuoteChars = configuration.BuildRequiredQuoteChars,
                 Comment = configuration.Comment,
                 CountBytes = configuration.CountBytes,
-                CultureInfo = csvContext.CultureInfo ?? configuration.CultureInfo,
+                CultureInfo = csvContext.Culture ?? configuration.CultureInfo,
                 Delimiter = configuration.Delimiter,
                 DetectColumnCountChanges = configuration.DetectColumnCountChanges,
                 Encoding = configuration.Encoding,
