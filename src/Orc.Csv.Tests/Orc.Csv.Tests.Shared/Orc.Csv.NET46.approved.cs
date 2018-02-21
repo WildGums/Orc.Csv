@@ -33,8 +33,6 @@ namespace Orc.Csv
         public CsvHelper.Configuration.ClassMap ClassMap { get; set; }
         public CsvHelper.Configuration.Configuration Configuration { get; set; }
         public System.Globalization.CultureInfo Culture { get; set; }
-        [System.ObsoleteAttribute("Use `Culture` instead. Will be removed in version 3.1.0.", true)]
-        public System.Globalization.CultureInfo CultureInfo { get; set; }
         public System.Action<object> Initializer { get; set; }
         public System.Type RecordType { get; set; }
         public bool ThrowOnError { get; set; }
@@ -91,8 +89,6 @@ namespace Orc.Csv
         CsvHelper.Configuration.ClassMap ClassMap { get; set; }
         CsvHelper.Configuration.Configuration Configuration { get; set; }
         System.Globalization.CultureInfo Culture { get; set; }
-        [System.ObsoleteAttribute("Use `Culture` instead. Will be removed in version 3.1.0.", true)]
-        System.Globalization.CultureInfo CultureInfo { get; set; }
         System.Action<object> Initializer { get; set; }
         System.Type RecordType { get; set; }
         bool ThrowOnError { get; set; }
