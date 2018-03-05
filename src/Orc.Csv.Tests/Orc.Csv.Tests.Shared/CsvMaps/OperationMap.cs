@@ -7,6 +7,9 @@
 
 namespace Orc.Csv.Tests.CsvMaps
 {
+    using System.Collections.Generic;
+    using Catel.Reflection;
+    using Converters;
     using Entities;
     using global::CsvHelper.Configuration;
 
@@ -23,5 +26,19 @@ namespace Orc.Csv.Tests.CsvMaps
             Map(x => x.Enabled).Name("Enabled");
         }
         #endregion
+
+        public void Initialize(IEnumerable<string> customAttributes)
+        {
+            var classType = typeof(Operation);
+
+            var customAttributesPropertyInfo = classType.GetPropertyEx("Attributes");
+            foreach (var customAttribute in customAttributes)
+            {
+                var csvPropertyMap = MemberMap.CreateGeneric(classType, customAttributesPropertyInfo);
+                csvPropertyMap.Name(customAttribute).TypeConverter(new CustomAttributesTypeConverter(customAttribute));
+
+                MemberMaps.Add(csvPropertyMap);
+            }
+        }
     }
 }

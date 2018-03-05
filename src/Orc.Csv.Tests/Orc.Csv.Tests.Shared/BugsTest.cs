@@ -38,7 +38,7 @@ namespace Orc.Csv.Tests
                 Configuration = configuration
             };
 
-            using (var csvReader = ICsvReaderServiceExtensions.CreateReader(csvReaderService, csvFilePath, csvContext))
+            using (var csvReader = csvReaderService.CreateReader(csvFilePath, csvContext))
             {
                 while (csvReader.Read())
                 {

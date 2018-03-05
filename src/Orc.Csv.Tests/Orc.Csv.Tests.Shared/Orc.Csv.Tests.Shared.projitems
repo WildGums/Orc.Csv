@@ -13,7 +13,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)..\..\GlobalSuppressions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BugsTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\BooleanConverterFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\CustomAttributesTypeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CsvMaps\OperationMap.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\CustomAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Operation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GlobalInitialization.approvaltests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\AssemblyDirectoryHelper.cs" />
