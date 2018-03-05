@@ -23,18 +23,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\CsvReaderServiceFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\CsvWriterServiceFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TemporaryFileContext.cs" />
-    <None Include="$(MSBuildThisFileDirectory)Expected\OperationWithMissingColumn.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="$(MSBuildThisFileDirectory)Expected\OperationWithMissingColumnMap.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="$(MSBuildThisFileDirectory)Expected\Operation.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="$(MSBuildThisFileDirectory)Expected\OperationMap.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
     <Content Include="$(MSBuildThisFileDirectory)TestData\2Operation.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

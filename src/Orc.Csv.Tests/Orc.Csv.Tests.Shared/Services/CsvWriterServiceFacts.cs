@@ -8,9 +8,11 @@
 namespace Orc.Csv.Tests.Services
 {
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using ApprovalTests;
+    using CsvHelper;
     using CsvMaps;
     using Entities;
     using NUnit.Framework;
@@ -62,6 +64,17 @@ namespace Orc.Csv.Tests.Services
             {
                 ClassMap = classMap
             };
+
+            using (var stream = File.Create(fileName))
+            {
+                using (var textWriter = new StreamWriter(stream))
+                {
+                    var csvWriter = new CsvWriter(textWriter);
+                    csvWriter.Configuration.RegisterClassMap(classMap);
+
+                    csvWriter.WriteRecords(operations);
+                }
+            }
 
             await writerService.WriteRecordsAsync(operations, fileName, csvContext);
 

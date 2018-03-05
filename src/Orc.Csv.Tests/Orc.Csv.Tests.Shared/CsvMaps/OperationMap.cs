@@ -36,6 +36,7 @@ namespace Orc.Csv.Tests.CsvMaps
             {
                 var csvPropertyMap = MemberMap.CreateGeneric(classType, customAttributesPropertyInfo);
                 csvPropertyMap.Name(customAttribute).TypeConverter(new CustomAttributesTypeConverter(customAttribute));
+                csvPropertyMap.Data.Index = GetMaxIndex() + 1;
 
                 MemberMaps.Add(csvPropertyMap);
             }

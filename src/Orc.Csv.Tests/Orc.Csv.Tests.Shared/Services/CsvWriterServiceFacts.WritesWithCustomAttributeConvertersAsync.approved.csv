@@ -1,0 +1,6 @@
+﻿Id,Name,StartTime,Duration,Quantity,Enabled,Attribute1,Attribute2,Attribute3
+1,Operation 1,1-1-0001 00:00:00,00:00:00,0,True,Value 1,Value 2,Value 3
+2,Operation 2,1-1-0001 00:00:00,00:00:00,0,True,Value 1,Value 2,Value 3
+3,Operation 3,1-1-0001 00:00:00,00:00:00,0,True,Value 1,Value 2,Value 3
+4,Operation 4,1-1-0001 00:00:00,00:00:00,0,True,Value 1,Value 2,Value 3
+5,Operation 5,1-1-0001 00:00:00,00:00:00,0,True,Value 1,Value 2,Value 3
