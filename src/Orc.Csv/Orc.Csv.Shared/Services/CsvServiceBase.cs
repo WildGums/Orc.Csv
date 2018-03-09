@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CsvServiceBase.cs" company="WildGums">
 //   Copyright (c) 2008 - 2018 WildGums. All rights reserved.
 // </copyright>
@@ -12,6 +12,7 @@ namespace Orc.Csv
     using Catel;
     using Catel.Logging;
     using CsvHelper.Configuration;
+    using CsvHelper.TypeConversion;
 
     public abstract class CsvServiceBase
     {
@@ -153,7 +154,27 @@ namespace Orc.Csv
                 var readingContext = ex.ReadingContext;
                 if (readingContext != null)
                 {
-                    message += $", row '{readingContext.Row}', char position '{readingContext.CharPosition}', field '{readingContext.Field}'";
+                    message += $", row '{readingContext.Row}', char position '{readingContext.CharPosition}'";
+
+                    var columnName = readingContext.Field;
+
+                    if (ex is TypeConverterException typeConverterException)
+                    {
+                        if (typeConverterException.MemberMapData.IsNameSet)
+                        {
+                            columnName = typeConverterException.MemberMapData.Names.FirstOrDefault();
+                        }
+                        else
+                        {
+                            columnName = $"idx: {typeConverterException.MemberMapData.Index}";
+                        }
+
+                        var propertyName = typeConverterException.MemberMapData.Member.Name;
+
+                        message += $", property '{propertyName}'";
+                    }
+
+                    message += $", column '{columnName}'";
                 }
 
                 var writingContext = ex.WritingContext;
