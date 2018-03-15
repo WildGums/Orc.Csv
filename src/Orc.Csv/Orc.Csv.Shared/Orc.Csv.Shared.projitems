@@ -24,6 +24,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converters\NullableDoubleConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\NullableDateTimeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\NullableTypeConverterBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\DynamicTypeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\TypeConverterBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\BooleanConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CsvEnvironment.cs" />
