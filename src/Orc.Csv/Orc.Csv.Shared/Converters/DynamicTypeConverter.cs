@@ -22,14 +22,17 @@ namespace Orc.Csv
         #region Fields
         private readonly Func<string, IReaderRow, MemberMapData, T> _convertFromString;
         private readonly Func<object, IWriterRow, MemberMapData, string> _convertToString;
+        private readonly string _defaultValue;
         #endregion
 
         #region Constructors
         public DynamicTypeConverter(Func<string, IReaderRow, MemberMapData, T> convertFromString,
-            Func<object, IWriterRow, MemberMapData, string> convertToString)
+            Func<object, IWriterRow, MemberMapData, string> convertToString,
+            string defaultValue = null)
         {
             _convertFromString = convertFromString;
             _convertToString = convertToString;
+            _defaultValue = defaultValue;
         }
         #endregion
 
@@ -49,6 +52,14 @@ namespace Orc.Csv
             if (_convertFromString == null)
             {
                 throw Log.ErrorAndCreateException<NotImplementedException>($"The ConvertFromString method is not specified for this converter");
+            }
+
+            if (!string.IsNullOrWhiteSpace(_defaultValue))
+            {
+                if (string.IsNullOrWhiteSpace(text))
+                {
+                    text = _defaultValue;
+                }
             }
 
             return _convertFromString(text, row, memberMapData);

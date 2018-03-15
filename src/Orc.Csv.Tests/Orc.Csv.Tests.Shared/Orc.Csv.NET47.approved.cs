@@ -79,7 +79,7 @@ namespace Orc.Csv
     public class DynamicTypeConverter<T> : CsvHelper.TypeConversion.ITypeConverter
     
     {
-        public DynamicTypeConverter(System.Func<string, CsvHelper.IReaderRow, CsvHelper.Configuration.MemberMapData, T> convertFromString, System.Func<object, CsvHelper.IWriterRow, CsvHelper.Configuration.MemberMapData, string> convertToString) { }
+        public DynamicTypeConverter(System.Func<string, CsvHelper.IReaderRow, CsvHelper.Configuration.MemberMapData, T> convertFromString, System.Func<object, CsvHelper.IWriterRow, CsvHelper.Configuration.MemberMapData, string> convertToString, string defaultValue = null) { }
         public object ConvertFromString(string text, CsvHelper.IReaderRow row, CsvHelper.Configuration.MemberMapData memberMapData) { }
         public string ConvertToString(object value, CsvHelper.IWriterRow row, CsvHelper.Configuration.MemberMapData memberMapData) { }
     }
