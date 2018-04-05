@@ -40,9 +40,7 @@ namespace Orc.Csv.Tests.Converters
         [TestCase("yup", true)]
         public void CorrectlyConvertsCustomValue(string input, bool expected)
         {
-            var converter = new BooleanConverter();
-            converter.TrueValues.Add("JA");
-            converter.TrueValues.Add("YUP");
+            var converter = new BooleanConverter().AddTrueValues("JA", "YUP");
 
             converter.ConvertFromString(input, null, null);
         }

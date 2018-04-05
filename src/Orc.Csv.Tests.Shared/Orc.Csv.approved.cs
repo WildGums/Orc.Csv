@@ -9,9 +9,18 @@ namespace Orc.Csv
     public class BooleanConverter : Orc.Csv.TypeConverterBase<bool>
     {
         public BooleanConverter() { }
-        public BooleanConverter(string[] additionalTrueValues, string[] additionalFalseValues) { }
+        public BooleanConverter(string[] trueValues) { }
+        [System.ObsoleteAttribute("Use `BooleanConverter(string[])` instead. Will be treated as an error from versio" +
+            "n 3.0.0. Will be removed in version 4.0.0.", false)]
+        public BooleanConverter(string[] trueValues, string[] falseValues) { }
+        [System.ObsoleteAttribute("False values are not necessary in non-nullable boolean conversions (default value" +
+            " = false). Will be treated as an error from version 3.0.0. Will be removed in ve" +
+            "rsion 4.0.0.", false)]
         public System.Collections.Generic.List<string> FalseValues { get; }
+        [System.ObsoleteAttribute("Use `AddTrueValues` instead. Will be treated as an error from version 3.0.0. Will" +
+            " be removed in version 4.0.0.", false)]
         public System.Collections.Generic.List<string> TrueValues { get; }
+        public Orc.Csv.BooleanConverter AddTrueValues(params string[] values) { }
         public override object ConvertFromString(string text, CsvHelper.IReaderRow row, CsvHelper.Configuration.MemberMapData memberMapData) { }
     }
     public abstract class ClassMapBase<TRecord> : CsvHelper.Configuration.ClassMap<TRecord>
@@ -164,8 +173,15 @@ namespace Orc.Csv
     public class NullableBooleanConverter : Orc.Csv.NullableTypeConverterBase<System.Nullable<bool>>
     {
         public NullableBooleanConverter() { }
+        public NullableBooleanConverter(string[] trueValues, string[] falseValues) { }
+        [System.ObsoleteAttribute("Use `AddFalseValues` instead. Will be treated as an error from version 3.0.0. Wil" +
+            "l be removed in version 4.0.0.", false)]
         public System.Collections.Generic.List<string> FalseValues { get; }
+        [System.ObsoleteAttribute("Use `AddTrueValues` instead. Will be treated as an error from version 3.0.0. Will" +
+            " be removed in version 4.0.0.", false)]
         public System.Collections.Generic.List<string> TrueValues { get; }
+        public Orc.Csv.NullableBooleanConverter AddFalseValues(params string[] values) { }
+        public Orc.Csv.NullableBooleanConverter AddTrueValues(params string[] values) { }
         protected override System.Nullable<bool> ConvertStringToActualType(CsvHelper.IReaderRow row, string text) { }
     }
     public class NullableDateTimeConverter : Orc.Csv.NullableTypeConverterBase<System.Nullable<System.DateTime>>
