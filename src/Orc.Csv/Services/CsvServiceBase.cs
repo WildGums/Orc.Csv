@@ -7,9 +7,9 @@
 
 namespace Orc.Csv
 {
-    using System.Globalization;
+    using System.IO;
     using System.Linq;
-    using Catel;
+    using System.Text;
     using Catel.Logging;
     using CsvHelper.Configuration;
     using CsvHelper.TypeConversion;
@@ -129,7 +129,7 @@ namespace Orc.Csv
                             {
                                 var classMap = csvContext.ClassMap?.GetType()?.Name ?? "no-class-map";
 
-                                Log.Warning("Found field '{0}' defined in class map '{1}', but it's not defined in the actual content", field, classMap);
+                                Log.Debug("Found field '{0}' defined in class map '{1}', but it's not defined in the actual file", field, classMap);
                             }
                         }
                     }
@@ -149,12 +149,30 @@ namespace Orc.Csv
 
             finalConfiguration.ReadingExceptionOccurred = (ex) =>
             {
-                var message = "An exception occurred";
-
                 var readingContext = ex.ReadingContext;
+
+                // We always read from a csv file so we know we have a file stream
+                var fileName = string.Empty;
+
+                if (ex.ReadingContext.Reader is StreamReader streamReader)
+                {
+                    if (streamReader.BaseStream is FileStream fileStream)
+                    {
+                        fileName = fileStream.Name;
+                    }
+                }
+
+                var messageBuilder = new StringBuilder();
+                messageBuilder.Append("An exception occurred during reading");
+
+                if (!string.IsNullOrWhiteSpace(fileName))
+                {
+                    messageBuilder.Append($", file: '{fileName}'");
+                }
+
                 if (readingContext != null)
                 {
-                    message += $", row '{readingContext.Row}', char position '{readingContext.CharPosition}'";
+                    messageBuilder.Append($", row '{readingContext.Row}'");
 
                     var columnName = readingContext.Field;
 
@@ -169,23 +187,38 @@ namespace Orc.Csv
                             columnName = $"idx: {typeConverterException.MemberMapData.Index}";
                         }
 
+                        messageBuilder.Append($", content '{typeConverterException.Text}'");
+
                         var propertyName = typeConverterException.MemberMapData.Member.Name;
 
-                        message += $", property '{propertyName}'";
+                        messageBuilder.Append($", property '{propertyName}'");
                     }
 
-                    message += $", column '{columnName}'";
+                    //if (ex is BadDataException badDataException)
+                    //{
+                    //}
+
+                    //if (ex is ParserException parserException)
+                    //{
+                    //}
+
+                    //if (ex is ReaderException readerException)
+                    //{
+                    //}
+
+                    messageBuilder.Append($", column '{columnName}'");
                 }
 
                 var writingContext = ex.WritingContext;
                 if (writingContext != null)
                 {
-                    message += $", row '{writingContext.Row}'";
+                    messageBuilder.Append($", row '{writingContext.Row}'");
                 }
 
-                message += $", message: '{ex.Message}'";
+                messageBuilder.Append($", message: '{ex.Message}'");
 
-                Log.Warning(message);
+                var message = messageBuilder.ToString();
+                Log.Error(message);
 
                 var handler = configuration.ReadingExceptionOccurred;
                 if (handler != null)
