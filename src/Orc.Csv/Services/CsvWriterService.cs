@@ -54,14 +54,18 @@ namespace Orc.Csv
         {
             try
             {
-                var configuration = csvWriter.Configuration;
-                if (configuration.HasHeaderRecord)
-                {
-                    Log.Debug($"Writing header record");
+                // Note: no need to write the header, the WriteRecords method will take care of that.
+                //var configuration = csvWriter.Configuration;
 
-                    csvWriter.WriteHeader(csvContext.RecordType);
-                    csvWriter.NextRecord();
-                }
+                //if (configuration.HasHeaderRecord)
+                //{
+                //    Log.Debug($"Writing header record");
+
+                //    csvWriter.WriteHeader(csvContext.RecordType);
+                //    csvWriter.NextRecord();
+
+                //    csvWriter.Flush();
+                //}
 
                 Log.Debug($"Writing records");
 
