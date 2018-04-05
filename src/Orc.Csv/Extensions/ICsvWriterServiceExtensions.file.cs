@@ -26,7 +26,7 @@ namespace Orc.Csv
             var dependencyResolver = csvWriterService.GetDependencyResolver();
             var fileService = dependencyResolver.Resolve<IFileService>();
 
-            using (var stream = fileService.OpenWrite(fileName))
+            using (var stream = fileService.Open(fileName, FileMode.Create, FileAccess.Write, FileShare.Read))
             {
                 using (var streamWriter = new StreamWriter(stream))
                 {
@@ -42,7 +42,7 @@ namespace Orc.Csv
             var dependencyResolver = csvWriterService.GetDependencyResolver();
             var fileService = dependencyResolver.Resolve<IFileService>();
 
-            using (var stream = fileService.OpenWrite(fileName))
+            using (var stream = fileService.Open(fileName, FileMode.Create, FileAccess.Write, FileShare.Read))
             {
                 using (var streamWriter = new StreamWriter(stream))
                 {
@@ -85,7 +85,7 @@ namespace Orc.Csv
             var fileService = dependencyResolver.Resolve<IFileService>();
 
             // Note: don't dispose, the writer cannot be used when disposed
-            var stream = fileService.OpenWrite(fileName);
+            var stream = fileService.Open(fileName, FileMode.Create, FileAccess.Write, FileShare.Read);
             var streamWriter = new StreamWriter(stream);
             return csvWriterService.CreateWriter(streamWriter, csvContext);
         }
