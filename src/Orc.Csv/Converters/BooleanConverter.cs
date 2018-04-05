@@ -46,9 +46,12 @@ namespace Orc.Csv
         }
 
         public BooleanConverter AddTrueValues(params string[] values)
-        {    
-            _trueValuesList.AddRange(values);
-            _trueValues = null;
+        {
+            if (values != null)
+            {
+                _trueValuesList.AddRange(values);
+                _trueValues = null;
+            }
 
             return this;
         }

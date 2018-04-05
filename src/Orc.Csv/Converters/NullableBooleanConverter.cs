@@ -45,8 +45,11 @@ namespace Orc.Csv
 
         public NullableBooleanConverter AddTrueValues(params string[] values)
         {
-            _trueValuesList.AddRange(values);
-            _trueValues = null;
+            if (values != null)
+            {
+                _trueValuesList.AddRange(values);
+                _trueValues = null;
+            }
 
             return this;
         }
@@ -65,8 +68,11 @@ namespace Orc.Csv
 
         public NullableBooleanConverter AddFalseValues(params string[] values)
         {
-            _falseValuesList.AddRange(values);
-            _falseValues = null;
+            if (values != null)
+            {
+                _falseValuesList.AddRange(values);
+                _falseValues = null;
+            }
 
             return this;
         }

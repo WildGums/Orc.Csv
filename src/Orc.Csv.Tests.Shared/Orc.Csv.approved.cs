@@ -10,15 +10,12 @@ namespace Orc.Csv
     {
         public BooleanConverter() { }
         public BooleanConverter(string[] trueValues) { }
-        [System.ObsoleteAttribute("Use `BooleanConverter(string[])` instead. Will be treated as an error from versio" +
-            "n 3.0.0. Will be removed in version 4.0.0.", false)]
+        [System.ObsoleteAttribute("Use `BooleanConverter(string[])` instead. Will be removed in version 4.0.0.", true)]
         public BooleanConverter(string[] trueValues, string[] falseValues) { }
         [System.ObsoleteAttribute("False values are not necessary in non-nullable boolean conversions (default value" +
-            " = false). Will be treated as an error from version 3.0.0. Will be removed in ve" +
-            "rsion 4.0.0.", false)]
+            " = false). Will be removed in version 4.0.0.", true)]
         public System.Collections.Generic.List<string> FalseValues { get; }
-        [System.ObsoleteAttribute("Use `AddTrueValues` instead. Will be treated as an error from version 3.0.0. Will" +
-            " be removed in version 4.0.0.", false)]
+        [System.ObsoleteAttribute("Use `AddTrueValues` instead. Will be removed in version 4.0.0.", true)]
         public System.Collections.Generic.List<string> TrueValues { get; }
         public Orc.Csv.BooleanConverter AddTrueValues(params string[] values) { }
         public override object ConvertFromString(string text, CsvHelper.IReaderRow row, CsvHelper.Configuration.MemberMapData memberMapData) { }
@@ -150,7 +147,10 @@ namespace Orc.Csv
     public class static MemberMapExtensions
     {
         public static CsvHelper.Configuration.MemberMap AsBool(this CsvHelper.Configuration.MemberMap map) { }
+        [System.ObsoleteAttribute("False values are not necessary in non-nullable boolean conversions (default value" +
+            " = false). Will be removed in version 4.0.0.", true)]
         public static CsvHelper.Configuration.MemberMap AsBool(this CsvHelper.Configuration.MemberMap map, string[] additionalTrueValues, string[] additionalFalseValues) { }
+        public static CsvHelper.Configuration.MemberMap AsBool(this CsvHelper.Configuration.MemberMap map, string[] additionalTrueValues) { }
         public static CsvHelper.Configuration.MemberMap AsDateTime(this CsvHelper.Configuration.MemberMap map) { }
         public static CsvHelper.Configuration.MemberMap AsDecimal(this CsvHelper.Configuration.MemberMap map) { }
         public static CsvHelper.Configuration.MemberMap AsDouble(this CsvHelper.Configuration.MemberMap map) { }
@@ -159,6 +159,7 @@ namespace Orc.Csv
         public static CsvHelper.Configuration.MemberMap AsInt(this CsvHelper.Configuration.MemberMap map) { }
         public static CsvHelper.Configuration.MemberMap AsLong(this CsvHelper.Configuration.MemberMap map) { }
         public static CsvHelper.Configuration.MemberMap AsNullableBool(this CsvHelper.Configuration.MemberMap map) { }
+        public static CsvHelper.Configuration.MemberMap AsNullableBool(this CsvHelper.Configuration.MemberMap map, string[] additionalTrueValues, string[] additionalFalseValues) { }
         public static CsvHelper.Configuration.MemberMap AsNullableDateTime(this CsvHelper.Configuration.MemberMap map) { }
         public static CsvHelper.Configuration.MemberMap AsNullableDecimal(this CsvHelper.Configuration.MemberMap map) { }
         public static CsvHelper.Configuration.MemberMap AsNullableDouble(this CsvHelper.Configuration.MemberMap map) { }
@@ -174,11 +175,9 @@ namespace Orc.Csv
     {
         public NullableBooleanConverter() { }
         public NullableBooleanConverter(string[] trueValues, string[] falseValues) { }
-        [System.ObsoleteAttribute("Use `AddFalseValues` instead. Will be treated as an error from version 3.0.0. Wil" +
-            "l be removed in version 4.0.0.", false)]
+        [System.ObsoleteAttribute("Use `AddFalseValues` instead. Will be removed in version 4.0.0.", true)]
         public System.Collections.Generic.List<string> FalseValues { get; }
-        [System.ObsoleteAttribute("Use `AddTrueValues` instead. Will be treated as an error from version 3.0.0. Will" +
-            " be removed in version 4.0.0.", false)]
+        [System.ObsoleteAttribute("Use `AddTrueValues` instead. Will be removed in version 4.0.0.", true)]
         public System.Collections.Generic.List<string> TrueValues { get; }
         public Orc.Csv.NullableBooleanConverter AddFalseValues(params string[] values) { }
         public Orc.Csv.NullableBooleanConverter AddTrueValues(params string[] values) { }
