@@ -20,6 +20,12 @@ namespace Orc.Csv
             return map.Default(string.Empty);
         }
 
+        public static MemberMap AsNullableString(this MemberMap map)
+        {
+            // Dummy wrapper
+            return map.Default(string.Empty);
+        }
+
         public static MemberMap AsEnum<TEnum>(this MemberMap map, TEnum defaultValue = default(TEnum))
             where TEnum : struct, IComparable, IFormattable
         {

@@ -166,6 +166,7 @@ namespace Orc.Csv
         public static CsvHelper.Configuration.MemberMap AsNullableInt(this CsvHelper.Configuration.MemberMap map) { }
         public static CsvHelper.Configuration.MemberMap AsNullableLong(this CsvHelper.Configuration.MemberMap map) { }
         public static CsvHelper.Configuration.MemberMap AsNullableShort(this CsvHelper.Configuration.MemberMap map) { }
+        public static CsvHelper.Configuration.MemberMap AsNullableString(this CsvHelper.Configuration.MemberMap map) { }
         public static CsvHelper.Configuration.MemberMap AsNullableTimeSpan(this CsvHelper.Configuration.MemberMap map) { }
         public static CsvHelper.Configuration.MemberMap AsShort(this CsvHelper.Configuration.MemberMap map) { }
         public static CsvHelper.Configuration.MemberMap AsString(this CsvHelper.Configuration.MemberMap map) { }
