@@ -7,6 +7,7 @@
 
 namespace Orc.Csv.Tests
 {
+    using System.Runtime.CompilerServices;
     using ApiApprover;
     using Csv;
     using NUnit.Framework;
@@ -14,7 +15,7 @@ namespace Orc.Csv.Tests
     [TestFixture]
     public class PublicApiFacts
     {
-        [Test]
+        [Test, MethodImpl(MethodImplOptions.NoInlining)]
         public void Orc_CsvHelper_HasNoBreakingChanges()
         {
             var assembly = typeof(CsvReaderService).Assembly;
