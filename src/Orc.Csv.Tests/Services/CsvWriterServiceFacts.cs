@@ -62,7 +62,8 @@ namespace Orc.Csv.Tests.Services
 
             var csvContext = new CsvContext<Operation>
             {
-                ClassMap = classMap
+                ClassMap = classMap,
+                Culture = new System.Globalization.CultureInfo("en-US")
             };
 
             using (var stream = File.Create(fileName))
@@ -75,6 +76,23 @@ namespace Orc.Csv.Tests.Services
                     csvWriter.WriteRecords(operations);
                 }
             }
+
+            await writerService.WriteRecordsAsync(operations, fileName, csvContext);
+
+            Approvals.VerifyFile(fileName);
+        }
+
+        [Test]
+        public async Task WritesHeaderForEmptyRecordSetAsync()
+        {
+            var writerService = new CsvWriterService();
+
+            var operations = new List<Operation>();
+
+            var temporaryFileContext = new TemporaryFilesContext($"{nameof(CsvWriterServiceFacts)}_{nameof(WritesHeaderForEmptyRecordSetAsync)}");
+            var fileName = temporaryFileContext.GetFile("operations.csv");
+
+            var csvContext = new CsvContext<Operation>();
 
             await writerService.WriteRecordsAsync(operations, fileName, csvContext);
 

@@ -69,7 +69,18 @@ namespace Orc.Csv
 
                 Log.Debug($"Writing records");
 
-                csvWriter.WriteRecords(records);
+                var enumerator = records.GetEnumerator();
+                if (!enumerator.MoveNext())
+                {
+                    // 0 records, only write header
+                    csvWriter.WriteHeader(csvContext.RecordType);
+                }
+                else
+                {
+                    // Note: one would expect that we need to write enumerator.Current first (since we already touched
+                    // it), but it doesn't seem necessary
+                    csvWriter.WriteRecords(records);
+                }
             }
             catch (Exception)
             {
