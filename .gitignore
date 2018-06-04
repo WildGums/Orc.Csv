@@ -19,7 +19,6 @@ TestResult.xml
 [Rr]elease/
 [Oo]utput*/
 [Pp]ackages*/
-.vs/
 bin
 obj
 [Ll]ib/*
@@ -125,3 +124,5 @@ Desktop.ini
 # mstest test results
 TestResults
 src/.vs/
+.sonarqube/
+.github/
