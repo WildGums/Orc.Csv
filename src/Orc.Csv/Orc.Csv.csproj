@@ -10,6 +10,11 @@
     <PackageTags>orc;csv;directory</PackageTags>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <!-- SonarQube requires a project guid -->
+    <ProjectGuid>65E6C289-AC0C-4551-AF0A-C8F3DB3B7BD6</ProjectGuid>
+  </PropertyGroup>
+  
   <ItemGroup>
     <PackageReference Include="CsvHelper" Version="7.1.0" />
     <PackageReference Include="MSBuild.Sdk.Extras" Version="1.5.4" PrivateAssets="all" />
