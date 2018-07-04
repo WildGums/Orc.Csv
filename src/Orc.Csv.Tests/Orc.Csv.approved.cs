@@ -6,7 +6,7 @@ public class static ModuleInitializer
 }
 namespace Orc.Csv
 {
-    public class BooleanConverter : Orc.Csv.TypeConverterBase<bool>
+    public class BooleanConverter : Orc.Csv.TypeConverterBase
     {
         public BooleanConverter() { }
         public BooleanConverter(string[] trueValues) { }
@@ -81,7 +81,7 @@ namespace Orc.Csv
         public object ConvertFromString(string text, CsvHelper.IReaderRow row, CsvHelper.Configuration.MemberMapData memberMapData) { }
         public string ConvertToString(object value, CsvHelper.IWriterRow row, CsvHelper.Configuration.MemberMapData memberMapData) { }
     }
-    public class EnumConverter<T> : Orc.Csv.TypeConverterBase<T>
+    public class EnumConverter<T> : Orc.Csv.TypeConverterBase
         where T :  struct, System.IComparable, System.IFormattable
     {
         public EnumConverter() { }
@@ -219,7 +219,7 @@ namespace Orc.Csv
         public NullableTimeSpanConverter() { }
         protected override System.Nullable<System.TimeSpan> ConvertStringToActualType(CsvHelper.IReaderRow row, string text) { }
     }
-    public abstract class NullableTypeConverterBase<TNullable> : Orc.Csv.TypeConverterBase<TNullable>
+    public abstract class NullableTypeConverterBase<TNullable> : Orc.Csv.TypeConverterBase
     {
         protected NullableTypeConverterBase() { }
         public override object ConvertFromString(string text, CsvHelper.IReaderRow row, CsvHelper.Configuration.MemberMapData memberMapData) { }
@@ -244,7 +244,7 @@ namespace Orc.Csv
     {
         public static string ToCamelCase(this string input) { }
     }
-    public abstract class TypeConverterBase<T> : CsvHelper.TypeConversion.ITypeConverter
+    public abstract class TypeConverterBase : CsvHelper.TypeConversion.ITypeConverter
     {
         protected TypeConverterBase() { }
         public abstract object ConvertFromString(string text, CsvHelper.IReaderRow row, CsvHelper.Configuration.MemberMapData memberMapData);

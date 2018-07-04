@@ -86,10 +86,7 @@ namespace Orc.Csv
                 Log.Warning($"Found bad data, row '{context.Row}', char position '{context.CharPosition}', field '{context.Field}'");
 
                 var handler = configuration.BadDataFound;
-                if (handler != null)
-                {
-                    handler(context);
-                }
+                handler?.Invoke(context);
             };
 
             finalConfiguration.HeaderValidated = (isValid, headers, index, context) =>
@@ -102,10 +99,7 @@ namespace Orc.Csv
                 }
 
                 var handler = configuration.HeaderValidated;
-                if (handler != null)
-                {
-                    handler(isValid, headers, index, context);
-                }
+                handler?.Invoke(isValid, headers, index, context);
             };
 
             finalConfiguration.MissingFieldFound = (fields, position, context) =>
@@ -141,10 +135,7 @@ namespace Orc.Csv
                 }
 
                 var handler = configuration.MissingFieldFound;
-                if (handler != null)
-                {
-                    handler(fields, position, context);
-                }
+                handler?.Invoke(fields, position, context);
             };
 
             finalConfiguration.ReadingExceptionOccurred = (ex) =>
