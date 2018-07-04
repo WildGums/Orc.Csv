@@ -11,7 +11,7 @@ namespace Orc.Csv.Tests.Converters
     using CsvHelper;
     using CsvHelper.Configuration;
 
-    public class CustomAttributesTypeConverter : TypeConverterBase<object>
+    public class CustomAttributesTypeConverter : TypeConverterBase
     {
         #region Fields
         private readonly string _customAttribute;

@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="TypeConverter.cs" company="WildGums">
 //   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
 // </copyright>
@@ -13,7 +13,7 @@ namespace Orc.Csv
     using CsvHelper.Configuration;
     using global::CsvHelper.TypeConversion;
 
-    public abstract class TypeConverterBase<T> : ITypeConverter
+    public abstract class TypeConverterBase : ITypeConverter
     {
         public virtual string ConvertToString(object value, IWriterRow row, MemberMapData memberMapData)
         {

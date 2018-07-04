@@ -10,7 +10,7 @@ namespace Orc.Csv
     using CsvHelper;
     using CsvHelper.Configuration;
 
-    public abstract class NullableTypeConverterBase<TNullable> : TypeConverterBase<TNullable>
+    public abstract class NullableTypeConverterBase<TNullable> : TypeConverterBase
     {
         #region Methods
         public override object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData)

@@ -25,13 +25,20 @@ namespace Orc.Csv
 
             var dependencyResolver = csvWriterService.GetDependencyResolver();
             var fileService = dependencyResolver.Resolve<IFileService>();
+            FileStream stream = null;
 
-            using (var stream = fileService.Open(fileName, FileMode.Create, FileAccess.Write, FileShare.Read))
+            try
             {
+                stream = fileService.Open(fileName, FileMode.Create, FileAccess.Write, FileShare.Read);
+
                 using (var streamWriter = new StreamWriter(stream))
                 {
                     csvWriterService.WriteRecords(records, streamWriter, csvContext);
                 }
+            }
+            finally
+            {
+                stream?.Dispose();
             }
         }
 
@@ -41,13 +48,20 @@ namespace Orc.Csv
 
             var dependencyResolver = csvWriterService.GetDependencyResolver();
             var fileService = dependencyResolver.Resolve<IFileService>();
+            FileStream stream = null;
 
-            using (var stream = fileService.Open(fileName, FileMode.Create, FileAccess.Write, FileShare.Read))
+            try
             {
+                stream = fileService.Open(fileName, FileMode.Create, FileAccess.Write, FileShare.Read);
+
                 using (var streamWriter = new StreamWriter(stream))
                 {
                     await csvWriterService.WriteRecordsAsync(records, streamWriter, csvContext);
                 }
+            }
+            finally
+            {
+                stream?.Dispose();
             }
         }
 

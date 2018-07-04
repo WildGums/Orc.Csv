@@ -13,10 +13,10 @@ namespace Orc.Csv
 
     public class NullableBooleanConverter : NullableTypeConverterBase<bool?>
     {
-        private List<string> _trueValuesList = new List<string>();
+        private readonly List<string> _trueValuesList = new List<string>();
         private string[] _trueValues;
 
-        private List<string> _falseValuesList = new List<string>();
+        private readonly List<string> _falseValuesList = new List<string>();
         private string[] _falseValues;
 
         public NullableBooleanConverter()

@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CsvServiceBase.cs" company="WildGums">
 //   Copyright (c) 2008 - 2018 WildGums. All rights reserved.
 // </copyright>
@@ -178,14 +178,9 @@ namespace Orc.Csv
 
                     if (ex is TypeConverterException typeConverterException)
                     {
-                        if (typeConverterException.MemberMapData.IsNameSet)
-                        {
-                            columnName = typeConverterException.MemberMapData.Names.FirstOrDefault();
-                        }
-                        else
-                        {
-                            columnName = $"idx: {typeConverterException.MemberMapData.Index}";
-                        }
+                        columnName = typeConverterException.MemberMapData.IsNameSet 
+                            ? typeConverterException.MemberMapData.Names.FirstOrDefault() 
+                            : $"idx: {typeConverterException.MemberMapData.Index}";
 
                         messageBuilder.Append($", content '{typeConverterException.Text}'");
 
@@ -193,18 +188,6 @@ namespace Orc.Csv
 
                         messageBuilder.Append($", property '{propertyName}'");
                     }
-
-                    //if (ex is BadDataException badDataException)
-                    //{
-                    //}
-
-                    //if (ex is ParserException parserException)
-                    //{
-                    //}
-
-                    //if (ex is ReaderException readerException)
-                    //{
-                    //}
 
                     messageBuilder.Append($", column '{columnName}'");
                 }
@@ -221,10 +204,7 @@ namespace Orc.Csv
                 Log.Error(message);
 
                 var handler = configuration.ReadingExceptionOccurred;
-                if (handler != null)
-                {
-                    handler(ex);
-                }
+                handler?.Invoke(ex);
             };
 
             if (csvContext.ClassMap != null)
