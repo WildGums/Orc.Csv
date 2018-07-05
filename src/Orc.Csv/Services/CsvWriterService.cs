@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CsvWriterService.cs" company="WildGums">
 //   Copyright (c) 2008 - 2017 WildGums. All rights reserved.
 // </copyright>
@@ -54,19 +54,6 @@ namespace Orc.Csv
         {
             try
             {
-                // Note: no need to write the header, the WriteRecords method will take care of that.
-                //var configuration = csvWriter.Configuration;
-
-                //if (configuration.HasHeaderRecord)
-                //{
-                //    Log.Debug($"Writing header record");
-
-                //    csvWriter.WriteHeader(csvContext.RecordType);
-                //    csvWriter.NextRecord();
-
-                //    csvWriter.Flush();
-                //}
-
                 Log.Debug($"Writing records");
 
                 var enumerator = records.GetEnumerator();
