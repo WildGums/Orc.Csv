@@ -252,4 +252,9 @@ namespace Orc.Csv
         protected System.Globalization.CultureInfo GetCultureInfo(CsvHelper.IWriterRow row) { }
         protected System.Globalization.CultureInfo GetCultureInfo(CsvHelper.IReaderRow row) { }
     }
+    [System.ObsoleteAttribute("Use `TypeConverterBase` instead. Will be removed in version 4.0.0.", true)]
+    public abstract class TypeConverterBase<T> : Orc.Csv.TypeConverterBase
+    {
+        protected TypeConverterBase() { }
+    }
 }
