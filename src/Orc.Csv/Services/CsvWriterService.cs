@@ -54,6 +54,8 @@ namespace Orc.Csv
         {
             try
             {
+                // Note: no need to write the header, the WriteRecords method will take care of that.
+
                 Log.Debug($"Writing records");
 
                 var enumerator = records.GetEnumerator();
