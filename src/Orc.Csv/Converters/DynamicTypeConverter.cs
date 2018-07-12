@@ -54,12 +54,9 @@ namespace Orc.Csv
                 throw Log.ErrorAndCreateException<NotImplementedException>($"The ConvertFromString method is not specified for this converter");
             }
 
-            if (!string.IsNullOrWhiteSpace(_defaultValue))
+            if (!string.IsNullOrWhiteSpace(_defaultValue) && string.IsNullOrWhiteSpace(text))
             {
-                if (string.IsNullOrWhiteSpace(text))
-                {
-                    text = _defaultValue;
-                }
+                text = _defaultValue;
             }
 
             return _convertFromString(text, row, memberMapData);

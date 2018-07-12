@@ -25,7 +25,7 @@ namespace Orc.Csv
 
             foreach (var word in words)
             {
-                if (string.IsNullOrWhiteSpace(word) || string.IsNullOrWhiteSpace(word))
+                if (string.IsNullOrWhiteSpace(word))
                 {
                     continue;
                 }

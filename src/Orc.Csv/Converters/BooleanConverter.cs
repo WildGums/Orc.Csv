@@ -7,14 +7,12 @@
 
 namespace Orc.Csv
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
     using Catel;
     using CsvHelper;
     using CsvHelper.Configuration;
 
-    public class BooleanConverter : TypeConverterBase<bool>
+    public class BooleanConverter : TypeConverterBase
     {
         private readonly List<string> _trueValuesList = new List<string>();
         private string[] _trueValues;

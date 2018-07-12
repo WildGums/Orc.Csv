@@ -28,10 +28,8 @@ namespace Orc.Csv
 
             using (var stream = fileService.Open(fileName, FileMode.Create, FileAccess.Write, FileShare.Read))
             {
-                using (var streamWriter = new StreamWriter(stream))
-                {
-                    csvWriterService.WriteRecords(records, streamWriter, csvContext);
-                }
+                var streamWriter = new StreamWriter(stream);
+                csvWriterService.WriteRecords(records, streamWriter, csvContext);
             }
         }
 
@@ -44,10 +42,8 @@ namespace Orc.Csv
 
             using (var stream = fileService.Open(fileName, FileMode.Create, FileAccess.Write, FileShare.Read))
             {
-                using (var streamWriter = new StreamWriter(stream))
-                {
-                    await csvWriterService.WriteRecordsAsync(records, streamWriter, csvContext);
-                }
+                var streamWriter = new StreamWriter(stream);
+                await csvWriterService.WriteRecordsAsync(records, streamWriter, csvContext);
             }
         }
 

@@ -4,14 +4,17 @@
   -->
   
   <PropertyGroup>
-    <NoWarn>$(NoWarn);CS1591;CS1998</NoWarn>
+    <NoWarn>$(NoWarn);CS1591;CS1998;NU1603;NU1605;NU1608;NU1701</NoWarn>
+    <NoError>$(NoError);CS1591;CS1998;NU1603;NU1605;NU1608;NU1701</NoError>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageOutputPath>$(ProjectDir)..\..\output\$(ConfigurationName)\</PackageOutputPath>
     <Configuration Condition="'$(Configuration)' == ''">Release</Configuration>
+    <PackageOutputPath>$(ProjectDir)..\..\output\$(Configuration)\</PackageOutputPath>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb;.xml</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <Deterministic>False</Deterministic>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -28,6 +31,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\*.cs" />
+    <Compile Include="..\*.cs">
+      <SonarQubeExclude>true</SonarQubeExclude>
+    </Compile>
   </ItemGroup>
 </Project>
