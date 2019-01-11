@@ -214,6 +214,11 @@ namespace Orc.Csv
         public NullableShortConverter() { }
         protected override System.Nullable<short> ConvertStringToActualType(CsvHelper.IReaderRow row, string text) { }
     }
+    public class NullableStringConverter : Orc.Csv.NullableTypeConverterBase<string>
+    {
+        public NullableStringConverter() { }
+        protected override string ConvertStringToActualType(CsvHelper.IReaderRow row, string text) { }
+    }
     public class NullableTimeSpanConverter : Orc.Csv.NullableTypeConverterBase<System.Nullable<System.TimeSpan>>
     {
         public NullableTimeSpanConverter() { }
@@ -221,7 +226,8 @@ namespace Orc.Csv
     }
     public abstract class NullableTypeConverterBase<TNullable> : Orc.Csv.TypeConverterBase
     {
-        protected NullableTypeConverterBase() { }
+        public NullableTypeConverterBase() { }
+        public bool SupportNullText { get; set; }
         public override object ConvertFromString(string text, CsvHelper.IReaderRow row, CsvHelper.Configuration.MemberMapData memberMapData) { }
         protected abstract TNullable ConvertStringToActualType(CsvHelper.IReaderRow row, string text);
     }

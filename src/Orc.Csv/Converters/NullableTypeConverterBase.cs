@@ -7,11 +7,24 @@
 
 namespace Orc.Csv
 {
+    using Catel;
     using CsvHelper;
     using CsvHelper.Configuration;
 
     public abstract class NullableTypeConverterBase<TNullable> : TypeConverterBase
     {
+        public NullableTypeConverterBase()
+        {
+            SupportNullText = true;
+        }
+
+        /// <summary>
+        /// If set the <c>true</c>, the text <c>null</c> will be treated as null as well.
+        /// <para />
+        /// The default value is <c>true</c>.
+        /// </summary>
+        public bool SupportNullText { get; set; }
+
         #region Methods
         public override object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData)
         {
@@ -23,6 +36,11 @@ namespace Orc.Csv
             // Note: we could (should?) respect the trim option here, but since we really want to convert types,
             // we need to trim
             text = text.Trim();
+
+            if (SupportNullText && text.EqualsIgnoreCase("null"))
+            {
+                return null;
+            }
 
             var value = ConvertStringToActualType(row, text);
             return value;

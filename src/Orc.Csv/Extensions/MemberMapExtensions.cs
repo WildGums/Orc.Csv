@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CsvHelperExtensions.cs" company="WildGums">
 //   Copyright (c) 2008 - 2018 WildGums. All rights reserved.
 // </copyright>
@@ -22,8 +22,7 @@ namespace Orc.Csv
 
         public static MemberMap AsNullableString(this MemberMap map)
         {
-            // Dummy wrapper
-            return map.Default(string.Empty);
+            return map.TypeConverter<NullableStringConverter>();
         }
 
         public static MemberMap AsEnum<TEnum>(this MemberMap map, TEnum defaultValue = default(TEnum))
