@@ -20,22 +20,22 @@ namespace Orc.Csv
                 return null;
             }
 
+            // Note: we could (should?) respect the trim option here, but since we really want to convert types,
+            // we need to trim
+            text = text.Trim();
+
             var nullValues = memberMapData.TypeConverterOptions.NullValues;
             if (nullValues.Contains(text))
             {
                 return null;
             }
 
-            // Note: we could (should?) respect the trim option here, but since we really want to convert types,
-            // we need to trim
-            text = text.Trim();
-
             var value = ConvertStringToActualType(row, text);
             return value;
         }
 
         /// <summary>
-        /// Converts the string to the actual type. The null checks are already performed.
+        ///     Converts the string to the actual type. The null checks are already performed.
         /// </summary>
         /// <param name="row">The row.</param>
         /// <param name="text">The text.</param>
