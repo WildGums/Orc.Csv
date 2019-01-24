@@ -24,12 +24,18 @@ namespace Orc.Csv
             // we need to trim
             text = text.Trim();
 
+            var nullValues = memberMapData.TypeConverterOptions.NullValues;
+            if (nullValues.Contains(text))
+            {
+                return null;
+            }
+
             var value = ConvertStringToActualType(row, text);
             return value;
         }
 
         /// <summary>
-        /// Converts the string to the actual type. The null checks are already performed.
+        ///     Converts the string to the actual type. The null checks are already performed.
         /// </summary>
         /// <param name="row">The row.</param>
         /// <param name="text">The text.</param>
