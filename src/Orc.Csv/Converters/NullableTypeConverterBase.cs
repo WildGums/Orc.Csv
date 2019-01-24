@@ -20,6 +20,12 @@ namespace Orc.Csv
                 return null;
             }
 
+            var nullValues = memberMapData.TypeConverterOptions.NullValues;
+            if (nullValues.Contains(text))
+            {
+                return null;
+            }
+
             // Note: we could (should?) respect the trim option here, but since we really want to convert types,
             // we need to trim
             text = text.Trim();
