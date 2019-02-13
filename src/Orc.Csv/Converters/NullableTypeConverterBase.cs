@@ -42,8 +42,8 @@ namespace Orc.Csv
                 return null;
             }
 
-            var nullValues = memberMapData.TypeConverterOptions.NullValues;
-            if (nullValues.Contains(text))
+            var nullValues = memberMapData?.TypeConverterOptions?.NullValues;
+            if (nullValues?.Contains(text)??false)
             {
                 return null;
             }
