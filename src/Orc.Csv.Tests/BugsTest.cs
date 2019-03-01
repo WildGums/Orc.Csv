@@ -27,6 +27,7 @@ namespace Orc.Csv.Tests
             var csvReaderService = new CsvReaderService();
             var configuration = new global::CsvHelper.Configuration.Configuration
             {
+                Delimiter = ",",
                 MissingFieldFound = null,
                 IgnoreBlankLines = true,
                 HasHeaderRecord = true,
@@ -40,6 +41,9 @@ namespace Orc.Csv.Tests
 
             using (var csvReader = csvReaderService.CreateReader(csvFilePath, csvContext))
             {
+                csvReader.Read();
+                csvReader.ReadHeader();
+
                 while (csvReader.Read())
                 {
                     var id = csvReader.GetField("Id");
