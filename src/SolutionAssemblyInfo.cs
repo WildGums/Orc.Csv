@@ -6,8 +6,8 @@
 using System.Reflection;
 
 [assembly: AssemblyCompany("WildGums")]
-[assembly: AssemblyVersion("3.0.0")]
-[assembly: AssemblyFileVersion("3.0.0")]
-[assembly: AssemblyInformationalVersion("3.0.0-alpha.1")]
-[assembly: AssemblyCopyright("Copyright © WildGums 2010 - 2018")]
+[assembly: AssemblyVersion("3.4.0")]
+[assembly: AssemblyFileVersion("3.4.0")]
+[assembly: AssemblyInformationalVersion("3.4.0-alpha.47")]
+[assembly: AssemblyCopyright("Copyright © WildGums 2014 - 2019")]
 

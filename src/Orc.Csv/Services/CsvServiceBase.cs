@@ -19,7 +19,9 @@ namespace Orc.Csv
     {
         // Non-static so we can get derived type, services will not have many instances
         // anyway
+#pragma warning disable IDE1006 // Naming Styles
         private readonly ILog Log;
+#pragma warning restore IDE1006 // Naming Styles
 
         protected CsvServiceBase()
         {
@@ -30,6 +32,7 @@ namespace Orc.Csv
         {
             var configuration = new Configuration
             {
+                Delimiter = ",",
                 CultureInfo = csvContext?.Culture ?? CsvEnvironment.DefaultCultureInfo,
                 MissingFieldFound = null,
                 TrimOptions = TrimOptions.Trim,
@@ -49,13 +52,14 @@ namespace Orc.Csv
             {
                 AllowComments = configuration.AllowComments,
                 BufferSize = configuration.BufferSize,
-                BuildRequiredQuoteChars = configuration.BuildRequiredQuoteChars,
                 Comment = configuration.Comment,
                 CountBytes = configuration.CountBytes,
                 CultureInfo = csvContext.Culture ?? configuration.CultureInfo,
                 Delimiter = configuration.Delimiter,
                 DetectColumnCountChanges = configuration.DetectColumnCountChanges,
+                DynamicPropertySort = configuration.DynamicPropertySort,
                 Encoding = configuration.Encoding,
+                Escape = configuration.Escape,
                 GetConstructor = configuration.GetConstructor,
                 HasHeaderRecord = configuration.HasHeaderRecord,
                 HeaderValidated = configuration.HeaderValidated,
@@ -65,13 +69,15 @@ namespace Orc.Csv
                 IncludePrivateMembers = configuration.IncludePrivateMembers,
                 InjectionCharacters = configuration.InjectionCharacters,
                 InjectionEscapeCharacter = configuration.InjectionEscapeCharacter,
+                LineBreakInQuotedFieldIsBadData = configuration.LineBreakInQuotedFieldIsBadData,
+                //Maps = configuration.Maps,
                 MemberTypes = configuration.MemberTypes,
                 PrepareHeaderForMatch = configuration.PrepareHeaderForMatch,
                 Quote = configuration.Quote,
-                QuoteAllFields = configuration.QuoteAllFields,
-                QuoteNoFields = configuration.QuoteNoFields,
+                //QuoteString = configuration.QuoteString,
                 ReferenceHeaderPrefix = configuration.ReferenceHeaderPrefix,
                 SanitizeForInjection = configuration.SanitizeForInjection,
+                ShouldQuote = configuration.ShouldQuote,
                 ShouldSkipRecord = configuration.ShouldSkipRecord,
                 ShouldUseConstructorParameters = configuration.ShouldUseConstructorParameters,
                 TrimOptions = configuration.TrimOptions,
@@ -155,7 +161,7 @@ namespace Orc.Csv
             handler?.Invoke(fields, position, context);
         }
 
-        private void HandleReadingException(CsvHelperException ex, Configuration configuration)
+        private bool HandleReadingException(CsvHelperException ex, Configuration configuration)
         {
             var readingContext = ex.ReadingContext;
 
@@ -211,6 +217,8 @@ namespace Orc.Csv
 
             var handler = configuration.ReadingExceptionOccurred;
             handler?.Invoke(ex);
+
+            return false;
         }
     }
 }
