@@ -59,7 +59,7 @@ namespace Orc.Csv
                 Log.Debug($"Writing records");
 
                 var enumerator = records.GetEnumerator();
-                if (csvContext.Configuration?.HasHeaderRecord??true && !enumerator.MoveNext())
+                if (!enumerator.MoveNext() && (csvContext.Configuration?.HasHeaderRecord??true))
                 {
                     // 0 records, only write header
                     csvWriter.WriteHeader(csvContext.RecordType);
