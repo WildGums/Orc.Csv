@@ -19,13 +19,13 @@
     <PackageReference Include="Catel.Analyzers" Version="1.0.0" PrivateAssets="all" />
     <PackageReference Include="Catel.Core" Version="5.12.0" />
     <PackageReference Include="Catel.Fody" Version="4.3.0" PrivateAssets="all" />
-    <PackageReference Include="CsvHelper" Version="12.1.2" />
+    <PackageReference Include="CsvHelper" Version="12.2.2" />
     <PackageReference Include="Fody" Version="6.0.5" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="ModuleInit.Fody" Version="2.1.0" PrivateAssets="all" />
     <PackageReference Include="Obsolete.Fody" Version="5.2.0" PrivateAssets="all" />
-    <PackageReference Include="Orc.FileSystem" Version="3.1.2" />
+    <PackageReference Include="Orc.FileSystem" Version="3.2.0" />
     <PackageReference Include="WpfAnalyzers" Version="2.2.0.2" PrivateAssets="all" />
   </ItemGroup>
 
