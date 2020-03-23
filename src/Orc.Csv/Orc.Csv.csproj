@@ -7,7 +7,7 @@
     <PackageId>Orc.Csv</PackageId>
     <PackageVersion>1.0.0-alpha0001</PackageVersion>
     <Description>Csv reader and writer services.</Description>
-    <PackageTags>orc;csv;directory</PackageTags>
+    <PackageTags>orc;csv;csvhelper;directory</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup>
