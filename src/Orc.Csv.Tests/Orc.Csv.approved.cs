@@ -10,13 +10,6 @@ namespace Orc.Csv
     {
         public BooleanConverter() { }
         public BooleanConverter(string[] trueValues) { }
-        [System.Obsolete("Use `BooleanConverter(string[])` instead. Will be removed in version 4.0.0.", true)]
-        public BooleanConverter(string[] trueValues, string[] falseValues) { }
-        [System.Obsolete("False values are not necessary in non-nullable boolean conversions (default value" +
-            " = false). Will be removed in version 4.0.0.", true)]
-        public System.Collections.Generic.List<string> FalseValues { get; }
-        [System.Obsolete("Use `AddTrueValues` instead. Will be removed in version 4.0.0.", true)]
-        public System.Collections.Generic.List<string> TrueValues { get; }
         public Orc.Csv.BooleanConverter AddTrueValues(params string[] values) { }
         public override object ConvertFromString(string text, CsvHelper.IReaderRow row, CsvHelper.Configuration.MemberMapData memberMapData) { }
     }
@@ -148,9 +141,6 @@ namespace Orc.Csv
     {
         public static CsvHelper.Configuration.MemberMap AsBool(this CsvHelper.Configuration.MemberMap map) { }
         public static CsvHelper.Configuration.MemberMap AsBool(this CsvHelper.Configuration.MemberMap map, string[] additionalTrueValues) { }
-        [System.Obsolete("False values are not necessary in non-nullable boolean conversions (default value" +
-            " = false). Will be removed in version 4.0.0.", true)]
-        public static CsvHelper.Configuration.MemberMap AsBool(this CsvHelper.Configuration.MemberMap map, string[] additionalTrueValues, string[] additionalFalseValues) { }
         public static CsvHelper.Configuration.MemberMap AsDateTime(this CsvHelper.Configuration.MemberMap map) { }
         public static CsvHelper.Configuration.MemberMap AsDecimal(this CsvHelper.Configuration.MemberMap map) { }
         public static CsvHelper.Configuration.MemberMap AsDouble(this CsvHelper.Configuration.MemberMap map) { }
@@ -176,10 +166,6 @@ namespace Orc.Csv
     {
         public NullableBooleanConverter() { }
         public NullableBooleanConverter(string[] trueValues, string[] falseValues) { }
-        [System.Obsolete("Use `AddFalseValues` instead. Will be removed in version 4.0.0.", true)]
-        public System.Collections.Generic.List<string> FalseValues { get; }
-        [System.Obsolete("Use `AddTrueValues` instead. Will be removed in version 4.0.0.", true)]
-        public System.Collections.Generic.List<string> TrueValues { get; }
         public Orc.Csv.NullableBooleanConverter AddFalseValues(params string[] values) { }
         public Orc.Csv.NullableBooleanConverter AddTrueValues(params string[] values) { }
         protected override bool? ConvertStringToActualType(CsvHelper.IReaderRow row, string text) { }
@@ -257,10 +243,5 @@ namespace Orc.Csv
         public virtual string ConvertToString(object value, CsvHelper.IWriterRow row, CsvHelper.Configuration.MemberMapData memberMapData) { }
         protected System.Globalization.CultureInfo GetCultureInfo(CsvHelper.IReaderRow row) { }
         protected System.Globalization.CultureInfo GetCultureInfo(CsvHelper.IWriterRow row) { }
-    }
-    [System.Obsolete("Use `TypeConverterBase` instead. Will be removed in version 4.0.0.", true)]
-    public abstract class TypeConverterBase<T> : Orc.Csv.TypeConverterBase
-    {
-        protected TypeConverterBase() { }
     }
 }

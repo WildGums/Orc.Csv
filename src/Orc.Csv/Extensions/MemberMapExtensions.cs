@@ -107,13 +107,6 @@ namespace Orc.Csv
             return map.TypeConverter<BooleanConverter>();
         }
 
-        [ObsoleteEx(Message = "False values are not necessary in non-nullable boolean conversions (default value = false)", TreatAsErrorFromVersion = "3.0", RemoveInVersion = "4.0")]
-        public static MemberMap AsBool(this MemberMap map, string[] additionalTrueValues, string[] additionalFalseValues)
-        {
-            var typeConverter = new BooleanConverter(additionalTrueValues, additionalFalseValues);
-            return map.TypeConverter(typeConverter);
-        }
-
         public static MemberMap AsBool(this MemberMap map, string[] additionalTrueValues)
         {
             var typeConverter = new BooleanConverter()

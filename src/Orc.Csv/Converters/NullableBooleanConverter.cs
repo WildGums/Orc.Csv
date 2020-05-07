@@ -54,18 +54,6 @@ namespace Orc.Csv
             return this;
         }
 
-        [ObsoleteEx(ReplacementTypeOrMember = "AddTrueValues", TreatAsErrorFromVersion = "3.0", RemoveInVersion = "4.0")]
-        public List<string> TrueValues
-        {
-            get
-            {
-                // Always reset so we refresh
-                _trueValues = null;
-
-                return _trueValuesList;
-            }
-        }
-
         public NullableBooleanConverter AddFalseValues(params string[] values)
         {
             if (values != null)
@@ -75,18 +63,6 @@ namespace Orc.Csv
             }
 
             return this;
-        }
-
-        [ObsoleteEx(ReplacementTypeOrMember = "AddFalseValues", TreatAsErrorFromVersion = "3.0", RemoveInVersion = "4.0")]
-        public List<string> FalseValues
-        {
-            get
-            {
-                // Always reset so we refresh
-                _falseValues = null;
-
-                return _falseValuesList;
-            }
         }
 
         protected override bool? ConvertStringToActualType(IReaderRow row, string text)
