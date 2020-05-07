@@ -1,6 +1,6 @@
-﻿[assembly: System.Resources.NeutralResourcesLanguageAttribute("en-US")]
-[assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.6", FrameworkDisplayName=".NET Framework 4.6")]
-public class static ModuleInitializer
+﻿[assembly: System.Resources.NeutralResourcesLanguage("en-US")]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETFramework,Version=v4.7", FrameworkDisplayName=".NET Framework 4.7")]
+public static class ModuleInitializer
 {
     public static void Initialize() { }
 }
@@ -10,12 +10,12 @@ namespace Orc.Csv
     {
         public BooleanConverter() { }
         public BooleanConverter(string[] trueValues) { }
-        [System.ObsoleteAttribute("Use `BooleanConverter(string[])` instead. Will be removed in version 4.0.0.", true)]
+        [System.Obsolete("Use `BooleanConverter(string[])` instead. Will be removed in version 4.0.0.", true)]
         public BooleanConverter(string[] trueValues, string[] falseValues) { }
-        [System.ObsoleteAttribute("False values are not necessary in non-nullable boolean conversions (default value" +
+        [System.Obsolete("False values are not necessary in non-nullable boolean conversions (default value" +
             " = false). Will be removed in version 4.0.0.", true)]
         public System.Collections.Generic.List<string> FalseValues { get; }
-        [System.ObsoleteAttribute("Use `AddTrueValues` instead. Will be removed in version 4.0.0.", true)]
+        [System.Obsolete("Use `AddTrueValues` instead. Will be removed in version 4.0.0.", true)]
         public System.Collections.Generic.List<string> TrueValues { get; }
         public Orc.Csv.BooleanConverter AddTrueValues(params string[] values) { }
         public override object ConvertFromString(string text, CsvHelper.IReaderRow row, CsvHelper.Configuration.MemberMapData memberMapData) { }
@@ -24,7 +24,7 @@ namespace Orc.Csv
     {
         protected ClassMapBase() { }
     }
-    public class static ClassMapExtensions
+    public static class ClassMapExtensions
     {
         public static System.Type GetRecordType(this CsvHelper.Configuration.ClassMap classMap) { }
     }
@@ -32,7 +32,7 @@ namespace Orc.Csv
     {
         public CsvContext(System.Type recordType) { }
         public CsvHelper.Configuration.ClassMap ClassMap { get; set; }
-        public CsvHelper.Configuration.Configuration Configuration { get; set; }
+        public CsvHelper.Configuration.CsvConfiguration Configuration { get; set; }
         public System.Globalization.CultureInfo Culture { get; set; }
         public System.Action<object> Initializer { get; set; }
         public System.Type RecordType { get; set; }
@@ -47,7 +47,7 @@ namespace Orc.Csv
     {
         public CsvContext() { }
     }
-    public class static CsvEnvironment
+    public static class CsvEnvironment
     {
         public static readonly System.Globalization.CultureInfo DefaultCultureInfo;
         public static readonly System.DateTime ExcelNullDate;
@@ -64,15 +64,15 @@ namespace Orc.Csv
     public abstract class CsvServiceBase
     {
         protected CsvServiceBase() { }
-        public virtual CsvHelper.Configuration.Configuration CreateDefaultConfiguration(Orc.Csv.ICsvContext csvContext) { }
-        protected virtual CsvHelper.Configuration.Configuration EnsureCorrectConfiguration(CsvHelper.Configuration.Configuration configuration, Orc.Csv.ICsvContext csvContext) { }
+        public virtual CsvHelper.Configuration.CsvConfiguration CreateDefaultConfiguration(Orc.Csv.ICsvContext csvContext) { }
+        protected virtual CsvHelper.Configuration.CsvConfiguration EnsureCorrectConfiguration(CsvHelper.Configuration.CsvConfiguration configuration, Orc.Csv.ICsvContext csvContext) { }
     }
     public class CsvWriterService : Orc.Csv.CsvServiceBase, Orc.Csv.ICsvWriterService
     {
         public CsvWriterService() { }
         public virtual CsvHelper.CsvWriter CreateWriter(System.IO.StreamWriter streamWriter, Orc.Csv.ICsvContext csvContext) { }
-        public virtual void WriteRecords(System.Collections.IEnumerable records, System.IO.StreamWriter streamWriter, Orc.Csv.ICsvContext csvContext) { }
         protected virtual void WriteRecords(System.Collections.IEnumerable records, CsvHelper.CsvWriter csvWriter, Orc.Csv.ICsvContext csvContext) { }
+        public virtual void WriteRecords(System.Collections.IEnumerable records, System.IO.StreamWriter streamWriter, Orc.Csv.ICsvContext csvContext) { }
         public virtual System.Threading.Tasks.Task WriteRecordsAsync(System.Collections.IEnumerable records, System.IO.StreamWriter streamWriter, Orc.Csv.ICsvContext csvContext) { }
     }
     public class DynamicTypeConverter<T> : CsvHelper.TypeConversion.ITypeConverter
@@ -92,7 +92,7 @@ namespace Orc.Csv
     public interface ICsvContext
     {
         CsvHelper.Configuration.ClassMap ClassMap { get; set; }
-        CsvHelper.Configuration.Configuration Configuration { get; set; }
+        CsvHelper.Configuration.CsvConfiguration Configuration { get; set; }
         System.Globalization.CultureInfo Culture { get; set; }
         System.Action<object> Initializer { get; set; }
         System.Type RecordType { get; set; }
@@ -100,61 +100,61 @@ namespace Orc.Csv
     }
     public interface ICsvReaderService
     {
-        CsvHelper.Configuration.Configuration CreateDefaultConfiguration(Orc.Csv.ICsvContext csvContext);
+        CsvHelper.Configuration.CsvConfiguration CreateDefaultConfiguration(Orc.Csv.ICsvContext csvContext);
         CsvHelper.CsvReader CreateReader(System.IO.StreamReader streamReader, Orc.Csv.ICsvContext csvContext);
         System.Collections.IEnumerable ReadRecords(System.IO.StreamReader streamReader, Orc.Csv.ICsvContext csvContext);
         System.Threading.Tasks.Task<System.Collections.IEnumerable> ReadRecordsAsync(System.IO.StreamReader streamReader, Orc.Csv.ICsvContext csvContext);
     }
-    public class static ICsvReaderServiceExtensions
+    public static class ICsvReaderServiceExtensions
     {
         public static CsvHelper.CsvReader CreateReader(this Orc.Csv.ICsvReaderService csvReaderService, string fileName, Orc.Csv.ICsvContext csvContext) { }
         public static System.Collections.IEnumerable ReadRecords(this Orc.Csv.ICsvReaderService csvReaderService, string fileName, Orc.Csv.ICsvContext csvContext) { }
-        public static System.Collections.Generic.List<TRecord> ReadRecords<TRecord>(this Orc.Csv.ICsvReaderService csvReaderService, string fileName, Orc.Csv.ICsvContext csvContext) { }
-        public static System.Collections.Generic.List<TRecord> ReadRecords<TRecord, TRecordMap>(this Orc.Csv.ICsvReaderService csvReaderService, string fileName, Orc.Csv.ICsvContext csvContext = null)
-            where TRecordMap : CsvHelper.Configuration.ClassMap, new () { }
         public static System.Collections.Generic.List<TRecord> ReadRecords<TRecord>(this Orc.Csv.ICsvReaderService csvReaderService, System.IO.StreamReader streamReader, Orc.Csv.ICsvContext csvContext) { }
+        public static System.Collections.Generic.List<TRecord> ReadRecords<TRecord>(this Orc.Csv.ICsvReaderService csvReaderService, string fileName, Orc.Csv.ICsvContext csvContext) { }
         public static System.Collections.Generic.List<TRecord> ReadRecords<TRecord, TRecordMap>(this Orc.Csv.ICsvReaderService csvReaderService, System.IO.StreamReader streamReader, Orc.Csv.ICsvContext csvContext = null)
             where TRecordMap : CsvHelper.Configuration.ClassMap, new () { }
-        public static System.Threading.Tasks.Task<System.Collections.IEnumerable> ReadRecordsAsync(this Orc.Csv.ICsvReaderService csvReaderService, string fileName, Orc.Csv.ICsvContext csvContext) { }
-        public static System.Threading.Tasks.Task<System.Collections.Generic.List<TRecord>> ReadRecordsAsync<TRecord>(this Orc.Csv.ICsvReaderService csvReaderService, string fileName, Orc.Csv.ICsvContext csvContext) { }
-        public static System.Threading.Tasks.Task<System.Collections.Generic.List<TRecord>> ReadRecordsAsync<TRecord, TRecordMap>(this Orc.Csv.ICsvReaderService csvReaderService, string fileName, Orc.Csv.ICsvContext csvContext = null)
+        public static System.Collections.Generic.List<TRecord> ReadRecords<TRecord, TRecordMap>(this Orc.Csv.ICsvReaderService csvReaderService, string fileName, Orc.Csv.ICsvContext csvContext = null)
             where TRecordMap : CsvHelper.Configuration.ClassMap, new () { }
+        public static System.Threading.Tasks.Task<System.Collections.IEnumerable> ReadRecordsAsync(this Orc.Csv.ICsvReaderService csvReaderService, string fileName, Orc.Csv.ICsvContext csvContext) { }
         public static System.Threading.Tasks.Task<System.Collections.Generic.List<TRecord>> ReadRecordsAsync<TRecord>(this Orc.Csv.ICsvReaderService csvReaderService, System.IO.StreamReader streamReader, Orc.Csv.ICsvContext csvContext) { }
+        public static System.Threading.Tasks.Task<System.Collections.Generic.List<TRecord>> ReadRecordsAsync<TRecord>(this Orc.Csv.ICsvReaderService csvReaderService, string fileName, Orc.Csv.ICsvContext csvContext) { }
         public static System.Threading.Tasks.Task<System.Collections.Generic.List<TRecord>> ReadRecordsAsync<TRecord, TRecordMap>(this Orc.Csv.ICsvReaderService csvReaderService, System.IO.StreamReader streamReader, Orc.Csv.ICsvContext csvContext = null)
+            where TRecordMap : CsvHelper.Configuration.ClassMap, new () { }
+        public static System.Threading.Tasks.Task<System.Collections.Generic.List<TRecord>> ReadRecordsAsync<TRecord, TRecordMap>(this Orc.Csv.ICsvReaderService csvReaderService, string fileName, Orc.Csv.ICsvContext csvContext = null)
             where TRecordMap : CsvHelper.Configuration.ClassMap, new () { }
     }
     public interface ICsvWriterService
     {
-        CsvHelper.Configuration.Configuration CreateDefaultConfiguration(Orc.Csv.ICsvContext csvContext);
+        CsvHelper.Configuration.CsvConfiguration CreateDefaultConfiguration(Orc.Csv.ICsvContext csvContext);
         CsvHelper.CsvWriter CreateWriter(System.IO.StreamWriter streamWriter, Orc.Csv.ICsvContext csvContext);
         void WriteRecords(System.Collections.IEnumerable records, System.IO.StreamWriter streamWriter, Orc.Csv.ICsvContext csvContext);
         System.Threading.Tasks.Task WriteRecordsAsync(System.Collections.IEnumerable records, System.IO.StreamWriter streamWriter, Orc.Csv.ICsvContext csvContext);
     }
-    public class static ICsvWriterServiceExtensions
+    public static class ICsvWriterServiceExtensions
     {
         public static CsvHelper.CsvWriter CreateWriter(this Orc.Csv.ICsvWriterService csvWriterService, string fileName, Orc.Csv.ICsvContext csvContext) { }
         public static void WriteRecords(this Orc.Csv.ICsvWriterService csvWriterService, System.Collections.IEnumerable records, string fileName, Orc.Csv.ICsvContext csvContext) { }
-        public static void WriteRecords<TRecord, TRecordMap>(this Orc.Csv.ICsvWriterService csvWriterService, System.Collections.Generic.IEnumerable<TRecord> records, string fileName, Orc.Csv.ICsvContext csvContext = null)
-            where TRecordMap : CsvHelper.Configuration.ClassMap, new () { }
         public static void WriteRecords<TRecord, TRecordMap>(this Orc.Csv.ICsvWriterService csvWriterService, System.Collections.Generic.IEnumerable<TRecord> records, System.IO.StreamWriter streamWriter, Orc.Csv.ICsvContext csvContext = null)
             where TRecordMap : CsvHelper.Configuration.ClassMap, new () { }
-        public static System.Threading.Tasks.Task WriteRecordsAsync(this Orc.Csv.ICsvWriterService csvWriterService, System.Collections.IEnumerable records, string fileName, Orc.Csv.ICsvContext csvContext) { }
-        public static System.Threading.Tasks.Task WriteRecordsAsync<TRecord, TRecordMap>(this Orc.Csv.ICsvWriterService csvWriterService, System.Collections.Generic.IEnumerable<TRecord> records, string fileName, Orc.Csv.ICsvContext csvContext = null)
+        public static void WriteRecords<TRecord, TRecordMap>(this Orc.Csv.ICsvWriterService csvWriterService, System.Collections.Generic.IEnumerable<TRecord> records, string fileName, Orc.Csv.ICsvContext csvContext = null)
             where TRecordMap : CsvHelper.Configuration.ClassMap, new () { }
+        public static System.Threading.Tasks.Task WriteRecordsAsync(this Orc.Csv.ICsvWriterService csvWriterService, System.Collections.IEnumerable records, string fileName, Orc.Csv.ICsvContext csvContext) { }
         public static System.Threading.Tasks.Task WriteRecordsAsync<TRecord, TRecordMap>(this Orc.Csv.ICsvWriterService csvWriterService, System.Collections.Generic.IEnumerable<TRecord> records, System.IO.StreamWriter streamWriter, Orc.Csv.ICsvContext csvContext = null)
             where TRecordMap : CsvHelper.Configuration.ClassMap, new () { }
+        public static System.Threading.Tasks.Task WriteRecordsAsync<TRecord, TRecordMap>(this Orc.Csv.ICsvWriterService csvWriterService, System.Collections.Generic.IEnumerable<TRecord> records, string fileName, Orc.Csv.ICsvContext csvContext = null)
+            where TRecordMap : CsvHelper.Configuration.ClassMap, new () { }
     }
-    public class static MemberMapExtensions
+    public static class MemberMapExtensions
     {
         public static CsvHelper.Configuration.MemberMap AsBool(this CsvHelper.Configuration.MemberMap map) { }
-        [System.ObsoleteAttribute("False values are not necessary in non-nullable boolean conversions (default value" +
+        public static CsvHelper.Configuration.MemberMap AsBool(this CsvHelper.Configuration.MemberMap map, string[] additionalTrueValues) { }
+        [System.Obsolete("False values are not necessary in non-nullable boolean conversions (default value" +
             " = false). Will be removed in version 4.0.0.", true)]
         public static CsvHelper.Configuration.MemberMap AsBool(this CsvHelper.Configuration.MemberMap map, string[] additionalTrueValues, string[] additionalFalseValues) { }
-        public static CsvHelper.Configuration.MemberMap AsBool(this CsvHelper.Configuration.MemberMap map, string[] additionalTrueValues) { }
         public static CsvHelper.Configuration.MemberMap AsDateTime(this CsvHelper.Configuration.MemberMap map) { }
         public static CsvHelper.Configuration.MemberMap AsDecimal(this CsvHelper.Configuration.MemberMap map) { }
         public static CsvHelper.Configuration.MemberMap AsDouble(this CsvHelper.Configuration.MemberMap map) { }
-        public static CsvHelper.Configuration.MemberMap AsEnum<TEnum>(this CsvHelper.Configuration.MemberMap map, TEnum defaultValue = null)
+        public static CsvHelper.Configuration.MemberMap AsEnum<TEnum>(this CsvHelper.Configuration.MemberMap map, TEnum defaultValue = default)
             where TEnum :  struct, System.IComparable, System.IFormattable { }
         public static CsvHelper.Configuration.MemberMap AsInt(this CsvHelper.Configuration.MemberMap map) { }
         public static CsvHelper.Configuration.MemberMap AsLong(this CsvHelper.Configuration.MemberMap map) { }
@@ -172,57 +172,57 @@ namespace Orc.Csv
         public static CsvHelper.Configuration.MemberMap AsString(this CsvHelper.Configuration.MemberMap map) { }
         public static CsvHelper.Configuration.MemberMap AsTimeSpan(this CsvHelper.Configuration.MemberMap map) { }
     }
-    public class NullableBooleanConverter : Orc.Csv.NullableTypeConverterBase<System.Nullable<bool>>
+    public class NullableBooleanConverter : Orc.Csv.NullableTypeConverterBase<bool?>
     {
         public NullableBooleanConverter() { }
         public NullableBooleanConverter(string[] trueValues, string[] falseValues) { }
-        [System.ObsoleteAttribute("Use `AddFalseValues` instead. Will be removed in version 4.0.0.", true)]
+        [System.Obsolete("Use `AddFalseValues` instead. Will be removed in version 4.0.0.", true)]
         public System.Collections.Generic.List<string> FalseValues { get; }
-        [System.ObsoleteAttribute("Use `AddTrueValues` instead. Will be removed in version 4.0.0.", true)]
+        [System.Obsolete("Use `AddTrueValues` instead. Will be removed in version 4.0.0.", true)]
         public System.Collections.Generic.List<string> TrueValues { get; }
         public Orc.Csv.NullableBooleanConverter AddFalseValues(params string[] values) { }
         public Orc.Csv.NullableBooleanConverter AddTrueValues(params string[] values) { }
-        protected override System.Nullable<bool> ConvertStringToActualType(CsvHelper.IReaderRow row, string text) { }
+        protected override bool? ConvertStringToActualType(CsvHelper.IReaderRow row, string text) { }
     }
-    public class NullableDateTimeConverter : Orc.Csv.NullableTypeConverterBase<System.Nullable<System.DateTime>>
+    public class NullableDateTimeConverter : Orc.Csv.NullableTypeConverterBase<System.DateTime?>
     {
         public NullableDateTimeConverter() { }
-        protected override System.Nullable<System.DateTime> ConvertStringToActualType(CsvHelper.IReaderRow row, string text) { }
+        protected override System.DateTime? ConvertStringToActualType(CsvHelper.IReaderRow row, string text) { }
     }
-    public class NullableDecimalConverter : Orc.Csv.NullableTypeConverterBase<System.Nullable<decimal>>
+    public class NullableDecimalConverter : Orc.Csv.NullableTypeConverterBase<decimal?>
     {
         public NullableDecimalConverter() { }
-        protected override System.Nullable<decimal> ConvertStringToActualType(CsvHelper.IReaderRow row, string text) { }
+        protected override decimal? ConvertStringToActualType(CsvHelper.IReaderRow row, string text) { }
     }
-    public class NullableDoubleConverter : Orc.Csv.NullableTypeConverterBase<System.Nullable<double>>
+    public class NullableDoubleConverter : Orc.Csv.NullableTypeConverterBase<double?>
     {
         public NullableDoubleConverter() { }
-        protected override System.Nullable<double> ConvertStringToActualType(CsvHelper.IReaderRow row, string text) { }
+        protected override double? ConvertStringToActualType(CsvHelper.IReaderRow row, string text) { }
     }
-    public class NullableIntConverter : Orc.Csv.NullableTypeConverterBase<System.Nullable<int>>
+    public class NullableIntConverter : Orc.Csv.NullableTypeConverterBase<int?>
     {
         public NullableIntConverter() { }
-        protected override System.Nullable<int> ConvertStringToActualType(CsvHelper.IReaderRow row, string text) { }
+        protected override int? ConvertStringToActualType(CsvHelper.IReaderRow row, string text) { }
     }
-    public class NullableLongConverter : Orc.Csv.NullableTypeConverterBase<System.Nullable<long>>
+    public class NullableLongConverter : Orc.Csv.NullableTypeConverterBase<long?>
     {
         public NullableLongConverter() { }
-        protected override System.Nullable<long> ConvertStringToActualType(CsvHelper.IReaderRow row, string text) { }
+        protected override long? ConvertStringToActualType(CsvHelper.IReaderRow row, string text) { }
     }
-    public class NullableShortConverter : Orc.Csv.NullableTypeConverterBase<System.Nullable<short>>
+    public class NullableShortConverter : Orc.Csv.NullableTypeConverterBase<short?>
     {
         public NullableShortConverter() { }
-        protected override System.Nullable<short> ConvertStringToActualType(CsvHelper.IReaderRow row, string text) { }
+        protected override short? ConvertStringToActualType(CsvHelper.IReaderRow row, string text) { }
     }
     public class NullableStringConverter : Orc.Csv.NullableTypeConverterBase<string>
     {
         public NullableStringConverter() { }
         protected override string ConvertStringToActualType(CsvHelper.IReaderRow row, string text) { }
     }
-    public class NullableTimeSpanConverter : Orc.Csv.NullableTypeConverterBase<System.Nullable<System.TimeSpan>>
+    public class NullableTimeSpanConverter : Orc.Csv.NullableTypeConverterBase<System.TimeSpan?>
     {
         public NullableTimeSpanConverter() { }
-        protected override System.Nullable<System.TimeSpan> ConvertStringToActualType(CsvHelper.IReaderRow row, string text) { }
+        protected override System.TimeSpan? ConvertStringToActualType(CsvHelper.IReaderRow row, string text) { }
     }
     public abstract class NullableTypeConverterBase<TNullable> : Orc.Csv.TypeConverterBase
     {
@@ -231,22 +231,22 @@ namespace Orc.Csv
         public override object ConvertFromString(string text, CsvHelper.IReaderRow row, CsvHelper.Configuration.MemberMapData memberMapData) { }
         protected abstract TNullable ConvertStringToActualType(CsvHelper.IReaderRow row, string text);
     }
-    public class NullableUIntConverter : Orc.Csv.NullableTypeConverterBase<System.Nullable<uint>>
+    public class NullableUIntConverter : Orc.Csv.NullableTypeConverterBase<uint?>
     {
         public NullableUIntConverter() { }
-        protected override System.Nullable<uint> ConvertStringToActualType(CsvHelper.IReaderRow row, string text) { }
+        protected override uint? ConvertStringToActualType(CsvHelper.IReaderRow row, string text) { }
     }
-    public class NullableULongConverter : Orc.Csv.NullableTypeConverterBase<System.Nullable<ulong>>
+    public class NullableULongConverter : Orc.Csv.NullableTypeConverterBase<ulong?>
     {
         public NullableULongConverter() { }
-        protected override System.Nullable<ulong> ConvertStringToActualType(CsvHelper.IReaderRow row, string text) { }
+        protected override ulong? ConvertStringToActualType(CsvHelper.IReaderRow row, string text) { }
     }
-    public class NullableUShortConverter : Orc.Csv.NullableTypeConverterBase<System.Nullable<ushort>>
+    public class NullableUShortConverter : Orc.Csv.NullableTypeConverterBase<ushort?>
     {
         public NullableUShortConverter() { }
-        protected override System.Nullable<ushort> ConvertStringToActualType(CsvHelper.IReaderRow row, string text) { }
+        protected override ushort? ConvertStringToActualType(CsvHelper.IReaderRow row, string text) { }
     }
-    public class static StringExtensions
+    public static class StringExtensions
     {
         public static string ToCamelCase(this string input) { }
     }
@@ -255,10 +255,10 @@ namespace Orc.Csv
         protected TypeConverterBase() { }
         public abstract object ConvertFromString(string text, CsvHelper.IReaderRow row, CsvHelper.Configuration.MemberMapData memberMapData);
         public virtual string ConvertToString(object value, CsvHelper.IWriterRow row, CsvHelper.Configuration.MemberMapData memberMapData) { }
-        protected System.Globalization.CultureInfo GetCultureInfo(CsvHelper.IWriterRow row) { }
         protected System.Globalization.CultureInfo GetCultureInfo(CsvHelper.IReaderRow row) { }
+        protected System.Globalization.CultureInfo GetCultureInfo(CsvHelper.IWriterRow row) { }
     }
-    [System.ObsoleteAttribute("Use `TypeConverterBase` instead. Will be removed in version 4.0.0.", true)]
+    [System.Obsolete("Use `TypeConverterBase` instead. Will be removed in version 4.0.0.", true)]
     public abstract class TypeConverterBase<T> : Orc.Csv.TypeConverterBase
     {
         protected TypeConverterBase() { }

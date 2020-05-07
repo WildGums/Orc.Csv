@@ -7,6 +7,7 @@
 
 namespace Orc.Csv.Tests
 {
+    using System.Globalization;
     using Catel.IO;
     using Csv;
     using FileSystem;
@@ -25,7 +26,7 @@ namespace Orc.Csv.Tests
             var csvFilePath = $"{TestInputFolder}{"Operation.csv"}";
 
             var csvReaderService = new CsvReaderService();
-            var configuration = new global::CsvHelper.Configuration.Configuration
+            var configuration = new global::CsvHelper.Configuration.CsvConfiguration(new CultureInfo("en-AU"))
             {
                 Delimiter = ",",
                 MissingFieldFound = null,

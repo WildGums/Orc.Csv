@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ICsvWriterService.cs" company="WildGums">
 //   Copyright (c) 2008 - 2017 WildGums. All rights reserved.
 // </copyright>
@@ -17,14 +17,12 @@ namespace Orc.Csv
 
     public interface ICsvWriterService
     {
-        #region Methods
         void WriteRecords(IEnumerable records, StreamWriter streamWriter, ICsvContext csvContext);
 
         Task WriteRecordsAsync(IEnumerable records, StreamWriter streamWriter, ICsvContext csvContext);
 
         CsvWriter CreateWriter(StreamWriter streamWriter, ICsvContext csvContext);
 
-        Configuration CreateDefaultConfiguration(ICsvContext csvContext);
-        #endregion
+        CsvConfiguration CreateDefaultConfiguration(ICsvContext csvContext);
     }
 }

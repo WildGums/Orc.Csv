@@ -28,12 +28,11 @@ namespace Orc.Csv
             Log = LogManager.GetLogger(GetType());
         }
 
-        public virtual Configuration CreateDefaultConfiguration(ICsvContext csvContext)
+        public virtual CsvConfiguration CreateDefaultConfiguration(ICsvContext csvContext)
         {
-            var configuration = new Configuration
+            var configuration = new CsvConfiguration(csvContext?.Culture ?? CsvEnvironment.DefaultCultureInfo)
             {
                 Delimiter = ",",
-                CultureInfo = csvContext?.Culture ?? CsvEnvironment.DefaultCultureInfo,
                 MissingFieldFound = null,
                 TrimOptions = TrimOptions.Trim,
                 IgnoreBlankLines = true,
@@ -43,18 +42,17 @@ namespace Orc.Csv
             return configuration;
         }
 
-        protected virtual Configuration EnsureCorrectConfiguration(Configuration configuration, ICsvContext csvContext)
+        protected virtual CsvConfiguration EnsureCorrectConfiguration(CsvConfiguration configuration, ICsvContext csvContext)
         {
             configuration = configuration ?? CreateDefaultConfiguration(csvContext);
 
             // Always create a new config object so we can wrap it
-            var finalConfiguration = new Configuration
+            var finalConfiguration = new CsvConfiguration(csvContext.Culture ?? configuration.CultureInfo)
             {
                 AllowComments = configuration.AllowComments,
                 BufferSize = configuration.BufferSize,
                 Comment = configuration.Comment,
                 CountBytes = configuration.CountBytes,
-                CultureInfo = csvContext.Culture ?? configuration.CultureInfo,
                 Delimiter = configuration.Delimiter,
                 DetectColumnCountChanges = configuration.DetectColumnCountChanges,
                 DynamicPropertySort = configuration.DynamicPropertySort,
@@ -104,7 +102,7 @@ namespace Orc.Csv
             return finalConfiguration;
         }
 
-        private void HandleBadDataFound(ReadingContext context, Configuration configuration)
+        private void HandleBadDataFound(ReadingContext context, CsvConfiguration configuration)
         {
             Log.Warning($"Found bad data, row '{context.Row}', char position '{context.CharPosition}', field '{context.Field}'");
 
@@ -112,7 +110,7 @@ namespace Orc.Csv
             handler?.Invoke(context);
         }
 
-        private void HandleHeaderValidated(bool isValid, string[] headers, int index, ReadingContext context, Configuration configuration)
+        private void HandleHeaderValidated(bool isValid, string[] headers, int index, ReadingContext context, CsvConfiguration configuration)
         {
             if (!isValid)
             {
@@ -125,7 +123,7 @@ namespace Orc.Csv
             handler?.Invoke(isValid, headers, index, context);
         }
 
-        private void HandleMissingFieldFound(string[] fields, int position, ReadingContext context, Configuration configuration, ICsvContext csvContext)
+        private void HandleMissingFieldFound(string[] fields, int position, ReadingContext context, CsvConfiguration configuration, ICsvContext csvContext)
         {
             // Don't log when fields are null, special case for which we don't want to pollute the logs
             if (fields != null)
@@ -161,7 +159,7 @@ namespace Orc.Csv
             handler?.Invoke(fields, position, context);
         }
 
-        private bool HandleReadingException(CsvHelperException ex, Configuration configuration)
+        private bool HandleReadingException(CsvHelperException ex, CsvConfiguration configuration)
         {
             var readingContext = ex.ReadingContext;
 
