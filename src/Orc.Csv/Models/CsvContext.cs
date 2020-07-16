@@ -26,7 +26,7 @@ namespace Orc.Csv
 
         public ClassMap ClassMap { get; set; }
 
-        public Configuration Configuration { get; set; }
+        public CsvConfiguration Configuration { get; set; }
 
         public CultureInfo Culture { get; set; }
 

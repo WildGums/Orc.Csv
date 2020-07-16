@@ -19,9 +19,6 @@ namespace Orc.Csv
 
         public BooleanConverter()
         {
-            // Dummy collection
-            FalseValues = new List<string>();
-
             _trueValuesList.AddRange(new [] { "yes", "1", "on", "true", "y", "t" });
         }
 
@@ -36,13 +33,6 @@ namespace Orc.Csv
             }
         }
 
-        [ObsoleteEx(ReplacementTypeOrMember = "BooleanConverter(string[])", TreatAsErrorFromVersion = "3.0", RemoveInVersion = "4.0")]
-        public BooleanConverter(string[] trueValues, string[] falseValues)
-            : this(trueValues)
-        {
-            // No implementation required
-        }
-
         public BooleanConverter AddTrueValues(params string[] values)
         {
             if (values != null)
@@ -53,21 +43,6 @@ namespace Orc.Csv
 
             return this;
         }
-
-        [ObsoleteEx(ReplacementTypeOrMember = "AddTrueValues", TreatAsErrorFromVersion = "3.0", RemoveInVersion = "4.0")]
-        public List<string> TrueValues
-        {
-            get
-            {
-                // Always reset so we refresh
-                _trueValues = null;
-
-                return _trueValuesList;
-            }
-        }
-
-        [ObsoleteEx(Message = "False values are not necessary in non-nullable boolean conversions (default value = false)", TreatAsErrorFromVersion = "3.0", RemoveInVersion = "4.0")]
-        public List<string> FalseValues { get; private set; }
 
         public override object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData)
         {

@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ICsvReaderService.cs" company="WildGums">
 //   Copyright (c) 2008 - 2017 WildGums. All rights reserved.
 // </copyright>
@@ -16,14 +16,12 @@ namespace Orc.Csv
 
     public interface ICsvReaderService
     {
-        #region Methods
         IEnumerable ReadRecords(StreamReader streamReader, ICsvContext csvContext);
 
         Task<IEnumerable> ReadRecordsAsync(StreamReader streamReader, ICsvContext csvContext);
 
         CsvReader CreateReader(StreamReader streamReader, ICsvContext csvContext);
 
-        Configuration CreateDefaultConfiguration(ICsvContext csvContext);
-        #endregion
+        CsvConfiguration CreateDefaultConfiguration(ICsvContext csvContext);
     }
 }

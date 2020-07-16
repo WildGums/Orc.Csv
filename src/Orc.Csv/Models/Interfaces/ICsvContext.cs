@@ -16,7 +16,7 @@ namespace Orc.Csv
         #region Properties
         Type RecordType { get; set; }
         CultureInfo Culture { get; set; }
-        Configuration Configuration { get; set; }
+        CsvConfiguration Configuration { get; set; }
         Action<object> Initializer { get; set; }
         bool ThrowOnError { get; set; }
         ClassMap ClassMap { get; set; }

@@ -13,6 +13,7 @@ namespace Orc.Csv.Tests.Services
     using System.Threading.Tasks;
     using ApprovalTests;
     using CsvHelper;
+    using CsvHelper.Configuration;
     using CsvMaps;
     using Entities;
     using NUnit.Framework;
@@ -63,14 +64,14 @@ namespace Orc.Csv.Tests.Services
             var csvContext = new CsvContext<Operation>
             {
                 ClassMap = classMap,
-                Culture = new System.Globalization.CultureInfo("en-US")
+                Culture = new System.Globalization.CultureInfo("nl-NL")
             };
 
             using (var stream = File.Create(fileName))
             {
                 using (var textWriter = new StreamWriter(stream))
                 {
-                    var csvWriter = new CsvWriter(textWriter);
+                    var csvWriter = new CsvWriter(textWriter, new CsvConfiguration(csvContext.Culture));
                     csvWriter.Configuration.RegisterClassMap(classMap);
 
                     csvWriter.WriteRecords(operations);
