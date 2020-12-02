@@ -88,7 +88,7 @@ namespace Orc.Csv
 
             finalConfiguration.BadDataFound = (context) => HandleBadDataFound(context, configuration); 
 
-            finalConfiguration.HeaderValidated = (isValid, headers, index, context) => HandleHeaderValidated(isValid, headers, index, context, configuration);
+            finalConfiguration.HeaderValidated = (invalidHeaders, context) => HandleHeaderValidated(invalidHeaders, context, configuration);
 
             finalConfiguration.MissingFieldFound = (fields, position, context) => HandleMissingFieldFound(fields, position, context, configuration, csvContext);
 
@@ -110,17 +110,17 @@ namespace Orc.Csv
             handler?.Invoke(context);
         }
 
-        private void HandleHeaderValidated(bool isValid, string[] headers, int index, ReadingContext context, CsvConfiguration configuration)
+        private void HandleHeaderValidated(InvalidHeader[] invalidHeaders, ReadingContext context, CsvConfiguration configuration)
         {
-            if (!isValid)
+            foreach (var invalidHeader in invalidHeaders)
             {
-                var headerNames = string.Join(", ", headers);
+                var headerNames = string.Join(", ", invalidHeader.Names);
 
-                Log.Warning($"Header matching '{headerNames}' names at index '{index}' was not found");
+                Log.Warning($"Header matching '{headerNames}' names at index '{invalidHeader.Index}' was not found");
             }
 
             var handler = configuration.HeaderValidated;
-            handler?.Invoke(isValid, headers, index, context);
+            handler?.Invoke(invalidHeaders, context);
         }
 
         private void HandleMissingFieldFound(string[] fields, int position, ReadingContext context, CsvConfiguration configuration, ICsvContext csvContext)
