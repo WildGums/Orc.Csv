@@ -1,6 +1,6 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.1;net5.0-windows</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1;net5.0</TargetFrameworks>
     <AssemblyName>Orc.Csv</AssemblyName>
     <RootNamespace>Orc.Csv</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
@@ -24,7 +24,7 @@
     </PackageReference>
     <PackageReference Include="ModuleInit.Fody" Version="2.1.1" PrivateAssets="all" />
     <PackageReference Include="Obsolete.Fody" Version="5.2.1" PrivateAssets="all" />
-    <PackageReference Include="Orc.FileSystem" Version="4.0.0" />
+    <PackageReference Include="Orc.FileSystem" Version="4.1.1" />
   </ItemGroup>
 
   <ItemGroup>
