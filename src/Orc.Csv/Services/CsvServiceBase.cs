@@ -62,7 +62,6 @@ namespace Orc.Csv
                 HasHeaderRecord = configuration.HasHeaderRecord,
                 HeaderValidated = configuration.HeaderValidated,
                 IgnoreBlankLines = configuration.IgnoreBlankLines,
-                IgnoreQuotes = configuration.IgnoreQuotes,
                 IgnoreReferences = configuration.IgnoreReferences,
                 IncludePrivateMembers = configuration.IncludePrivateMembers,
                 InjectionCharacters = configuration.InjectionCharacters,
@@ -79,40 +78,30 @@ namespace Orc.Csv
                 ShouldSkipRecord = configuration.ShouldSkipRecord,
                 ShouldUseConstructorParameters = configuration.ShouldUseConstructorParameters,
                 TrimOptions = configuration.TrimOptions,
-                TypeConverterCache = configuration.TypeConverterCache,
-                TypeConverterOptionsCache = configuration.TypeConverterOptionsCache,
                 UseNewObjectForNullReferenceMembers = configuration.UseNewObjectForNullReferenceMembers
             };
 
             // Note: configuration.Maps can be ignored
 
-            finalConfiguration.BadDataFound = (context) => HandleBadDataFound(context, configuration); 
-
-            finalConfiguration.HeaderValidated = (invalidHeaders, context) => HandleHeaderValidated(invalidHeaders, context, configuration);
-
-            finalConfiguration.MissingFieldFound = (fields, position, context) => HandleMissingFieldFound(fields, position, context, configuration, csvContext);
-
+            finalConfiguration.BadDataFound = (args) => HandleBadDataFound(args, configuration); 
+            finalConfiguration.HeaderValidated = (args) => HandleHeaderValidated(args, configuration);
+            finalConfiguration.MissingFieldFound = (args) => HandleMissingFieldFound(args, configuration, csvContext);
             finalConfiguration.ReadingExceptionOccurred = (ex) => HandleReadingException(ex, configuration);
-
-            if (csvContext.ClassMap != null)
-            {
-                finalConfiguration.RegisterClassMap(csvContext.ClassMap);
-            }
 
             return finalConfiguration;
         }
 
-        private void HandleBadDataFound(ReadingContext context, CsvConfiguration configuration)
+        private void HandleBadDataFound(BadDataFoundArgs args, CsvConfiguration configuration)
         {
-            Log.Warning($"Found bad data, row '{context.Row}', char position '{context.CharPosition}', field '{context.Field}'");
+            Log.Warning($"Found bad data, row '{args.Context.Parser.Row}', char position '{args.Context.Parser.CharCount}', field '{args.Field}'");
 
             var handler = configuration.BadDataFound;
-            handler?.Invoke(context);
+            handler?.Invoke(args);
         }
 
-        private void HandleHeaderValidated(InvalidHeader[] invalidHeaders, ReadingContext context, CsvConfiguration configuration)
+        private void HandleHeaderValidated(HeaderValidatedArgs args, CsvConfiguration configuration)
         {
-            foreach (var invalidHeader in invalidHeaders)
+            foreach (var invalidHeader in args.InvalidHeaders)
             {
                 var headerNames = string.Join(", ", invalidHeader.Names);
 
@@ -120,18 +109,21 @@ namespace Orc.Csv
             }
 
             var handler = configuration.HeaderValidated;
-            handler?.Invoke(invalidHeaders, context);
+            handler?.Invoke(args);
         }
 
-        private void HandleMissingFieldFound(string[] fields, int position, ReadingContext context, CsvConfiguration configuration, ICsvContext csvContext)
+        private void HandleMissingFieldFound(MissingFieldFoundArgs args, CsvConfiguration configuration, ICsvContext csvContext)
         {
+            var context = args.Context;
+            var fields = args.HeaderNames;
+
             // Don't log when fields are null, special case for which we don't want to pollute the logs
             if (fields != null)
             {
                 var ignoreWarning = true;
 
                 // This could be a *mapped* field that is not part of the file (thus should not have a header record entry either)
-                var headerRecord = context.HeaderRecord;
+                var headerRecord = context.Reader.HeaderRecord;
                 if (headerRecord != null)
                 {
                     foreach (var field in fields)
@@ -140,7 +132,7 @@ namespace Orc.Csv
                         {
                             ignoreWarning = false;
                         }
-                        else if (context.Row <= 2)
+                        else if (context.Parser.Row <= 2)
                         {
                             var classMap = csvContext.ClassMap?.GetType()?.Name ?? "no-class-map";
 
@@ -151,22 +143,23 @@ namespace Orc.Csv
 
                 if (!ignoreWarning)
                 {
-                    Log.Warning("Found '{0}' missing fields at row '{1}', char position '{1}': '{2}'", fields.Length, context.Row, position, string.Join(",", fields));
+                    Log.Warning("Found '{0}' missing fields at row '{1}', char position '{1}': '{2}'", fields.Length, context.Parser.Row, context.Parser.CharCount, string.Join(",", fields));
                 }
             }
 
             var handler = configuration.MissingFieldFound;
-            handler?.Invoke(fields, position, context);
+            handler?.Invoke(args);
         }
 
-        private bool HandleReadingException(CsvHelperException ex, CsvConfiguration configuration)
+        private bool HandleReadingException(ReadingExceptionOccurredArgs args, CsvConfiguration configuration)
         {
-            var readingContext = ex.ReadingContext;
+            var ex = args.Exception;
+            var readingContext = ex.Context.Reader;
 
             // We always read from a csv file so we know we have a file stream
             var fileName = string.Empty;
 
-            if (ex.ReadingContext.Reader is StreamReader streamReader
+            if (readingContext is StreamReader streamReader
                 && streamReader.BaseStream is FileStream fileStream)
             {
                 fileName = fileStream.Name;
@@ -182,9 +175,9 @@ namespace Orc.Csv
 
             if (readingContext != null)
             {
-                messageBuilder.Append($", row '{readingContext.Row}'");
+                messageBuilder.Append($", row '{ex.Context.Parser.Row}'");
 
-                var columnName = readingContext.Field;
+                var columnName = ex.Context.Reader.HeaderRecord?[ex.Context.Reader.CurrentIndex] ?? "unknown";
 
                 if (ex is TypeConverterException typeConverterException)
                 {
@@ -202,7 +195,7 @@ namespace Orc.Csv
                 messageBuilder.Append($", column '{columnName}'");
             }
 
-            var writingContext = ex.WritingContext;
+            var writingContext = ex.Context.Writer;
             if (writingContext != null)
             {
                 messageBuilder.Append($", row '{writingContext.Row}'");
@@ -214,7 +207,7 @@ namespace Orc.Csv
             Log.Error(message);
 
             var handler = configuration.ReadingExceptionOccurred;
-            handler?.Invoke(ex);
+            handler?.Invoke(args);
 
             return false;
         }
