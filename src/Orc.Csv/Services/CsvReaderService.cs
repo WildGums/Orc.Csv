@@ -144,10 +144,7 @@ namespace Orc.Csv
                 return;
             }
 
-            if (initializer != null)
-            {
-                initializer(record);
-            }
+            initializer?.Invoke(record);
 
             items.Add(record);
         }
