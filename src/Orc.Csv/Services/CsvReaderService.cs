@@ -64,14 +64,14 @@ namespace Orc.Csv
                 var configuration = csvReader.Configuration;
                 if (configuration.HasHeaderRecord && csvReader.Context.HeaderRecord == null)
                 {
-                    Log.Debug("Reading header");
+                    Log.DebugIfAttached("Reading header");
 
                     // Yes, we need a double read
                     csvReader.Read();
                     csvReader.ReadHeader();
                 }
 
-                Log.Debug("Reading records");
+                Log.DebugIfAttached("Reading records");
 
                 while (csvReader.Read())
                 {
@@ -105,14 +105,14 @@ namespace Orc.Csv
                 var configuration = csvReader.Configuration;
                 if (configuration.HasHeaderRecord && csvReader.Context.HeaderRecord == null)
                 {
-                    Log.Debug("Reading header");
+                    Log.DebugIfAttached("Reading header");
 
                     // Yes, we need a double read
                     await csvReader.ReadAsync();
                     csvReader.ReadHeader();
                 }
 
-                Log.Debug("Reading records");
+                Log.DebugIfAttached("Reading records");
 
                 while (await csvReader.ReadAsync())
                 {
@@ -140,7 +140,7 @@ namespace Orc.Csv
             var record = csvReader.GetRecord(recordType);
             if (record == null)
             {
-                Log.Debug($"Read record results in null at row '{csvReader.Context.Row}', raw row content: '{csvReader.Context.RawRecord}'");
+                Log.DebugIfAttached($"Read record results in null at row '{csvReader.Context.Row}', raw row content: '{csvReader.Context.RawRecord}'");
                 return;
             }
 
