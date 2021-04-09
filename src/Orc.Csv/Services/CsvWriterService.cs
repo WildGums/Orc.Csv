@@ -46,7 +46,7 @@ namespace Orc.Csv
             var configuration = EnsureCorrectConfiguration(csvContext.Configuration, csvContext);
             var csvWriter = new CsvWriter(streamWriter, configuration);
 
-            if (csvContext.ClassMap != null)
+            if (csvContext.ClassMap is not null)
             {
                 csvWriter.Context.RegisterClassMap(csvContext.ClassMap);
             }

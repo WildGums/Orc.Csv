@@ -39,7 +39,7 @@ namespace Orc.Csv
         #region ITypeConverter Members
         public string ConvertToString(object value, IWriterRow row, MemberMapData memberMapData)
         {
-            if (_convertToString == null)
+            if (_convertToString is null)
             {
                 throw Log.ErrorAndCreateException<NotImplementedException>($"The ConvertToString method is not specified for this converter");
             }
@@ -49,7 +49,7 @@ namespace Orc.Csv
 
         public object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData)
         {
-            if (_convertFromString == null)
+            if (_convertFromString is null)
             {
                 throw Log.ErrorAndCreateException<NotImplementedException>($"The ConvertFromString method is not specified for this converter");
             }

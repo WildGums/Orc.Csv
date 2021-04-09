@@ -52,7 +52,7 @@ namespace Orc.Csv
         {
             Argument.IsNotNull(() => csvWriterService);
 
-            if (csvContext == null)
+            if (csvContext is null)
             {
                 csvContext = new CsvContext<TRecord, TRecordMap>();
             }
@@ -65,7 +65,7 @@ namespace Orc.Csv
         {
             Argument.IsNotNull(() => csvWriterService);
 
-            if (csvContext == null)
+            if (csvContext is null)
             {
                 csvContext = new CsvContext<TRecord, TRecordMap>();
             }

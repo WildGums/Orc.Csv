@@ -19,7 +19,7 @@ namespace Orc.Csv
         {
             Argument.IsNotNull(() => typeFactory);
 
-            return type != null ? typeFactory.CreateInstanceWithParametersAndAutoCompletion(type) as ClassMap : null;
+            return type is not null ? typeFactory.CreateInstanceWithParametersAndAutoCompletion(type) as ClassMap : null;
         }
         #endregion
     }

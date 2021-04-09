@@ -49,7 +49,7 @@ namespace Orc.Csv
             var configuration = EnsureCorrectConfiguration(csvContext.Configuration, csvContext);
             var csvReader = new CsvReader(streamReader, configuration);
 
-            if (csvContext.ClassMap != null)
+            if (csvContext.ClassMap is not null)
             {
                 csvReader.Context.RegisterClassMap(csvContext.ClassMap);
             }
@@ -68,7 +68,7 @@ namespace Orc.Csv
             try
             {
                 var configuration = csvReader.Configuration;
-                if (configuration.HasHeaderRecord && csvReader.Context.Reader.HeaderRecord == null)
+                if (configuration.HasHeaderRecord && csvReader.Context.Reader.HeaderRecord is null)
                 {
                     Log.DebugIfAttached("Reading header");
 
@@ -109,7 +109,7 @@ namespace Orc.Csv
             try
             {
                 var configuration = csvReader.Configuration;
-                if (configuration.HasHeaderRecord && csvReader.Context.Reader.HeaderRecord == null)
+                if (configuration.HasHeaderRecord && csvReader.Context.Reader.HeaderRecord is null)
                 {
                     Log.DebugIfAttached("Reading header");
 
@@ -144,7 +144,7 @@ namespace Orc.Csv
         private void AddCurrentRecord(CsvReader csvReader, List<object> items, Type recordType, Action<object> initializer)
         {
             var record = csvReader.GetRecord(recordType);
-            if (record == null)
+            if (record is null)
             {
                 Log.DebugIfAttached($"Read record results in null at row '{csvReader.Context.Parser.Row}', raw row content: '{csvReader.Context.Parser.RawRecord}'");
 

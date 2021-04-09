@@ -28,14 +28,14 @@ namespace Orc.Csv
         public NullableBooleanConverter(string[] trueValues, string[] falseValues)
             : this()
         {
-            if (trueValues != null)
+            if (trueValues is not null)
             {
                 // Replace the list
                 _trueValuesList.Clear();
                 _trueValuesList.AddRange(trueValues);
             }
 
-            if (falseValues != null)
+            if (falseValues is not null)
             {
                 // Replace the list
                 _falseValuesList.Clear();
@@ -45,7 +45,7 @@ namespace Orc.Csv
 
         public NullableBooleanConverter AddTrueValues(params string[] values)
         {
-            if (values != null)
+            if (values is not null)
             {
                 _trueValuesList.AddRange(values);
                 _trueValues = null;
@@ -56,7 +56,7 @@ namespace Orc.Csv
 
         public NullableBooleanConverter AddFalseValues(params string[] values)
         {
-            if (values != null)
+            if (values is not null)
             {
                 _falseValuesList.AddRange(values);
                 _falseValues = null;
@@ -74,7 +74,7 @@ namespace Orc.Csv
 
             text = text.Trim();
 
-            if (_trueValues == null)
+            if (_trueValues is null)
             {
                 _trueValues = _trueValuesList.ToArray();
             }
@@ -84,7 +84,7 @@ namespace Orc.Csv
                 return true;
             }
 
-            if (_falseValues == null)
+            if (_falseValues is null)
             {
                 _falseValues = _falseValuesList.ToArray();
             }

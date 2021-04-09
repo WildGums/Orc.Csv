@@ -118,13 +118,13 @@ namespace Orc.Csv
             var fields = args.HeaderNames;
 
             // Don't log when fields are null, special case for which we don't want to pollute the logs
-            if (fields != null)
+            if (fields is not null)
             {
                 var ignoreWarning = true;
 
                 // This could be a *mapped* field that is not part of the file (thus should not have a header record entry either)
                 var headerRecord = context.Reader.HeaderRecord;
-                if (headerRecord != null)
+                if (headerRecord is not null)
                 {
                     foreach (var field in fields)
                     {
@@ -173,7 +173,7 @@ namespace Orc.Csv
                 messageBuilder.Append($", file: '{fileName}'");
             }
 
-            if (readingContext != null)
+            if (readingContext is not null)
             {
                 messageBuilder.Append($", row '{ex.Context.Parser.Row}'");
 
@@ -196,7 +196,7 @@ namespace Orc.Csv
             }
 
             var writingContext = ex.Context.Writer;
-            if (writingContext != null)
+            if (writingContext is not null)
             {
                 messageBuilder.Append($", row '{writingContext.Row}'");
             }
