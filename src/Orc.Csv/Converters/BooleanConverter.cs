@@ -25,7 +25,7 @@ namespace Orc.Csv
         public BooleanConverter(string[] trueValues)
             : this()
         {
-            if (trueValues != null)
+            if (trueValues is not null)
             {
                 // Replace the list
                 _trueValuesList.Clear();
@@ -35,7 +35,7 @@ namespace Orc.Csv
 
         public BooleanConverter AddTrueValues(params string[] values)
         {
-            if (values != null)
+            if (values is not null)
             {
                 _trueValuesList.AddRange(values);
                 _trueValues = null;
@@ -53,7 +53,7 @@ namespace Orc.Csv
 
             text = text.Trim();
 
-            if (_trueValues == null)
+            if (_trueValues is null)
             {
                 _trueValues = _trueValuesList.ToArray();
             }

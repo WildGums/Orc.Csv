@@ -72,7 +72,7 @@ namespace Orc.Csv.Tests.Services
                 using (var textWriter = new StreamWriter(stream))
                 {
                     var csvWriter = new CsvWriter(textWriter, new CsvConfiguration(csvContext.Culture));
-                    csvWriter.Configuration.RegisterClassMap(classMap);
+                    csvWriter.Context.RegisterClassMap(classMap);
 
                     csvWriter.WriteRecords(operations);
                 }

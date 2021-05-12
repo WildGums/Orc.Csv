@@ -28,7 +28,7 @@ namespace Orc.Csv.Tests.Converters
         public override string ConvertToString(object value, IWriterRow row, MemberMapData memberMapData)
         {
             var dictionary = value as Dictionary<string, string>;
-            if (dictionary == null)
+            if (dictionary is null)
             {
                 return string.Empty;
             }
