@@ -81,9 +81,12 @@ namespace Orc.Csv
                 UseNewObjectForNullReferenceMembers = configuration.UseNewObjectForNullReferenceMembers
             };
 
+            // Clear specific handlers we want to ignore
+            configuration.BadDataFound -= ConfigurationFunctions.BadDataFound;
+
             // Note: configuration.Maps can be ignored
 
-            finalConfiguration.BadDataFound = (args) => HandleBadDataFound(args, configuration); 
+            finalConfiguration.BadDataFound = (args) => HandleBadDataFound(args, configuration);
             finalConfiguration.HeaderValidated = (args) => HandleHeaderValidated(args, configuration);
             finalConfiguration.MissingFieldFound = (args) => HandleMissingFieldFound(args, configuration, csvContext);
             finalConfiguration.ReadingExceptionOccurred = (ex) => HandleReadingException(ex, configuration);
