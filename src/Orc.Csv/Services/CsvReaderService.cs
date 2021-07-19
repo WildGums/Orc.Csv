@@ -81,7 +81,7 @@ namespace Orc.Csv
 
                 while (csvReader.Read())
                 {
-                    AddCurrentRecord(csvReader, items, recordType, initializer);
+                    AddCurrentRecord(csvReader, items, recordType, initializer, csvContext);
                 }
             }
             catch (Exception ex)
@@ -90,6 +90,8 @@ namespace Orc.Csv
                 {
                     return new object[0];
                 }
+
+                Log.Warning(ex, "Failed to read data");
 
                 if (csvContext.ThrowOnError)
                 {
@@ -122,7 +124,7 @@ namespace Orc.Csv
 
                 while (await csvReader.ReadAsync())
                 {
-                    AddCurrentRecord(csvReader, items, recordType, initializer);
+                    AddCurrentRecord(csvReader, items, recordType, initializer, csvContext);
                 }
             }
             catch (Exception ex)
@@ -131,6 +133,8 @@ namespace Orc.Csv
                 {
                     return new object[0];
                 }
+
+                Log.Warning(ex, "Failed to read data");
 
                 if (csvContext.ThrowOnError)
                 {
@@ -141,9 +145,9 @@ namespace Orc.Csv
             return items;
         }
 
-        private void AddCurrentRecord(CsvReader csvReader, List<object> items, Type recordType, Action<object> initializer)
+        private void AddCurrentRecord(CsvReader csvReader, List<object> items, Type recordType, Action<object> initializer, ICsvContext csvContext)
         {
-            var record = csvReader.GetRecord(recordType);
+            var record = ReadRecord(csvReader, recordType, csvContext);
             if (record is null)
             {
                 Log.DebugIfAttached($"Read record results in null at row '{csvReader.Context.Parser.Row}', raw row content: '{csvReader.Context.Parser.RawRecord}'");
@@ -154,6 +158,25 @@ namespace Orc.Csv
             initializer?.Invoke(record);
 
             items.Add(record);
+        }
+
+        private static object ReadRecord(CsvReader csvReader, Type recordType, ICsvContext csvContext)
+        {
+            try
+            {
+                return csvReader.GetRecord(recordType);
+            }
+            catch (Exception ex)
+            {
+                Log.Warning(ex, $"Failed to read record of type '{recordType}'");
+
+                if (csvContext.ThrowOnError)
+                {
+                    throw;
+                }
+            }
+
+            return null;
         }
         #endregion
     }

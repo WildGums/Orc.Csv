@@ -77,8 +77,10 @@ namespace Orc.Csv
                     csvWriter.WriteRecords(records);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.Warning(ex, "Failed to write data");
+
                 if (csvContext.ThrowOnError)
                 {
                     throw;
