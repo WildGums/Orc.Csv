@@ -39,7 +39,7 @@ namespace Orc.Csv
 
         public static async Task<IEnumerable> ReadRecordsAsync(this ICsvReaderService csvReaderService, string fileName, ICsvContext csvContext)
         {
-            Argument.IsNotNull(() => csvReaderService);
+            Argument.IsNotNull(nameof(csvReaderService), csvReaderService);
 
             var dependencyResolver = csvReaderService.GetDependencyResolver();
             var fileService = dependencyResolver.Resolve<IFileService>();
@@ -56,7 +56,7 @@ namespace Orc.Csv
 
         public static List<TRecord> ReadRecords<TRecord>(this ICsvReaderService csvReaderService, string fileName, ICsvContext csvContext)
         {
-            Argument.IsNotNull(() => csvReaderService);
+            Argument.IsNotNull(nameof(csvReaderService), csvReaderService);
             Argument.IsOfType("csvContext.RecordType", csvContext.RecordType, typeof(TRecord));
 
             var records = csvReaderService.ReadRecords(fileName, csvContext);
@@ -65,7 +65,7 @@ namespace Orc.Csv
 
         public static async Task<List<TRecord>> ReadRecordsAsync<TRecord>(this ICsvReaderService csvReaderService, string fileName, ICsvContext csvContext)
         {
-            Argument.IsNotNull(() => csvReaderService);
+            Argument.IsNotNull(nameof(csvReaderService), csvReaderService);
             Argument.IsOfType("csvContext.RecordType", csvContext.RecordType, typeof(TRecord));
 
             var records = await csvReaderService.ReadRecordsAsync(fileName, csvContext);
@@ -88,7 +88,7 @@ namespace Orc.Csv
         public static Task<List<TRecord>> ReadRecordsAsync<TRecord, TRecordMap>(this ICsvReaderService csvReaderService, string fileName, ICsvContext csvContext = null)
             where TRecordMap : ClassMap, new()
         {
-            Argument.IsNotNull(() => csvReaderService);
+            Argument.IsNotNull(nameof(csvReaderService), csvReaderService);
 
             if (csvContext is null)
             {
