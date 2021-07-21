@@ -160,7 +160,7 @@ namespace Orc.Csv
             items.Add(record);
         }
 
-        private static object ReadRecord(CsvReader csvReader, Type recordType, ICsvContext csvContext)
+        protected virtual object ReadRecord(CsvReader csvReader, Type recordType, ICsvContext csvContext)
         {
             try
             {
