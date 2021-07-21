@@ -20,7 +20,6 @@ namespace Orc.Csv
 
     public static partial class ICsvReaderServiceExtensions
     {
-        #region Methods
         public static List<TRecord> ReadRecords<TRecord>(this ICsvReaderService csvReaderService, StreamReader streamReader, ICsvContext csvContext)
         {
             Argument.IsNotNull(() => csvReaderService);
@@ -32,7 +31,7 @@ namespace Orc.Csv
 
         public static async Task<List<TRecord>> ReadRecordsAsync<TRecord>(this ICsvReaderService csvReaderService, StreamReader streamReader, ICsvContext csvContext)
         {
-            Argument.IsNotNull(() => csvReaderService);
+            Argument.IsNotNull(nameof(csvReaderService), csvReaderService);
             Argument.IsOfType("csvContext.RecordType", csvContext.RecordType, typeof(TRecord));
 
             var records = await csvReaderService.ReadRecordsAsync(streamReader, csvContext);
@@ -55,7 +54,7 @@ namespace Orc.Csv
         public static Task<List<TRecord>> ReadRecordsAsync<TRecord, TRecordMap>(this ICsvReaderService csvReaderService, StreamReader streamReader, ICsvContext csvContext = null)
             where TRecordMap : ClassMap, new()
         {
-            Argument.IsNotNull(() => csvReaderService);
+            Argument.IsNotNull(nameof(csvReaderService), csvReaderService);
 
             if (csvContext is null)
             {
@@ -64,6 +63,5 @@ namespace Orc.Csv
 
             return ReadRecordsAsync<TRecord>(csvReaderService, streamReader, csvContext);
         }
-        #endregion
     }
 }
