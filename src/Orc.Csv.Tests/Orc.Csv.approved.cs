@@ -51,6 +51,7 @@ namespace Orc.Csv
         public CsvHelper.CsvReader CreateReader(System.IO.StreamReader streamReader, Orc.Csv.ICsvContext csvContext) { }
         protected virtual System.Collections.IEnumerable ReadData(CsvHelper.CsvReader csvReader, Orc.Csv.ICsvContext csvContext) { }
         protected virtual System.Threading.Tasks.Task<System.Collections.IEnumerable> ReadDataAsync(CsvHelper.CsvReader csvReader, Orc.Csv.ICsvContext csvContext) { }
+        protected virtual object ReadRecord(CsvHelper.CsvReader csvReader, System.Type recordType, Orc.Csv.ICsvContext csvContext) { }
         public virtual System.Collections.IEnumerable ReadRecords(System.IO.StreamReader streamReader, Orc.Csv.ICsvContext csvContext) { }
         public System.Threading.Tasks.Task<System.Collections.IEnumerable> ReadRecordsAsync(System.IO.StreamReader streamReader, Orc.Csv.ICsvContext csvContext) { }
     }
