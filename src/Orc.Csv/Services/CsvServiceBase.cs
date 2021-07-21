@@ -207,12 +207,12 @@ namespace Orc.Csv
             messageBuilder.Append($", message: '{ex.Message}'");
 
             var message = messageBuilder.ToString();
-            Log.Error(message);
+            Log.Warning(message);
 
             var handler = configuration.ReadingExceptionOccurred;
             handler?.Invoke(args);
 
-            return false;
+            return true;
         }
     }
 }
