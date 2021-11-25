@@ -28,8 +28,10 @@ namespace Orc.Csv
 
             using (var stream = fileService.Open(fileName, FileMode.Create, FileAccess.Write, FileShare.Read))
             {
-                var streamWriter = new StreamWriter(stream);
-                csvWriterService.WriteRecords(records, streamWriter, csvContext);
+                using (var streamWriter = new StreamWriter(stream))
+                {
+                    csvWriterService.WriteRecords(records, streamWriter, csvContext);
+                }
             }
         }
 
@@ -42,8 +44,10 @@ namespace Orc.Csv
 
             using (var stream = fileService.Open(fileName, FileMode.Create, FileAccess.Write, FileShare.Read))
             {
-                var streamWriter = new StreamWriter(stream);
-                await csvWriterService.WriteRecordsAsync(records, streamWriter, csvContext);
+                using (var streamWriter = new StreamWriter(stream))
+                {
+                    await csvWriterService.WriteRecordsAsync(records, streamWriter, csvContext);
+                }
             }
         }
 
@@ -82,7 +86,9 @@ namespace Orc.Csv
 
             // Note: don't dispose, the writer cannot be used when disposed
             var stream = fileService.Open(fileName, FileMode.Create, FileAccess.Write, FileShare.Read);
+#pragma warning disable IDISP001 // Dispose created.
             var streamWriter = new StreamWriter(stream);
+#pragma warning restore IDISP001 // Dispose created.
             return csvWriterService.CreateWriter(streamWriter, csvContext);
         }
     }

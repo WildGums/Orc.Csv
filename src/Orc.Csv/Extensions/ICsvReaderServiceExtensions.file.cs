@@ -107,7 +107,9 @@ namespace Orc.Csv
 
             // Note: don't dispose, the reader cannot be used when disposed
             var stream = fileService.OpenRead(fileName);
+#pragma warning disable IDISP001 // Dispose created.
             var streamReader = new StreamReader(stream);
+#pragma warning restore IDISP001 // Dispose created.
             return csvReaderService.CreateReader(streamReader, csvContext);
         }
     }
