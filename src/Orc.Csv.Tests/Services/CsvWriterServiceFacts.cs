@@ -55,32 +55,36 @@ namespace Orc.Csv.Tests.Services
                 operations.Add(operation);
             }
 
-            var temporaryFileContext = new TemporaryFilesContext($"{nameof(CsvWriterServiceFacts)}_{nameof(WritesWithCustomAttributeConvertersAsync)}");
-            var fileName = temporaryFileContext.GetFile("operations.csv");
-
-            var classMap = new OperationMap();
-            classMap.Initialize(attributes.Select(x => x.Value));
-
-            var csvContext = new CsvContext<Operation>
+            using (var temporaryFileContext = new TemporaryFilesContext($"{nameof(CsvWriterServiceFacts)}_{nameof(WritesWithCustomAttributeConvertersAsync)}"))
             {
-                ClassMap = classMap,
-                Culture = new System.Globalization.CultureInfo("nl-NL")
-            };
+                var fileName = temporaryFileContext.GetFile("operations.csv");
 
-            using (var stream = File.Create(fileName))
-            {
-                using (var textWriter = new StreamWriter(stream))
+                var classMap = new OperationMap();
+                classMap.Initialize(attributes.Select(x => x.Value));
+
+                var csvContext = new CsvContext<Operation>
                 {
-                    var csvWriter = new CsvWriter(textWriter, new CsvConfiguration(csvContext.Culture));
-                    csvWriter.Context.RegisterClassMap(classMap);
+                    ClassMap = classMap,
+                    Culture = new System.Globalization.CultureInfo("nl-NL")
+                };
 
-                    csvWriter.WriteRecords(operations);
+                using (var stream = File.Create(fileName))
+                {
+                    using (var textWriter = new StreamWriter(stream))
+                    {
+                        using (var csvWriter = new CsvWriter(textWriter, new CsvConfiguration(csvContext.Culture)))
+                        {
+                            csvWriter.Context.RegisterClassMap(classMap);
+
+                            csvWriter.WriteRecords(operations);
+                        }
+                    }
                 }
+
+                await writerService.WriteRecordsAsync(operations, fileName, csvContext);
+
+                Approvals.VerifyFile(fileName);
             }
-
-            await writerService.WriteRecordsAsync(operations, fileName, csvContext);
-
-            Approvals.VerifyFile(fileName);
         }
 
         [Test]
@@ -90,14 +94,16 @@ namespace Orc.Csv.Tests.Services
 
             var operations = new List<Operation>();
 
-            var temporaryFileContext = new TemporaryFilesContext($"{nameof(CsvWriterServiceFacts)}_{nameof(WritesHeaderForEmptyRecordSetAsync)}");
-            var fileName = temporaryFileContext.GetFile("operations.csv");
+            using (var temporaryFileContext = new TemporaryFilesContext($"{nameof(CsvWriterServiceFacts)}_{nameof(WritesHeaderForEmptyRecordSetAsync)}"))
+            {
+                var fileName = temporaryFileContext.GetFile("operations.csv");
 
-            var csvContext = new CsvContext<Operation>();
+                var csvContext = new CsvContext<Operation>();
 
-            await writerService.WriteRecordsAsync(operations, fileName, csvContext);
+                await writerService.WriteRecordsAsync(operations, fileName, csvContext);
 
-            Approvals.VerifyFile(fileName);
+                Approvals.VerifyFile(fileName);
+            }
         }
     }
 }
