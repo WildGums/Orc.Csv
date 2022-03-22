@@ -131,6 +131,7 @@ Setup<BuildContext>(setupContext =>
 
     //  Important: build server first so other integrations can read values from config
     buildContext.BuildServer = GetBuildServerIntegration();
+    buildContext.BuildServer.SetBuildContext(buildContext);
 
     setupContext.LogSeparator("Creating build context");
 

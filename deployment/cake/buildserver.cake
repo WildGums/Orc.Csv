@@ -10,6 +10,8 @@ public interface IBuildServer
     Task SetVariableAsync(string name, string value);
     Tuple<bool, string> GetVariable(string variableName, string defaultValue);
 
+    void SetBuildContext(BuildContext buildContext);
+
     Task BeforeInitializeAsync();
     Task AfterInitializeAsync();
 
@@ -46,10 +48,19 @@ public abstract class BuildServerBase : IBuildServer
 
     public ICakeContext CakeContext { get; private set; }
 
+    public BuildContext BuildContext { get; private set; }
+
     public abstract Task PinBuildAsync(string comment);
     public abstract Task SetVersionAsync(string version);
     public abstract Task SetVariableAsync(string name, string value);
     public abstract Tuple<bool, string> GetVariable(string variableName, string defaultValue);
+
+    //-------------------------------------------------------------
+
+    public void SetBuildContext(BuildContext buildContext)
+    {
+        BuildContext = buildContext;
+    }
 
     //-------------------------------------------------------------
 
@@ -157,7 +168,6 @@ public class BuildServerIntegration : IIntegration
     private readonly List<IBuildServer> _buildServers = new List<IBuildServer>();
     private readonly Dictionary<string, string> _buildServerVariableCache = new Dictionary<string, string>();
 
-    // This is a special integration that only gets ICakeContext, not the BuildContext
     public BuildServerIntegration(ICakeContext cakeContext, Dictionary<string, object> parameters)
     {
         CakeContext = cakeContext;
@@ -165,6 +175,18 @@ public class BuildServerIntegration : IIntegration
 
         _buildServers.Add(new ContinuaCIBuildServer(cakeContext));
     }
+
+    public void SetBuildContext(BuildContext buildContext)
+    {
+        BuildContext = buildContext;
+
+        foreach (var buildServer in _buildServers)
+        {
+            buildServer.SetBuildContext(buildContext);
+        }   
+    }
+
+    public BuildContext BuildContext { get; private set; }
 
     public ICakeContext CakeContext { get; private set; }
 

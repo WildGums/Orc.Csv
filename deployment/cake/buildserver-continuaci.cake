@@ -7,14 +7,14 @@ public class ContinuaCIBuildServer : BuildServerBase
 
     //-------------------------------------------------------------
     
-    public async Task OnTestFailedAsync()
+    public override async Task OnTestFailedAsync()
     {
         await ImportNUnitTestFilesAsync();     
     }
 
     //-------------------------------------------------------------
 
-    public async Task AfterTestAsync()
+    public override async Task AfterTestAsync()
     {
         await ImportNUnitTestFilesAsync();     
     }
@@ -29,8 +29,19 @@ public class ContinuaCIBuildServer : BuildServerBase
             return;
         }
 
-        var message = string.Format("@@continua[pinBuild comment='{0}' appendComment='{1}']", 
-            comment, !string.IsNullOrWhiteSpace(comment));
+        var testResultsDirectory = System.IO.Path.Combine(BuildContext.General.OutputRootDirectory, "testresults");
+
+        if (!CakeContext.DirectoryExists(testResultsDirectory))
+        {            
+            CakeContext.Warning("No test results files directory");
+            return;
+        }
+
+        var filePattern = System.IO.Path.Combine(testResultsDirectory, "**.xml");
+
+        CakeContext.Information($"Importing NUnit test results from using '{filePattern}'");
+
+        var message = $"@@continua[importUnitTestResults type='nunit' filePatterns='{filePattern}']";
         WriteIntegration(message);
     }
 
