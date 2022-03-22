@@ -33,11 +33,18 @@ public class ContinuaCIBuildServer : BuildServerBase
 
         if (!CakeContext.DirectoryExists(testResultsDirectory))
         {            
-            CakeContext.Warning("No test results files directory");
+            CakeContext.Warning("No test results directory");
             return;
         }
 
         var filePattern = System.IO.Path.Combine(testResultsDirectory, "**.xml");
+
+        var testResultsFiles = CakeContext.GetFiles(filePattern);
+        if (!testResultsFiles.Any())
+        {            
+            CakeContext.Warning($"No test result file found using '{filePattern}'");
+            return;
+        }
 
         CakeContext.Information($"Importing NUnit test results from using '{filePattern}'");
 
