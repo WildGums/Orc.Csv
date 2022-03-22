@@ -37,18 +37,20 @@ public class ContinuaCIBuildServer : BuildServerBase
             return;
         }
 
-        var filePattern = System.IO.Path.Combine(testResultsDirectory, "**.xml");
+        var cakeFilePattern =  System.IO.Path.Combine(testResultsDirectory, "**", "*.xml");
 
-        var testResultsFiles = CakeContext.GetFiles(filePattern);
+        var testResultsFiles = CakeContext.GetFiles(cakeFilePattern);
         if (!testResultsFiles.Any())
         {            
-            CakeContext.Warning($"No test result file found using '{filePattern}'");
+            CakeContext.Warning($"No test result file found using '{cakeFilePattern}'");
             return;
         }
 
-        CakeContext.Information($"Importing NUnit test results from using '{filePattern}'");
+        var continuaCiFilePattern = System.IO.Path.Combine(testResultsDirectory, "**.xml");
 
-        var message = $"@@continua[importUnitTestResults type='nunit' filePatterns='{filePattern}']";
+        CakeContext.Information($"Importing NUnit test results from using '{continuaCiFilePattern}'");
+
+        var message = $"@@continua[importUnitTestResults type='nunit' filePatterns='{continuaCiFilePattern}']";
         WriteIntegration(message);
     }
 
