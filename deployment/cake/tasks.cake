@@ -193,6 +193,8 @@ Setup<BuildContext>(setupContext =>
 Task("Initialize")
     .Does<BuildContext>(async buildContext =>
 {
+    await buildContext.BuildServer.BeforeInitializeAsync();
+
     buildContext.CakeContext.LogSeparator("Writing special values back to build server");
 
     var displayVersion = buildContext.General.Version.FullSemVer;
@@ -201,7 +203,7 @@ Task("Initialize")
         displayVersion += " ci";
     }
 
-    buildContext.BuildServer.SetVersion(displayVersion);
+    await buildContext.BuildServer.SetVersionAsync(displayVersion);
 
     var variablesToUpdate = new Dictionary<string, string>();
     variablesToUpdate["channel"] = buildContext.Wpf.Channel;
@@ -218,8 +220,10 @@ Task("Initialize")
 
     foreach (var variableToUpdate in variablesToUpdate)
     {
-        buildContext.BuildServer.SetVariable(variableToUpdate.Key, variableToUpdate.Value);
+        await buildContext.BuildServer.SetVariableAsync(variableToUpdate.Key, variableToUpdate.Value);
     }
+
+    await buildContext.BuildServer.AfterInitializeAsync();
 });
 
 //-------------------------------------------------------------
@@ -227,6 +231,8 @@ Task("Initialize")
 Task("Prepare")
     .Does<BuildContext>(async buildContext =>
 {
+    await buildContext.BuildServer.BeforePrepareAsync();
+
     foreach (var processor in buildContext.Processors)
     {
         await processor.PrepareAsync();
@@ -260,6 +266,8 @@ Task("Prepare")
     {
         buildContext.CakeContext.Information($"- {item}");
     }
+    
+    await buildContext.BuildServer.AfterPrepareAsync();
 });
 
 //-------------------------------------------------------------
@@ -268,12 +276,16 @@ Task("UpdateInfo")
     .IsDependentOn("Prepare")
     .Does<BuildContext>(async buildContext =>
 {
+    await buildContext.BuildServer.BeforeUpdateInfoAsync();
+
     UpdateSolutionAssemblyInfo(buildContext);
     
     foreach (var processor in buildContext.Processors)
     {
         await processor.UpdateInfoAsync();
     }
+
+    await buildContext.BuildServer.AfterUpdateInfoAsync();
 });
 
 //-------------------------------------------------------------
@@ -286,6 +298,8 @@ Task("Build")
     .IsDependentOn("CleanupCode")
     .Does<BuildContext>(async buildContext =>
 {
+    await buildContext.BuildServer.BeforeBuildAsync();
+
     await buildContext.SourceControl.MarkBuildAsPendingAsync("Build");
     
     var sonarUrl = buildContext.General.SonarQube.Url;
@@ -413,6 +427,7 @@ Task("Build")
                 var failedDescription = $"SonarQube failed, please visit '{projectSpecificSonarUrl}' for more details";
 
                 await buildContext.SourceControl.MarkBuildAsFailedAsync("SonarQube", failedDescription);
+
                 throw;
             }
         }
@@ -430,10 +445,14 @@ Task("Build")
     await buildContext.SourceControl.MarkBuildAsSucceededAsync("Build");
 
     Information("Completed build for version '{0}'", buildContext.General.Version.NuGet);
+
+    await buildContext.BuildServer.AfterBuildAsync(); 
 })
-.OnError<BuildContext>((ex, buildContext) => 
+.OnError<BuildContext>(async (ex, buildContext) => 
 {
-    buildContext.SourceControl.MarkBuildAsFailedAsync("Build").Wait();
+    await buildContext.SourceControl.MarkBuildAsFailedAsync("Build");
+
+    await buildContext.BuildServer.OnBuildFailedAsync(); 
 
     throw ex;
 });
@@ -444,7 +463,9 @@ Task("Test")
     .IsDependentOn("Prepare")
     // Note: no dependency on 'build' since we might have already built the solution
     .Does<BuildContext>(async buildContext =>
-{    
+{
+    await buildContext.BuildServer.BeforeTestAsync(); 
+
     await buildContext.SourceControl.MarkBuildAsPendingAsync("Test");
     
     foreach (var testProject in buildContext.Tests.Items)
@@ -457,10 +478,14 @@ Task("Test")
     await buildContext.SourceControl.MarkBuildAsSucceededAsync("Test");
 
     Information("Completed tests for version '{0}'", buildContext.General.Version.NuGet);
+
+    await buildContext.BuildServer.AfterTestAsync(); 
 })
-.OnError<BuildContext>((ex, buildContext) => 
+.OnError<BuildContext>(async (ex, buildContext) => 
 {
-    buildContext.SourceControl.MarkBuildAsFailedAsync("Test").Wait();
+    await buildContext.SourceControl.MarkBuildAsFailedAsync("Test");
+
+    await buildContext.BuildServer.OnTestFailedAsync(); 
 
     throw ex;
 });
@@ -478,12 +503,16 @@ Task("Package")
     .IsDependentOn("CodeSign")
     .Does<BuildContext>(async buildContext =>
 {
+    await buildContext.BuildServer.BeforePackageAsync(); 
+
     foreach (var processor in buildContext.Processors)
     {
         await processor.PackageAsync();
     }
 
     Information("Completed packaging for version '{0}'", buildContext.General.Version.NuGet);
+
+    await buildContext.BuildServer.AfterPackageAsync(); 
 });
 
 //-------------------------------------------------------------
@@ -492,6 +521,8 @@ Task("PackageLocal")
     .IsDependentOn("Package")
     .Does<BuildContext>(buildContext =>
 {
+    // Note: no build server integration calls since this is *local*
+
     // For now only package components, we might need to move this to components-tasks.cake in the future
     if (buildContext.Components.Items.Count == 0 && 
         buildContext.Tools.Items.Count == 0)
@@ -534,10 +565,14 @@ Task("Deploy")
     .IsDependentOn("RestorePackages")
     .Does<BuildContext>(async buildContext =>
 {
+    await buildContext.BuildServer.BeforeDeployAsync(); 
+
     foreach (var processor in buildContext.Processors)
     {
         await processor.DeployAsync();
     }
+    
+    await buildContext.BuildServer.AfterDeployAsync(); 
 });
 
 //-------------------------------------------------------------
@@ -546,6 +581,8 @@ Task("Finalize")
     // Note: no dependency on 'deploy' since we might have already deployed the solution
     .Does<BuildContext>(async buildContext =>
 {
+    await buildContext.BuildServer.BeforeFinalizeAsync(); 
+
     Information("Finalizing release '{0}'", buildContext.General.Version.FullSemVer);
 
     foreach (var processor in buildContext.Processors)
@@ -555,10 +592,12 @@ Task("Finalize")
 
     if (buildContext.General.IsOfficialBuild)
     {
-        buildContext.BuildServer.PinBuild("Official build");
+        await buildContext.BuildServer.PinBuildAsync("Official build");
     }
 
     await buildContext.IssueTracker.CreateAndReleaseVersionAsync();
+
+    await buildContext.BuildServer.AfterFinalizeAsync(); 
 });
 
 //-------------------------------------------------------------
