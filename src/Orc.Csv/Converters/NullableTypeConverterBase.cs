@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StringToNullableTypeConverterBase.cs" company="WildGums">
-//   Copyright (c) 2008 - 2018 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Csv
+﻿namespace Orc.Csv
 {
     using Catel;
     using CsvHelper;
@@ -25,8 +18,7 @@ namespace Orc.Csv
         /// </summary>
         public bool SupportNullText { get; set; }
 
-        #region Methods
-        public override object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData)
+        public override object? ConvertFromString(string? text, IReaderRow row, MemberMapData memberMapData)
         {
             if (string.IsNullOrEmpty(text))
             {
@@ -58,7 +50,6 @@ namespace Orc.Csv
         /// <param name="row">The row.</param>
         /// <param name="text">The text.</param>
         /// <returns></returns>
-        protected abstract TNullable ConvertStringToActualType(IReaderRow row, string text);
-        #endregion
+        protected abstract TNullable? ConvertStringToActualType(IReaderRow row, string text);
     }
 }

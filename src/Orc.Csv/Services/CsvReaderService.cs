@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CsvReaderService.cs" company="WildGums">
-//   Copyright (c) 2008 - 2017 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Csv
+﻿namespace Orc.Csv
 {
     using System;
     using System.Collections;
@@ -18,15 +11,12 @@ namespace Orc.Csv
 
     public class CsvReaderService : CsvServiceBase, ICsvReaderService
     {
-        #region Constants
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        #endregion
 
-        #region ICsvReaderService Members
         public virtual IEnumerable ReadRecords(StreamReader streamReader, ICsvContext csvContext)
         {
-            Argument.IsNotNull(() => streamReader);
-            Argument.IsNotNull(() => csvContext);
+            ArgumentNullException.ThrowIfNull(streamReader);
+            ArgumentNullException.ThrowIfNull(csvContext);
 
             using (var csvReader = CreateReader(streamReader, csvContext))
             {
@@ -56,9 +46,7 @@ namespace Orc.Csv
 
             return csvReader;
         }
-        #endregion
 
-        #region Methods
         protected virtual IEnumerable ReadData(CsvReader csvReader, ICsvContext csvContext)
         {
             var recordType = csvContext.RecordType;
@@ -145,7 +133,7 @@ namespace Orc.Csv
             return items;
         }
 
-        private void AddCurrentRecord(CsvReader csvReader, List<object> items, Type recordType, Action<object> initializer, ICsvContext csvContext)
+        private void AddCurrentRecord(CsvReader csvReader, List<object> items, Type recordType, Action<object>? initializer, ICsvContext csvContext)
         {
             var record = ReadRecord(csvReader, recordType, csvContext);
             if (record is null)
@@ -160,7 +148,7 @@ namespace Orc.Csv
             items.Add(record);
         }
 
-        protected virtual object ReadRecord(CsvReader csvReader, Type recordType, ICsvContext csvContext)
+        protected virtual object? ReadRecord(CsvReader csvReader, Type recordType, ICsvContext csvContext)
         {
             try
             {
@@ -178,6 +166,5 @@ namespace Orc.Csv
 
             return null;
         }
-        #endregion
     }
 }

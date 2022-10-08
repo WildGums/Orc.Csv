@@ -1,22 +1,14 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CsvContext.cs" company="WildGums">
-//   Copyright (c) 2008 - 2018 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Csv
+﻿namespace Orc.Csv
 {
     using System;
     using System.Globalization;
-    using Catel;
     using CsvHelper.Configuration;
 
     public class CsvContext : ICsvContext
     {
         public CsvContext(Type recordType)
         {
-            Argument.IsNotNull(() => recordType);
+            ArgumentNullException.ThrowIfNull(recordType);
 
             RecordType = recordType;
             ThrowOnError = true;
@@ -24,13 +16,13 @@ namespace Orc.Csv
 
         public Type RecordType { get; set; }
 
-        public ClassMap ClassMap { get; set; }
+        public ClassMap? ClassMap { get; set; }
 
-        public CsvConfiguration Configuration { get; set; }
+        public CsvConfiguration? Configuration { get; set; }
 
-        public CultureInfo Culture { get; set; }
+        public CultureInfo? Culture { get; set; }
 
-        public Action<object> Initializer { get; set; }
+        public Action<object>? Initializer { get; set; }
 
         public bool ThrowOnError { get; set; }
     }
@@ -48,6 +40,7 @@ namespace Orc.Csv
         where TMap : ClassMap, new()
     {
         public CsvContext()
+            : base()
         {
             ClassMap = new TMap();
         }

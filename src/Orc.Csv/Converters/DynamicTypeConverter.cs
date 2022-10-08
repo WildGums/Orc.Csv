@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TypeConverter.cs" company="WildGums">
-//   Copyright (c) 2008 - 2018 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Csv
+﻿namespace Orc.Csv
 {
     using System;
     using Catel.Logging;
@@ -15,29 +8,22 @@ namespace Orc.Csv
 
     public class DynamicTypeConverter<T> : ITypeConverter
     {
-        #region Constants
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        #endregion
 
-        #region Fields
-        private readonly Func<string, IReaderRow, MemberMapData, T> _convertFromString;
-        private readonly Func<object, IWriterRow, MemberMapData, string> _convertToString;
-        private readonly string _defaultValue;
-        #endregion
+        private readonly Func<string?, IReaderRow, MemberMapData, T?> _convertFromString;
+        private readonly Func<object?, IWriterRow, MemberMapData, string?> _convertToString;
+        private readonly string? _defaultValue;
 
-        #region Constructors
-        public DynamicTypeConverter(Func<string, IReaderRow, MemberMapData, T> convertFromString,
-            Func<object, IWriterRow, MemberMapData, string> convertToString,
-            string defaultValue = null)
+        public DynamicTypeConverter(Func<string?, IReaderRow, MemberMapData, T?> convertFromString,
+            Func<object?, IWriterRow, MemberMapData, string?> convertToString,
+            string? defaultValue = null)
         {
             _convertFromString = convertFromString;
             _convertToString = convertToString;
             _defaultValue = defaultValue;
         }
-        #endregion
 
-        #region ITypeConverter Members
-        public string ConvertToString(object value, IWriterRow row, MemberMapData memberMapData)
+        public string? ConvertToString(object? value, IWriterRow row, MemberMapData memberMapData)
         {
             if (_convertToString is null)
             {
@@ -47,7 +33,7 @@ namespace Orc.Csv
             return _convertToString(value, row, memberMapData);
         }
 
-        public object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData)
+        public object? ConvertFromString(string? text, IReaderRow row, MemberMapData memberMapData)
         {
             if (_convertFromString is null)
             {
@@ -61,6 +47,5 @@ namespace Orc.Csv
 
             return _convertFromString(text, row, memberMapData);
         }
-        #endregion
     }
 }

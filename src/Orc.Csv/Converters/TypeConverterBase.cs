@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TypeConverter.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Csv
+﻿namespace Orc.Csv
 {
     using System;
     using System.Globalization;
@@ -15,13 +8,13 @@ namespace Orc.Csv
 
     public abstract class TypeConverterBase : ITypeConverter
     {
-        public virtual string ConvertToString(object value, IWriterRow row, MemberMapData memberMapData)
+        public virtual string? ConvertToString(object? value, IWriterRow row, MemberMapData memberMapData)
         {
             var stringValue = Convert.ToString(value, GetCultureInfo(row));
             return stringValue;
         }
 
-        public abstract object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData);
+        public abstract object? ConvertFromString(string? text, IReaderRow row, MemberMapData memberMapData);
 
         protected CultureInfo GetCultureInfo(IWriterRow row)
         {

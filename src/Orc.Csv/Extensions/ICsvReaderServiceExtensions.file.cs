@@ -1,12 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ICsvReaderServiceExtensions.file.cs" company="WildGums">
-//   Copyright (c) 2008 - 2018 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Csv
+﻿namespace Orc.Csv
 {
+    using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.IO;
@@ -22,10 +16,12 @@ namespace Orc.Csv
     {
         public static IEnumerable ReadRecords(this ICsvReaderService csvReaderService, string fileName, ICsvContext csvContext)
         {
-            Argument.IsNotNull(() => csvReaderService);
+            ArgumentNullException.ThrowIfNull(csvReaderService);
+            ArgumentNullException.ThrowIfNull(fileName);
+            ArgumentNullException.ThrowIfNull(csvContext);
 
             var dependencyResolver = csvReaderService.GetDependencyResolver();
-            var fileService = dependencyResolver.Resolve<IFileService>();
+            var fileService = dependencyResolver.ResolveRequired<IFileService>();
 
             using (var stream = fileService.OpenRead(fileName))
             {
@@ -39,10 +35,12 @@ namespace Orc.Csv
 
         public static async Task<IEnumerable> ReadRecordsAsync(this ICsvReaderService csvReaderService, string fileName, ICsvContext csvContext)
         {
-            Argument.IsNotNull(nameof(csvReaderService), csvReaderService);
+            ArgumentNullException.ThrowIfNull(csvReaderService);
+            ArgumentNullException.ThrowIfNull(fileName);
+            ArgumentNullException.ThrowIfNull(csvContext);
 
             var dependencyResolver = csvReaderService.GetDependencyResolver();
-            var fileService = dependencyResolver.Resolve<IFileService>();
+            var fileService = dependencyResolver.ResolveRequired<IFileService>();
 
             using (var stream = fileService.OpenRead(fileName))
             {
@@ -56,7 +54,9 @@ namespace Orc.Csv
 
         public static List<TRecord> ReadRecords<TRecord>(this ICsvReaderService csvReaderService, string fileName, ICsvContext csvContext)
         {
-            Argument.IsNotNull(nameof(csvReaderService), csvReaderService);
+            ArgumentNullException.ThrowIfNull(csvReaderService);
+            ArgumentNullException.ThrowIfNull(fileName);
+            ArgumentNullException.ThrowIfNull(csvContext);
             Argument.IsOfType("csvContext.RecordType", csvContext.RecordType, typeof(TRecord));
 
             var records = csvReaderService.ReadRecords(fileName, csvContext);
@@ -65,17 +65,20 @@ namespace Orc.Csv
 
         public static async Task<List<TRecord>> ReadRecordsAsync<TRecord>(this ICsvReaderService csvReaderService, string fileName, ICsvContext csvContext)
         {
-            Argument.IsNotNull(nameof(csvReaderService), csvReaderService);
+            ArgumentNullException.ThrowIfNull(csvReaderService);
+            ArgumentNullException.ThrowIfNull(fileName);
+            ArgumentNullException.ThrowIfNull(csvContext);
             Argument.IsOfType("csvContext.RecordType", csvContext.RecordType, typeof(TRecord));
 
             var records = await csvReaderService.ReadRecordsAsync(fileName, csvContext);
             return records.Cast<TRecord>().ToList();
         }
 
-        public static List<TRecord> ReadRecords<TRecord, TRecordMap>(this ICsvReaderService csvReaderService, string fileName, ICsvContext csvContext = null)
+        public static List<TRecord> ReadRecords<TRecord, TRecordMap>(this ICsvReaderService csvReaderService, string fileName, ICsvContext? csvContext = null)
             where TRecordMap : ClassMap, new()
         {
-            Argument.IsNotNull(() => csvReaderService);
+            ArgumentNullException.ThrowIfNull(csvReaderService);
+            ArgumentNullException.ThrowIfNull(fileName);
 
             if (csvContext is null)
             {
@@ -85,10 +88,11 @@ namespace Orc.Csv
             return ReadRecords<TRecord>(csvReaderService, fileName, csvContext);
         }
 
-        public static Task<List<TRecord>> ReadRecordsAsync<TRecord, TRecordMap>(this ICsvReaderService csvReaderService, string fileName, ICsvContext csvContext = null)
+        public static Task<List<TRecord>> ReadRecordsAsync<TRecord, TRecordMap>(this ICsvReaderService csvReaderService, string fileName, ICsvContext? csvContext = null)
             where TRecordMap : ClassMap, new()
         {
-            Argument.IsNotNull(nameof(csvReaderService), csvReaderService);
+            ArgumentNullException.ThrowIfNull(csvReaderService);
+            ArgumentNullException.ThrowIfNull(fileName);
 
             if (csvContext is null)
             {
@@ -100,10 +104,12 @@ namespace Orc.Csv
 
         public static CsvReader CreateReader(this ICsvReaderService csvReaderService, string fileName, ICsvContext csvContext)
         {
-            Argument.IsNotNull(() => csvReaderService);
+            ArgumentNullException.ThrowIfNull(csvReaderService);
+            ArgumentNullException.ThrowIfNull(fileName);
+            ArgumentNullException.ThrowIfNull(csvContext);
 
             var dependencyResolver = csvReaderService.GetDependencyResolver();
-            var fileService = dependencyResolver.Resolve<IFileService>();
+            var fileService = dependencyResolver.ResolveRequired<IFileService>();
 
             // Note: don't dispose, the reader cannot be used when disposed
             var stream = fileService.OpenRead(fileName);

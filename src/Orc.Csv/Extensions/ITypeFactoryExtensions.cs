@@ -1,26 +1,19 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ITypeFactoryExtensions.cs" company="WildGums">
-//   Copyright (c) 2008 - 2017 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Csv
+﻿namespace Orc.Csv
 {
     using System;
-    using Catel;
+    using System.Diagnostics.CodeAnalysis;
     using Catel.IoC;
     using CsvHelper.Configuration;
 
     internal static class ITypeFactoryExtensions
     {
-        #region Methods
-        public static ClassMap TryToCreateClassMap(this ITypeFactory typeFactory, Type type)
+        public static bool TryToCreateClassMap(this ITypeFactory typeFactory, Type type, [NotNullWhen(true)]out ClassMap? classMap)
         {
-            Argument.IsNotNull(() => typeFactory);
+            ArgumentNullException.ThrowIfNull(typeFactory);
+            ArgumentNullException.ThrowIfNull(type);
 
-            return type is not null ? typeFactory.CreateInstanceWithParametersAndAutoCompletion(type) as ClassMap : null;
+            classMap = typeFactory.CreateInstanceWithParametersAndAutoCompletion(type) as ClassMap;
+            return classMap is not null;
         }
-        #endregion
     }
 }

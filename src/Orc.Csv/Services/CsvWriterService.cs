@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CsvWriterService.cs" company="WildGums">
-//   Copyright (c) 2008 - 2017 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Csv
+﻿namespace Orc.Csv
 {
     using System;
     using System.Collections;
@@ -16,11 +9,8 @@ namespace Orc.Csv
 
     public class CsvWriterService : CsvServiceBase, ICsvWriterService
     {
-        #region Constants
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        #endregion
 
-        #region ICsvWriterService Members
         public virtual void WriteRecords(IEnumerable records, StreamWriter streamWriter, ICsvContext csvContext)
         {
             using (var csvWriter = CreateWriter(streamWriter, csvContext))
@@ -53,9 +43,7 @@ namespace Orc.Csv
 
             return csvWriter;
         }
-        #endregion
 
-        #region Methods
         protected virtual void WriteRecords(IEnumerable records, CsvWriter csvWriter, ICsvContext csvContext)
         {
             try
@@ -87,6 +75,5 @@ namespace Orc.Csv
                 }
             }
         }
-        #endregion
     }
 }

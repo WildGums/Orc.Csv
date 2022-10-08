@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CsvServiceBase.cs" company="WildGums">
-//   Copyright (c) 2008 - 2018 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Csv
+﻿namespace Orc.Csv
 {
     using System.IO;
     using System.Linq;
@@ -42,7 +35,7 @@ namespace Orc.Csv
             return configuration;
         }
 
-        protected virtual CsvConfiguration EnsureCorrectConfiguration(CsvConfiguration configuration, ICsvContext csvContext)
+        protected virtual CsvConfiguration EnsureCorrectConfiguration(CsvConfiguration? configuration, ICsvContext csvContext)
         {
             configuration = configuration ?? CreateDefaultConfiguration(csvContext);
 
@@ -73,7 +66,6 @@ namespace Orc.Csv
                 Quote = configuration.Quote,
                 //QuoteString = configuration.QuoteString,
                 ReferenceHeaderPrefix = configuration.ReferenceHeaderPrefix,
-                SanitizeForInjection = configuration.SanitizeForInjection,
                 ShouldQuote = configuration.ShouldQuote,
                 ShouldSkipRecord = configuration.ShouldSkipRecord,
                 ShouldUseConstructorParameters = configuration.ShouldUseConstructorParameters,
@@ -190,9 +182,11 @@ namespace Orc.Csv
 
                     messageBuilder.Append($", content '{typeConverterException.Text}'");
 
-                    var propertyName = typeConverterException.MemberMapData.Member.Name;
-
-                    messageBuilder.Append($", property '{propertyName}'");
+                    var propertyName = typeConverterException.MemberMapData.Member?.Name;
+                    if (propertyName is not null)
+                    {
+                        messageBuilder.Append($", property '{propertyName}'");
+                    }
                 }
 
                 messageBuilder.Append($", column '{columnName}'");

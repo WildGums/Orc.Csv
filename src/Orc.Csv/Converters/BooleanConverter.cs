@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="YesNoToBooleanConverter.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Csv
+﻿namespace Orc.Csv
 {
     using System.Collections.Generic;
     using Catel;
@@ -15,7 +8,7 @@ namespace Orc.Csv
     public class BooleanConverter : TypeConverterBase
     {
         private readonly List<string> _trueValuesList = new List<string>();
-        private string[] _trueValues;
+        private string[]? _trueValues;
 
         public BooleanConverter()
         {
@@ -44,7 +37,7 @@ namespace Orc.Csv
             return this;
         }
 
-        public override object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData)
+        public override object? ConvertFromString(string? text, IReaderRow row, MemberMapData memberMapData)
         {
             if (string.IsNullOrEmpty(text))
             {

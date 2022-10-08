@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="YesNoToBooleanConverter.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Csv
+﻿namespace Orc.Csv
 {
     using System.Collections.Generic;
     using Catel;
@@ -14,10 +7,10 @@ namespace Orc.Csv
     public class NullableBooleanConverter : NullableTypeConverterBase<bool?>
     {
         private readonly List<string> _trueValuesList = new List<string>();
-        private string[] _trueValues;
+        private string[]? _trueValues;
 
         private readonly List<string> _falseValuesList = new List<string>();
-        private string[] _falseValues;
+        private string[]? _falseValues;
 
         public NullableBooleanConverter()
         {
@@ -25,7 +18,7 @@ namespace Orc.Csv
             _falseValuesList.AddRange(new[] { "no", "0", "off", "false" });
         }
 
-        public NullableBooleanConverter(string[] trueValues, string[] falseValues)
+        public NullableBooleanConverter(string[]? trueValues, string[]? falseValues)
             : this()
         {
             if (trueValues is not null)

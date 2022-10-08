@@ -1,14 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BugsTest.cs" company="WildGums">
-//   Copyright (c) 2008 - 2016 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Csv.Tests
+﻿namespace Orc.Csv.Tests
 {
     using System.Globalization;
-    using Catel.IO;
+    using System.IO;
     using Csv;
     using FileSystem;
     using global::CsvHelper.Configuration;
