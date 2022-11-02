@@ -11,12 +11,12 @@ namespace Orc.Csv.Tests.Services
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
-    using ApprovalTests;
     using CsvHelper;
     using CsvHelper.Configuration;
     using CsvMaps;
     using Entities;
     using NUnit.Framework;
+    using VerifyNUnit;
 
     [TestFixture]
     public class CsvWriterServiceFacts
@@ -83,7 +83,7 @@ namespace Orc.Csv.Tests.Services
 
                 await writerService.WriteRecordsAsync(operations, fileName, csvContext);
 
-                Approvals.VerifyFile(fileName);
+                await Verifier.VerifyFile(fileName);
             }
         }
 
@@ -102,7 +102,7 @@ namespace Orc.Csv.Tests.Services
 
                 await writerService.WriteRecordsAsync(operations, fileName, csvContext);
 
-                Approvals.VerifyFile(fileName);
+                await Verifier.VerifyFile(fileName);
             }
         }
     }
