@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StringToBooleanConverterFacts.cs" company="WildGums">
-//   Copyright (c) 2008 - 2018 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Csv.Tests.Converters
+﻿namespace Orc.Csv.Tests.Converters
 {
     using Catel.Fody;
     using Csv;

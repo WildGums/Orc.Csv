@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="OperationCsvMap.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Csv.Tests.CsvMaps
+﻿namespace Orc.Csv.Tests.CsvMaps
 {
     using System.Collections.Generic;
     using Catel.Reflection;
