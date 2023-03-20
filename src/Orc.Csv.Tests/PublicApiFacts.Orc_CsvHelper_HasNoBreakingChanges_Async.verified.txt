@@ -9,9 +9,9 @@ namespace Orc.Csv
     public class BooleanConverter : Orc.Csv.TypeConverterBase
     {
         public BooleanConverter() { }
-        public BooleanConverter(string[] trueValues) { }
+        public BooleanConverter(string[]? trueValues) { }
         public Orc.Csv.BooleanConverter AddTrueValues(params string[] values) { }
-        public override object? ConvertFromString(string? text, CsvHelper.IReaderRow row, CsvHelper.Configuration.MemberMapData memberMapData) { }
+        public override object ConvertFromString(string? text, CsvHelper.IReaderRow row, CsvHelper.Configuration.MemberMapData? memberMapData) { }
     }
     public abstract class ClassMapBase<TRecord> : CsvHelper.Configuration.ClassMap<TRecord>
     {
@@ -71,7 +71,7 @@ namespace Orc.Csv
     }
     public class DynamicTypeConverter<T> : CsvHelper.TypeConversion.ITypeConverter
     {
-        public DynamicTypeConverter(System.Func<string?, CsvHelper.IReaderRow, CsvHelper.Configuration.MemberMapData, T?> convertFromString, System.Func<object?, CsvHelper.IWriterRow, CsvHelper.Configuration.MemberMapData, string?> convertToString, string? defaultValue = null) { }
+        public DynamicTypeConverter(System.Func<string?, CsvHelper.IReaderRow?, CsvHelper.Configuration.MemberMapData, T?> convertFromString, System.Func<object?, CsvHelper.IWriterRow, CsvHelper.Configuration.MemberMapData, string?> convertToString, string? defaultValue = null) { }
         public object? ConvertFromString(string? text, CsvHelper.IReaderRow row, CsvHelper.Configuration.MemberMapData memberMapData) { }
         public string? ConvertToString(object? value, CsvHelper.IWriterRow row, CsvHelper.Configuration.MemberMapData memberMapData) { }
     }
@@ -169,7 +169,7 @@ namespace Orc.Csv
         public NullableBooleanConverter(string[]? trueValues, string[]? falseValues) { }
         public Orc.Csv.NullableBooleanConverter AddFalseValues(params string[] values) { }
         public Orc.Csv.NullableBooleanConverter AddTrueValues(params string[] values) { }
-        protected override bool? ConvertStringToActualType(CsvHelper.IReaderRow row, string text) { }
+        protected override bool? ConvertStringToActualType(CsvHelper.IReaderRow? row, string text) { }
     }
     public class NullableDateTimeConverter : Orc.Csv.NullableTypeConverterBase<System.DateTime?>
     {
@@ -204,7 +204,7 @@ namespace Orc.Csv
     public class NullableStringConverter : Orc.Csv.NullableTypeConverterBase<string>
     {
         public NullableStringConverter() { }
-        protected override string? ConvertStringToActualType(CsvHelper.IReaderRow row, string text) { }
+        protected override string ConvertStringToActualType(CsvHelper.IReaderRow row, string text) { }
     }
     public class NullableTimeSpanConverter : Orc.Csv.NullableTypeConverterBase<System.TimeSpan?>
     {
@@ -213,9 +213,9 @@ namespace Orc.Csv
     }
     public abstract class NullableTypeConverterBase<TNullable> : Orc.Csv.TypeConverterBase
     {
-        public NullableTypeConverterBase() { }
+        protected NullableTypeConverterBase() { }
         public bool SupportNullText { get; set; }
-        public override object? ConvertFromString(string? text, CsvHelper.IReaderRow row, CsvHelper.Configuration.MemberMapData memberMapData) { }
+        public override object? ConvertFromString(string? text, CsvHelper.IReaderRow row, CsvHelper.Configuration.MemberMapData? memberMapData) { }
         protected abstract TNullable? ConvertStringToActualType(CsvHelper.IReaderRow row, string text);
     }
     public class NullableUIntConverter : Orc.Csv.NullableTypeConverterBase<uint?>

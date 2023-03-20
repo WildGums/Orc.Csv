@@ -1,10 +1,9 @@
-﻿namespace Orc.Csv.Tests.Services
+﻿namespace Orc.Csv.Tests.Services;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class CsvReaderServiceFacts
 {
-    using NUnit.Framework;
 
-    [TestFixture]
-    public class CsvReaderServiceFacts
-    {
-
-    }
 }

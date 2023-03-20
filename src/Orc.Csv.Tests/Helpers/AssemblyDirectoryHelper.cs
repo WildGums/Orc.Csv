@@ -1,19 +1,18 @@
-﻿namespace Orc.Csv.Tests
+﻿namespace Orc.Csv.Tests;
+
+using System;
+using System.IO;
+
+internal static class AssemblyDirectoryHelper
 {
-    using System;
-    using System.IO;
-
-    internal static class AssemblyDirectoryHelper
+    public static string GetCurrentDirectory()
     {
-        public static string GetCurrentDirectory()
-        {
-            var directory = AppDomain.CurrentDomain.BaseDirectory;
-            return directory;
-        }
+        var directory = AppDomain.CurrentDomain.BaseDirectory;
+        return directory;
+    }
 
-        public static string Resolve(string fileName)
-        {
-            return Path.Combine(GetCurrentDirectory(), fileName);
-        }
+    public static string Resolve(string fileName)
+    {
+        return Path.Combine(GetCurrentDirectory(), fileName);
     }
 }

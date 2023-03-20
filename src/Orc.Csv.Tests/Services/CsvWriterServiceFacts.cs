@@ -1,102 +1,97 @@
-﻿namespace Orc.Csv.Tests.Services
+﻿namespace Orc.Csv.Tests.Services;
+
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using CsvHelper;
+using CsvHelper.Configuration;
+using CsvMaps;
+using Entities;
+using NUnit.Framework;
+using VerifyNUnit;
+
+[TestFixture]
+public class CsvWriterServiceFacts
 {
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using CsvHelper;
-    using CsvHelper.Configuration;
-    using CsvMaps;
-    using Entities;
-    using NUnit.Framework;
-    using VerifyNUnit;
-
-    [TestFixture]
-    public class CsvWriterServiceFacts
+    [Test]
+    public async Task WritesWithCustomAttributeConvertersAsync()
     {
-        [Test]
-        public async Task WritesWithCustomAttributeConvertersAsync()
+        var writerService = new CsvWriterService();
+
+        var attributes = new List<CustomAttribute>();
+
+        for (var i = 0; i < 3; i++)
         {
-            var writerService = new CsvWriterService();
-
-            var attributes = new List<CustomAttribute>();
-
-            for (var i = 0; i < 3; i++)
+            attributes.Add(new CustomAttribute
             {
-                attributes.Add(new CustomAttribute
-                {
-                    Value = $"Attribute{i + 1}"
-                });
+                Value = $"Attribute{i + 1}"
+            });
+        }
+
+        var operations = new List<Operation>();
+
+        for (var i = 0; i < 5; i++)
+        {
+            var operation = new Operation
+            {
+                Id = i + 1,
+                Name = $"Operation {i + 1}",
+                Enabled = true
+            };
+
+            for (var j = 0; j < 5; j++)
+            {
+                operation.Attributes[$"Attribute{j + 1}"] = $"Value {j + 1}";
             }
 
-            var operations = new List<Operation>();
+            operations.Add(operation);
+        }
 
-            for (var i = 0; i < 5; i++)
+        using var temporaryFileContext = new TemporaryFilesContext($"{nameof(CsvWriterServiceFacts)}_{nameof(WritesWithCustomAttributeConvertersAsync)}");
+        var fileName = temporaryFileContext.GetFile("operations.csv");
+
+        var classMap = new OperationMap();
+        classMap.Initialize(attributes.Select(x => x.Value));
+
+        var csvContext = new CsvContext<Operation>
+        {
+            ClassMap = classMap,
+            Culture = new System.Globalization.CultureInfo("nl-NL")
+        };
+
+        await using (var stream = File.Create(fileName))
+        {
+            await using (var textWriter = new StreamWriter(stream))
             {
-                var operation = new Operation
+                await using (var csvWriter = new CsvWriter(textWriter, new CsvConfiguration(csvContext.Culture)))
                 {
-                    Id = i + 1,
-                    Name = $"Operation {i + 1}",
-                    Enabled = true
-                };
+                    csvWriter.Context.RegisterClassMap(classMap);
 
-                for (var j = 0; j < 5; j++)
-                {
-                    operation.Attributes[$"Attribute{j + 1}"] = $"Value {j + 1}";
+                    await csvWriter.WriteRecordsAsync(operations);
                 }
-
-                operations.Add(operation);
-            }
-
-            using (var temporaryFileContext = new TemporaryFilesContext($"{nameof(CsvWriterServiceFacts)}_{nameof(WritesWithCustomAttributeConvertersAsync)}"))
-            {
-                var fileName = temporaryFileContext.GetFile("operations.csv");
-
-                var classMap = new OperationMap();
-                classMap.Initialize(attributes.Select(x => x.Value));
-
-                var csvContext = new CsvContext<Operation>
-                {
-                    ClassMap = classMap,
-                    Culture = new System.Globalization.CultureInfo("nl-NL")
-                };
-
-                using (var stream = File.Create(fileName))
-                {
-                    using (var textWriter = new StreamWriter(stream))
-                    {
-                        using (var csvWriter = new CsvWriter(textWriter, new CsvConfiguration(csvContext.Culture)))
-                        {
-                            csvWriter.Context.RegisterClassMap(classMap);
-
-                            csvWriter.WriteRecords(operations);
-                        }
-                    }
-                }
-
-                await writerService.WriteRecordsAsync(operations, fileName, csvContext);
-
-                await Verifier.VerifyFile(fileName);
             }
         }
 
-        [Test]
-        public async Task WritesHeaderForEmptyRecordSetAsync()
-        {
-            var writerService = new CsvWriterService();
+        await writerService.WriteRecordsAsync(operations, fileName, csvContext);
 
-            var operations = new List<Operation>();
+        await Verifier.VerifyFile(fileName);
+    }
 
-            using (var temporaryFileContext = new TemporaryFilesContext($"{nameof(CsvWriterServiceFacts)}_{nameof(WritesHeaderForEmptyRecordSetAsync)}"))
-            {
-                var fileName = temporaryFileContext.GetFile("operations.csv");
+    [Test]
+    public async Task WritesHeaderForEmptyRecordSetAsync()
+    {
+        var writerService = new CsvWriterService();
 
-                var csvContext = new CsvContext<Operation>();
+        var operations = new List<Operation>();
 
-                await writerService.WriteRecordsAsync(operations, fileName, csvContext);
+        using var temporaryFileContext = new TemporaryFilesContext($"{nameof(CsvWriterServiceFacts)}_{nameof(WritesHeaderForEmptyRecordSetAsync)}");
+        var fileName = temporaryFileContext.GetFile("operations.csv");
 
-                await Verifier.VerifyFile(fileName);
-            }
-        }
+        var csvContext = new CsvContext<Operation>();
+
+        await writerService.WriteRecordsAsync(operations, fileName, csvContext);
+
+        await Verifier.VerifyFile(fileName);
     }
 }

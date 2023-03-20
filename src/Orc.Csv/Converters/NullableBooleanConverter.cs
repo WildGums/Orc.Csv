@@ -1,93 +1,82 @@
-﻿namespace Orc.Csv
+﻿namespace Orc.Csv;
+
+using System.Collections.Generic;
+using System.Linq;
+using Catel;
+using CsvHelper;
+
+public class NullableBooleanConverter : NullableTypeConverterBase<bool?>
 {
-    using System.Collections.Generic;
-    using Catel;
-    using CsvHelper;
+    private readonly List<string> _trueValuesList = new();
+    private readonly List<string> _falseValuesList = new();
 
-    public class NullableBooleanConverter : NullableTypeConverterBase<bool?>
+    private string[]? _trueValues;
+    private string[]? _falseValues;
+
+    public NullableBooleanConverter()
     {
-        private readonly List<string> _trueValuesList = new List<string>();
-        private string[]? _trueValues;
+        _trueValuesList.AddRange(new[] { "yes", "1", "on", "true" });
+        _falseValuesList.AddRange(new[] { "no", "0", "off", "false" });
+    }
 
-        private readonly List<string> _falseValuesList = new List<string>();
-        private string[]? _falseValues;
-
-        public NullableBooleanConverter()
+    public NullableBooleanConverter(string[]? trueValues, string[]? falseValues)
+        : this()
+    {
+        if (trueValues is not null)
         {
-            _trueValuesList.AddRange(new [] { "yes", "1", "on", "true" });
-            _falseValuesList.AddRange(new[] { "no", "0", "off", "false" });
+            // Replace the list
+            _trueValuesList.Clear();
+            _trueValuesList.AddRange(trueValues);
         }
 
-        public NullableBooleanConverter(string[]? trueValues, string[]? falseValues)
-            : this()
+        if (falseValues is not null)
         {
-            if (trueValues is not null)
-            {
-                // Replace the list
-                _trueValuesList.Clear();
-                _trueValuesList.AddRange(trueValues);
-            }
+            // Replace the list
+            _falseValuesList.Clear();
+            _falseValuesList.AddRange(falseValues);
+        }
+    }
 
-            if (falseValues is not null)
-            {
-                // Replace the list
-                _falseValuesList.Clear();
-                _falseValuesList.AddRange(falseValues);
-            }
+    public NullableBooleanConverter AddTrueValues(params string[] values)
+    {
+        if (values.Any())
+        {
+            _trueValuesList.AddRange(values);
+            _trueValues = null;
         }
 
-        public NullableBooleanConverter AddTrueValues(params string[] values)
-        {
-            if (values is not null)
-            {
-                _trueValuesList.AddRange(values);
-                _trueValues = null;
-            }
+        return this;
+    }
 
-            return this;
+    public NullableBooleanConverter AddFalseValues(params string[] values)
+    {
+        if (values.Any())
+        {
+            _falseValuesList.AddRange(values);
+            _falseValues = null;
         }
 
-        public NullableBooleanConverter AddFalseValues(params string[] values)
-        {
-            if (values is not null)
-            {
-                _falseValuesList.AddRange(values);
-                _falseValues = null;
-            }
+        return this;
+    }
 
-            return this;
+    protected override bool? ConvertStringToActualType(IReaderRow? row, string text)
+    {
+        if (string.IsNullOrEmpty(text))
+        {
+            return null;
         }
 
-        protected override bool? ConvertStringToActualType(IReaderRow row, string text)
+        text = text.Trim();
+
+        _trueValues ??= _trueValuesList.ToArray();
+
+        if (text.EqualsAnyIgnoreCase(_trueValues))
         {
-            if (string.IsNullOrEmpty(text))
-            {
-                return null;
-            }
-
-            text = text.Trim();
-
-            if (_trueValues is null)
-            {
-                _trueValues = _trueValuesList.ToArray();
-            }
-
-            if (text.EqualsAnyIgnoreCase(_trueValues))
-            {
-                return true;
-            }
-
-            if (_falseValues is null)
-            {
-                _falseValues = _falseValuesList.ToArray();
-            }
-
-            if (text.EqualsAnyIgnoreCase(_falseValues))
-            {
-                return false;
-            }
-
-            return false;
+            return true;
         }
+
+        _falseValues ??= _falseValuesList.ToArray();
+
+        return false;
     }
 }

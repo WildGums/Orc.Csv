@@ -1,38 +1,35 @@
-﻿namespace Orc.Csv.Tests.CsvMaps
+﻿namespace Orc.Csv.Tests.CsvMaps;
+
+using System.Collections.Generic;
+using Catel.Reflection;
+using Converters;
+using Entities;
+using global::CsvHelper.Configuration;
+
+public class OperationMap : ClassMap<Operation>
 {
-    using System.Collections.Generic;
-    using Catel.Reflection;
-    using Converters;
-    using Entities;
-    using global::CsvHelper.Configuration;
-
-    public class OperationMap : ClassMap<Operation>
+    public OperationMap()
     {
-        #region Constructors
-        public OperationMap()
+        Map(x => x.Id).Name("Id");
+        Map(x => x.Name).Name("Name");
+        Map(x => x.StartTime).Name("StartTime");
+        Map(x => x.Duration).Name("Duration");
+        Map(x => x.Quantity).Name("Quantity");
+        Map(x => x.Enabled).Name("Enabled");
+    }
+
+    public void Initialize(IEnumerable<string> customAttributes)
+    {
+        var classType = typeof(Operation);
+
+        var customAttributesPropertyInfo = classType.GetPropertyEx("Attributes");
+        foreach (var customAttribute in customAttributes)
         {
-            Map(x => x.Id).Name("Id");
-            Map(x => x.Name).Name("Name");
-            Map(x => x.StartTime).Name("StartTime");
-            Map(x => x.Duration).Name("Duration");
-            Map(x => x.Quantity).Name("Quantity");
-            Map(x => x.Enabled).Name("Enabled");
-        }
-        #endregion
+            var csvPropertyMap = MemberMap.CreateGeneric(classType, customAttributesPropertyInfo);
+            csvPropertyMap.Name(customAttribute).TypeConverter(new CustomAttributesTypeConverter(customAttribute));
+            csvPropertyMap.Data.Index = GetMaxIndex() + 1;
 
-        public void Initialize(IEnumerable<string> customAttributes)
-        {
-            var classType = typeof(Operation);
-
-            var customAttributesPropertyInfo = classType.GetPropertyEx("Attributes");
-            foreach (var customAttribute in customAttributes)
-            {
-                var csvPropertyMap = MemberMap.CreateGeneric(classType, customAttributesPropertyInfo);
-                csvPropertyMap.Name(customAttribute).TypeConverter(new CustomAttributesTypeConverter(customAttribute));
-                csvPropertyMap.Data.Index = GetMaxIndex() + 1;
-
-                MemberMaps.Add(csvPropertyMap);
-            }
+            MemberMaps.Add(csvPropertyMap);
         }
     }
 }
