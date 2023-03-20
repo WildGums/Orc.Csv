@@ -1,7 +1,6 @@
-﻿namespace Orc.Csv.Tests.Entities
+﻿namespace Orc.Csv.Tests.Entities;
+
+public class CustomAttribute
 {
-    public class CustomAttribute
-    {
-        public string Value { get; set; }
-    }
+    public string Value { get; set; }
 }

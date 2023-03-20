@@ -1,8 +1,7 @@
-﻿namespace Orc.Csv
-{
-    using CsvHelper.Configuration;
+﻿namespace Orc.Csv;
 
-    public abstract class ClassMapBase<TRecord> : ClassMap<TRecord>
-    {
-    }
+using CsvHelper.Configuration;
+
+public abstract class ClassMapBase<TRecord> : ClassMap<TRecord>
+{
 }

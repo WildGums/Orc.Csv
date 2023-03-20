@@ -1,48 +1,47 @@
-﻿namespace Orc.Csv.Tests
+﻿namespace Orc.Csv.Tests;
+
+using System.Globalization;
+using System.IO;
+using Csv;
+using FileSystem;
+using global::CsvHelper.Configuration;
+using NUnit.Framework;
+
+[TestFixture]
+public class BugsTest
 {
-    using System.Globalization;
-    using System.IO;
-    using Csv;
-    using FileSystem;
-    using global::CsvHelper.Configuration;
-    using NUnit.Framework;
+    private static readonly string TestInputFolder = Path.Combine(AssemblyDirectoryHelper.GetCurrentDirectory(), @"TestData\");
 
-    [TestFixture]
-    public class BugsTest
+    [Test]
+    public void GetFieldByColumnName_NoExceptionsShouldBeThrown()
     {
-        private static readonly string TestInputFolder = Path.Combine(AssemblyDirectoryHelper.GetCurrentDirectory(), @"TestData\");
+        // Arrange
+        var csvFilePath = $"{TestInputFolder}{"Operation.csv"}";
 
-        [Test]
-        public void GetFieldByColumnName_NoExceptionsShouldBeThrown()
+        var csvReaderService = new CsvReaderService();
+        var configuration = new global::CsvHelper.Configuration.CsvConfiguration(new CultureInfo("en-AU"))
         {
-            // Arrange
-            var csvFilePath = $"{TestInputFolder}{"Operation.csv"}";
+            Delimiter = ",",
+            MissingFieldFound = null,
+            IgnoreBlankLines = true,
+            HasHeaderRecord = true,
+            TrimOptions = TrimOptions.Trim
+        };
 
-            var csvReaderService = new CsvReaderService();
-            var configuration = new global::CsvHelper.Configuration.CsvConfiguration(new CultureInfo("en-AU"))
+        var csvContext = new CsvContext<object>
+        {
+            Configuration = configuration
+        };
+
+        using (var csvReader = csvReaderService.CreateReader(csvFilePath, csvContext))
+        {
+            csvReader.Read();
+            csvReader.ReadHeader();
+
+            while (csvReader.Read())
             {
-                Delimiter = ",",
-                MissingFieldFound = null,
-                IgnoreBlankLines = true,
-                HasHeaderRecord = true,
-                TrimOptions = TrimOptions.Trim
-            };
-
-            var csvContext = new CsvContext<object>
-            {
-                Configuration = configuration
-            };
-
-            using (var csvReader = csvReaderService.CreateReader(csvFilePath, csvContext))
-            {
-                csvReader.Read();
-                csvReader.ReadHeader();
-
-                while (csvReader.Read())
-                {
-                    var id = csvReader.GetField("Id");
-                    var name = csvReader.GetField("Name");
-                }
+                var id = csvReader.GetField("Id");
+                var name = csvReader.GetField("Name");
             }
         }
     }

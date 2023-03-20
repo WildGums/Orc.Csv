@@ -1,19 +1,18 @@
-﻿namespace Orc.Csv
+﻿namespace Orc.Csv;
+
+using System.Collections;
+using System.IO;
+using System.Threading.Tasks;
+using CsvHelper;
+using CsvHelper.Configuration;
+
+public interface ICsvWriterService
 {
-    using System.Collections;
-    using System.IO;
-    using System.Threading.Tasks;
-    using CsvHelper;
-    using CsvHelper.Configuration;
+    void WriteRecords(IEnumerable records, StreamWriter streamWriter, ICsvContext csvContext);
 
-    public interface ICsvWriterService
-    {
-        void WriteRecords(IEnumerable records, StreamWriter streamWriter, ICsvContext csvContext);
+    Task WriteRecordsAsync(IEnumerable records, StreamWriter streamWriter, ICsvContext csvContext);
 
-        Task WriteRecordsAsync(IEnumerable records, StreamWriter streamWriter, ICsvContext csvContext);
+    CsvWriter CreateWriter(StreamWriter streamWriter, ICsvContext csvContext);
 
-        CsvWriter CreateWriter(StreamWriter streamWriter, ICsvContext csvContext);
-
-        CsvConfiguration CreateDefaultConfiguration(ICsvContext csvContext);
-    }
+    CsvConfiguration CreateDefaultConfiguration(ICsvContext csvContext);
 }

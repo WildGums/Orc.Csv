@@ -1,39 +1,31 @@
-﻿namespace Orc.Csv.Tests.Converters
+﻿namespace Orc.Csv.Tests.Converters;
+
+using System.Collections.Generic;
+using CsvHelper;
+using CsvHelper.Configuration;
+
+public class CustomAttributesTypeConverter : TypeConverterBase
 {
-    using System.Collections.Generic;
-    using CsvHelper;
-    using CsvHelper.Configuration;
+    private readonly string _customAttribute;
 
-    public class CustomAttributesTypeConverter : TypeConverterBase
+    public CustomAttributesTypeConverter(string customAttribute)
     {
-        #region Fields
-        private readonly string _customAttribute;
-        #endregion
+        _customAttribute = customAttribute;
+    }
 
-        #region Constructors
-        public CustomAttributesTypeConverter(string customAttribute)
+    public override string ConvertToString(object value, IWriterRow row, MemberMapData memberMapData)
+    {
+        if (value is not Dictionary<string, string> dictionary)
         {
-            _customAttribute = customAttribute;
-        }
-        #endregion
-
-        #region Methods
-        public override string ConvertToString(object value, IWriterRow row, MemberMapData memberMapData)
-        {
-            var dictionary = value as Dictionary<string, string>;
-            if (dictionary is null)
-            {
-                return string.Empty;
-            }
-
-            var result = dictionary[_customAttribute];
-            return result ?? string.Empty;
+            return string.Empty;
         }
 
-        public override object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData)
-        {
-            throw new System.NotImplementedException();
-        }
-        #endregion
+        var result = dictionary[_customAttribute];
+        return result ?? string.Empty;
+    }
+
+    public override object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData)
+    {
+        throw new System.NotImplementedException();
     }
 }
