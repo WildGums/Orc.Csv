@@ -1,0 +1,5 @@
+FilePath,FieldName,Type
+C:\Source\Rantt\data\Finoflex_mapped_timeline\CalendarPeriods.csv,Efficiency,Int32
+C:\Source\Rantt\data\Finoflex_mapped_timeline\CalendarPeriods.csv,EndTime,DateTime?
+C:\Source\Rantt\data\Finoflex_mapped_timeline\CalendarPeriods.csv,Resource,String
+C:\Source\Rantt\data\Finoflex_mapped_timeline\CalendarPeriods.csv,StartTime,DateTime?
