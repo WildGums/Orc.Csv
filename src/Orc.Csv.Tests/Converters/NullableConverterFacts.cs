@@ -16,6 +16,6 @@ public class NullableConverterFacts
 
         var actualOutput = stringConverter.ConvertFromString(input, null, null);
 
-        Assert.AreEqual(expectedOutput, actualOutput);
+        Assert.That(actualOutput, Is.EqualTo(expectedOutput));
     }
 }

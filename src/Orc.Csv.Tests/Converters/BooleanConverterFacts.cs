@@ -31,7 +31,7 @@ public class StringToBooleanConverterFacts
         var converter = new BooleanConverter();
         var result = converter.ConvertFromString(input, rowReaderMoq, null);
 
-        Assert.AreEqual(expected, result);
+        Assert.That(result, Is.EqualTo(expected));
     }
 
     [TestCase("ja", true)]
@@ -44,6 +44,6 @@ public class StringToBooleanConverterFacts
         var converter = new BooleanConverter().AddTrueValues("JA", "YUP");
         var result = converter.ConvertFromString(input, rowReaderMoq, null);
 
-        Assert.AreEqual(expected, result);
+        Assert.That(result, Is.EqualTo(expected));
     }
 }

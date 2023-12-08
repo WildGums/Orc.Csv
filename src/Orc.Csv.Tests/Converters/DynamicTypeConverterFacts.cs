@@ -22,10 +22,10 @@ public class DynamicTypeConverterFacts
             (o, _, _) => ((DynamicTypeConverterClass)o).Value);
 
         var result = dynamicTypeConverter.ConvertFromString("Any string", moq.ReaderRow, moq.MemberData);
-        Assert.AreEqual(expectedDynamicTypeConverterClassInstance, result);
+        Assert.That(result, Is.EqualTo(expectedDynamicTypeConverterClassInstance));
 
         var convertBackResult = dynamicTypeConverter.ConvertToString(expectedDynamicTypeConverterClassInstance, moq.WriterRow, moq.MemberData);
-        Assert.AreEqual(ExpectedString, convertBackResult);
+        Assert.That(convertBackResult, Is.EqualTo(ExpectedString));
     }
 
     [Test]
@@ -40,7 +40,7 @@ public class DynamicTypeConverterFacts
             defaultValue);
 
         var result = (DynamicTypeConverterClass) dynamicTypeConverter.ConvertFromString(null, moq.ReaderRow, moq.MemberData);
-        Assert.AreEqual(defaultValue, result.Value);
+        Assert.That(result.Value, Is.EqualTo(defaultValue));
     }
 
     [Test]
@@ -55,7 +55,7 @@ public class DynamicTypeConverterFacts
             defaultValue);
 
         var result = dynamicTypeConverter.ConvertToString(null, moq.WriterRow, moq.MemberData);
-        Assert.AreEqual(defaultValue, result);
+        Assert.That(result, Is.EqualTo(defaultValue));
     }
 
     public class DynamicTypeConverterClass
