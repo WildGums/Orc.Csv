@@ -1,28 +1,18 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ICsvWriterService.cs" company="WildGums">
-//   Copyright (c) 2008 - 2017 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿namespace Orc.Csv;
 
+using System.Collections;
+using System.IO;
+using System.Threading.Tasks;
+using CsvHelper;
+using CsvHelper.Configuration;
 
-namespace Orc.Csv
+public interface ICsvWriterService
 {
-    using System;
-    using System.Collections;
-    using System.Globalization;
-    using System.IO;
-    using System.Threading.Tasks;
-    using CsvHelper;
-    using CsvHelper.Configuration;
+    void WriteRecords(IEnumerable records, StreamWriter streamWriter, ICsvContext csvContext);
 
-    public interface ICsvWriterService
-    {
-        void WriteRecords(IEnumerable records, StreamWriter streamWriter, ICsvContext csvContext);
+    Task WriteRecordsAsync(IEnumerable records, StreamWriter streamWriter, ICsvContext csvContext);
 
-        Task WriteRecordsAsync(IEnumerable records, StreamWriter streamWriter, ICsvContext csvContext);
+    CsvWriter CreateWriter(StreamWriter streamWriter, ICsvContext csvContext);
 
-        CsvWriter CreateWriter(StreamWriter streamWriter, ICsvContext csvContext);
-
-        CsvConfiguration CreateDefaultConfiguration(ICsvContext csvContext);
-    }
+    CsvConfiguration CreateDefaultConfiguration(ICsvContext csvContext);
 }

@@ -1,29 +1,29 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ClassMapExtensions.cs" company="WildGums">
-//   Copyright (c) 2008 - 2018 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿namespace Orc.Csv;
 
+using Catel.Reflection;
+using CsvHelper.Configuration;
+using System;
 
-namespace Orc.Csv
+public static class ClassMapExtensions
 {
-    using Catel.Reflection;
-    using CsvHelper.Configuration;
-    using System;
-
-    public static class ClassMapExtensions
+    public static Type GetRecordType(this ClassMap classMap)
     {
-        public static Type GetRecordType(this ClassMap classMap)
-        {
-            var requiredType = typeof(ClassMap<>);
-            var type = classMap.GetType();
+        ArgumentNullException.ThrowIfNull(classMap);
 
-            while (!type.IsGenericTypeEx() || type.GetGenericTypeDefinitionEx() != requiredType)
+        var requiredType = typeof(ClassMap<>);
+        var type = classMap.GetType();
+
+        while (!type.IsGenericTypeEx() || type.GetGenericTypeDefinitionEx() != requiredType)
+        {
+            var subType = type.GetBaseTypeEx();
+            if (subType is null)
             {
-                type = type.BaseType;
+                break;
             }
 
-            return type.GetGenericArgumentsEx()[0];
+            type = subType;
         }
+
+        return type.GetGenericArgumentsEx()[0];
     }
 }

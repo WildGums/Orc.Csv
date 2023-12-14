@@ -1,48 +1,49 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StringToBooleanConverterFacts.cs" company="WildGums">
-//   Copyright (c) 2008 - 2018 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿namespace Orc.Csv.Tests.Converters;
 
+using Csv;
+using CsvHelper;
+using Moq;
+using NUnit.Framework;
 
-namespace Orc.Csv.Tests.Converters
+[TestFixture]
+public class StringToBooleanConverterFacts
 {
-    using Catel.Fody;
-    using Csv;
-    using NUnit.Framework;
-
-    [TestFixture]
-    public class StringToBooleanConverterFacts
+    [TestCase("true", true)]
+    [TestCase("TRUE", true)]
+    [TestCase("on", true)]
+    [TestCase("ON", true)]
+    [TestCase("yes", true)]
+    [TestCase("YES", true)]
+    [TestCase("1", true)]
+    [TestCase("false", false)]
+    [TestCase("FALSE", false)]
+    [TestCase("off", false)]
+    [TestCase("OFF", false)]
+    [TestCase("no", false)]
+    [TestCase("NO", false)]
+    [TestCase("0", false)]
+    [TestCase("gibberish", false)]
+    [TestCase(" TRUE   ", true)]
+    public void CorrectlyConvertsValue(string input, bool expected)
     {
-        [TestCase("true", true)]
-        [TestCase("TRUE", true)]
-        [TestCase("on", true)]
-        [TestCase("ON", true)]
-        [TestCase("yes", true)]
-        [TestCase("YES", true)]
-        [TestCase("1", true)]
-        [TestCase("false", false)]
-        [TestCase("FALSE", false)]
-        [TestCase("off", false)]
-        [TestCase("OFF", false)]
-        [TestCase("no", false)]
-        [TestCase("NO", false)]
-        [TestCase("0", false)]
-        [TestCase("gibberish", false)]
-        [TestCase(" TRUE   ", true)]
-        public void CorrectlyConvertsValue(string input, bool expected)
-        {
-            var converter = new BooleanConverter();
-            converter.ConvertFromString(input, null, null);
-        }
+        var rowReaderMoq = new Mock<IReaderRow>().Object;
 
-        [TestCase("ja", true)]
-        [TestCase("yup", true)]
-        public void CorrectlyConvertsCustomValue(string input, bool expected)
-        {
-            var converter = new BooleanConverter().AddTrueValues("JA", "YUP");
+        var converter = new BooleanConverter();
+        var result = converter.ConvertFromString(input, rowReaderMoq, null);
 
-            converter.ConvertFromString(input, null, null);
-        }
+        Assert.That(result, Is.EqualTo(expected));
+    }
+
+    [TestCase("ja", true)]
+    [TestCase("yup", true)]
+    [TestCase("ups", false)]
+    public void CorrectlyConvertsCustomValue(string input, bool expected)
+    {
+        var rowReaderMoq = new Mock<IReaderRow>().Object;
+
+        var converter = new BooleanConverter().AddTrueValues("JA", "YUP");
+        var result = converter.ConvertFromString(input, rowReaderMoq, null);
+
+        Assert.That(result, Is.EqualTo(expected));
     }
 }

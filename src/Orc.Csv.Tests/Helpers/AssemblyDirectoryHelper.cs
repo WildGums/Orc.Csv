@@ -1,28 +1,18 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AssemblyDirectoryHelper.cs" company="WildGums">
-//   Copyright (c) 2008 - 2017 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿namespace Orc.Csv.Tests;
 
+using System;
+using System.IO;
 
-namespace Orc.Csv.Tests
+internal static class AssemblyDirectoryHelper
 {
-    using System;
-    using Catel.IO;
-
-    internal static class AssemblyDirectoryHelper
+    public static string GetCurrentDirectory()
     {
-        #region Methods
-        public static string GetCurrentDirectory()
-        {
-            var directory = AppDomain.CurrentDomain.BaseDirectory;
-            return directory;
-        }
+        var directory = AppDomain.CurrentDomain.BaseDirectory;
+        return directory;
+    }
 
-        public static string Resolve(string fileName)
-        {
-            return Path.Combine(GetCurrentDirectory(), fileName);
-        }
-        #endregion
+    public static string Resolve(string fileName)
+    {
+        return Path.Combine(GetCurrentDirectory(), fileName);
     }
 }

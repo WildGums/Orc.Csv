@@ -1,22 +1,21 @@
-﻿namespace Orc.Csv.Tests.Converters
+﻿namespace Orc.Csv.Tests.Converters;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class NullableConverterFacts
 {
-    using NUnit.Framework;
-
-    [TestFixture]
-    public class NullableConverterFacts
+    [TestCase("NULL", "NULL", false)]
+    [TestCase("NULL", null, true)]
+    public void SupportsNullableText(string input, string expectedOutput, bool supportNullText)
     {
-        [TestCase("NULL", "NULL", false)]
-        [TestCase("NULL", null, true)]
-        public void SupportsNullableText(string input, string expectedOutput, bool supportNullText)
+        var stringConverter = new NullableStringConverter
         {
-            var stringConverter = new NullableStringConverter
-            {
-                SupportNullText = supportNullText
-            };
+            SupportNullText = supportNullText
+        };
 
-            var actualOuput = stringConverter.ConvertFromString(input, null, null);
+        var actualOutput = stringConverter.ConvertFromString(input, null, null);
 
-            Assert.AreEqual(expectedOutput, actualOuput);
-        }
+        Assert.That(actualOutput, Is.EqualTo(expectedOutput));
     }
 }
