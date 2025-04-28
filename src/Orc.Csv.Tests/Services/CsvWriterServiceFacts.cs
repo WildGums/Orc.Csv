@@ -60,6 +60,8 @@ public class CsvWriterServiceFacts
             Culture = new System.Globalization.CultureInfo("nl-NL")
         };
 
+        csvContext.Culture.DateTimeFormat.ShortDatePattern = "dd-MM-yyyy";
+
         await using (var stream = File.Create(fileName))
         {
             await using (var textWriter = new StreamWriter(stream))
