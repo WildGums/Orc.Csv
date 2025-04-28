@@ -88,7 +88,7 @@ public abstract class CsvServiceBase
 
     private void HandleBadDataFound(BadDataFoundArgs args, CsvConfiguration configuration)
     {
-        Log.Warning($"Found bad data, row '{args.Context.Parser.Row}', char position '{args.Context.Parser.CharCount}', field '{args.Field}'");
+        Log.Warning($"Found bad data, row '{args.Context.Parser?.Row ?? 0}', char position '{args.Context.Parser?.CharCount ?? 0}', field '{args.Field}'");
 
         var handler = configuration.BadDataFound;
         handler?.Invoke(args);
@@ -112,13 +112,19 @@ public abstract class CsvServiceBase
         var context = args.Context;
         var fields = args.HeaderNames;
 
+        var reader = context.Reader;
+        if (reader is null)
+        {
+            return;
+        }
+
         // Don't log when fields are null, special case for which we don't want to pollute the logs
         if (fields is not null)
         {
             var ignoreWarning = true;
 
             // This could be a *mapped* field that is not part of the file (thus should not have a header record entry either)
-            var headerRecord = context.Reader.HeaderRecord;
+            var headerRecord = reader.HeaderRecord;
             if (headerRecord is not null)
             {
                 foreach (var field in fields)
@@ -127,7 +133,7 @@ public abstract class CsvServiceBase
                     {
                         ignoreWarning = false;
                     }
-                    else if (context.Parser.Row <= 2)
+                    else if ((context.Parser?.Row ?? 0) <= 2)
                     {
                         var classMap = csvContext.ClassMap?.GetType().Name ?? "no-class-map";
 
@@ -138,7 +144,8 @@ public abstract class CsvServiceBase
 
             if (!ignoreWarning)
             {
-                Log.Warning("Found '{0}' missing fields at row '{1}', char position '{1}': '{2}'", fields.Length, context.Parser.Row, context.Parser.CharCount, string.Join(",", fields));
+                Log.Warning("Found '{0}' missing fields at row '{1}', char position '{1}': '{2}'", 
+                    fields.Length, context.Parser?.Row, context.Parser?.CharCount, string.Join(",", fields));
             }
         }
 
@@ -149,7 +156,7 @@ public abstract class CsvServiceBase
     private bool HandleReadingException(ReadingExceptionOccurredArgs args, CsvConfiguration configuration)
     {
         var ex = args.Exception;
-        var readingContext = ex.Context.Reader;
+        var readingContext = ex.Context?.Reader;
 
         // We always read from a csv file so we know we have a file stream
         var fileName = string.Empty;
@@ -169,9 +176,9 @@ public abstract class CsvServiceBase
 
         if (readingContext is not null)
         {
-            messageBuilder.Append($", row '{ex.Context.Parser.Row}'");
+            messageBuilder.Append($", row '{ex.Context?.Parser?.Row}'");
 
-            var columnName = ex.Context.Reader.HeaderRecord?[ex.Context.Reader.CurrentIndex] ?? "unknown";
+            var columnName = ex.Context?.Reader?.HeaderRecord?[ex.Context.Reader.CurrentIndex] ?? "unknown";
 
             if (ex is TypeConverterException typeConverterException)
             {
@@ -191,7 +198,7 @@ public abstract class CsvServiceBase
             messageBuilder.Append($", column '{columnName}'");
         }
 
-        var writingContext = ex.Context.Writer;
+        var writingContext = ex.Context?.Writer;
         if (writingContext is not null)
         {
             messageBuilder.Append($", row '{writingContext.Row}'");
