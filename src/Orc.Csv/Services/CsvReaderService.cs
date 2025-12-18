@@ -52,7 +52,7 @@ public class CsvReaderService : CsvServiceBase, ICsvReaderService
         try
         {
             var configuration = csvReader.Configuration;
-            if (configuration.HasHeaderRecord && csvReader.Context.Reader.HeaderRecord is null)
+            if (configuration.HasHeaderRecord && csvReader.Context.Reader?.HeaderRecord is null)
             {
                 Log.DebugIfAttached("Reading header");
 
@@ -95,7 +95,7 @@ public class CsvReaderService : CsvServiceBase, ICsvReaderService
         try
         {
             var configuration = csvReader.Configuration;
-            if (configuration.HasHeaderRecord && csvReader.Context.Reader.HeaderRecord is null)
+            if (configuration.HasHeaderRecord && csvReader.Context.Reader?.HeaderRecord is null)
             {
                 Log.DebugIfAttached("Reading header");
 
@@ -134,7 +134,7 @@ public class CsvReaderService : CsvServiceBase, ICsvReaderService
         var record = ReadRecord(csvReader, recordType, csvContext);
         if (record is null)
         {
-            Log.DebugIfAttached($"Read record results in null at row '{csvReader.Context.Parser.Row}', raw row content: '{csvReader.Context.Parser.RawRecord}'");
+            Log.DebugIfAttached($"Read record results in null at row '{csvReader.Context.Parser?.Row}', raw row content: '{csvReader.Context.Parser?.RawRecord}'");
 
             return;
         }
