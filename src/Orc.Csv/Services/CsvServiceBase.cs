@@ -3,22 +3,18 @@
 using System.IO;
 using System.Linq;
 using System.Text;
-using Catel.Logging;
 using CsvHelper;
 using CsvHelper.Configuration;
 using CsvHelper.TypeConversion;
+using Microsoft.Extensions.Logging;
 
 public abstract class CsvServiceBase
 {
-    // Non-static so we can get derived type, services will not have many instances
-    // anyway
-#pragma warning disable IDE1006 // Naming Styles
-    private readonly ILog Log;
-#pragma warning restore IDE1006 // Naming Styles
+    private readonly ILogger _logger;
 
-    protected CsvServiceBase()
+    protected CsvServiceBase(ILogger logger)
     {
-        Log = LogManager.GetLogger(GetType());
+        _logger = logger;
     }
 
     public virtual CsvConfiguration CreateDefaultConfiguration(ICsvContext csvContext)
@@ -88,7 +84,7 @@ public abstract class CsvServiceBase
 
     private void HandleBadDataFound(BadDataFoundArgs args, CsvConfiguration configuration)
     {
-        Log.Warning($"Found bad data, row '{args.Context.Parser?.Row ?? 0}', char position '{args.Context.Parser?.CharCount ?? 0}', field '{args.Field}'");
+        _logger.LogWarning($"Found bad data, row '{args.Context.Parser?.Row ?? 0}', char position '{args.Context.Parser?.CharCount ?? 0}', field '{args.Field}'");
 
         var handler = configuration.BadDataFound;
         handler?.Invoke(args);
@@ -100,7 +96,7 @@ public abstract class CsvServiceBase
         {
             var headerNames = string.Join(", ", invalidHeader.Names);
 
-            Log.Warning($"Header matching '{headerNames}' names at index '{invalidHeader.Index}' was not found");
+            _logger.LogWarning($"Header matching '{headerNames}' names at index '{invalidHeader.Index}' was not found");
         }
 
         var handler = configuration.HeaderValidated;
@@ -137,14 +133,14 @@ public abstract class CsvServiceBase
                     {
                         var classMap = csvContext.ClassMap?.GetType().Name ?? "no-class-map";
 
-                        Log.DebugIfAttached($"Found field '{field}' defined in class map '{classMap}', but it's not defined in the actual file");
+                        _logger.LogDebugIfAttached($"Found field '{field}' defined in class map '{classMap}', but it's not defined in the actual file");
                     }
                 }
             }
 
             if (!ignoreWarning)
             {
-                Log.Warning("Found '{0}' missing fields at row '{1}', char position '{1}': '{2}'", 
+                _logger.LogWarning("Found '{0}' missing fields at row '{1}', char position '{1}': '{2}'", 
                     fields.Length, context.Parser?.Row, context.Parser?.CharCount, string.Join(",", fields));
             }
         }
@@ -207,7 +203,7 @@ public abstract class CsvServiceBase
         messageBuilder.Append($", message: '{ex.Message}'");
 
         var message = messageBuilder.ToString();
-        Log.Warning(message);
+        _logger.LogWarning(message);
 
         var handler = configuration.ReadingExceptionOccurred;
         handler?.Invoke(args);

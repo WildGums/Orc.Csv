@@ -1,22 +1,22 @@
 ﻿namespace Orc.Csv;
 
 using System.Diagnostics;
-using Catel.Logging;
+using Microsoft.Extensions.Logging;
 
-internal static class ILogExtensions
+internal static class ILoggerExtensions
 {
     private static readonly bool IsDebuggerAttached;
 
-    static ILogExtensions()
+    static ILoggerExtensions()
     {
         IsDebuggerAttached = Debugger.IsAttached;
     }
 
-    public static void DebugIfAttached(this ILog log, string message)
+    public static void LogDebugIfAttached(this ILogger logger, string message)
     {
         if (IsDebuggerAttached)
         {
-            log.Debug(message);
+            logger.LogDebug(message);
         }
     }
 }

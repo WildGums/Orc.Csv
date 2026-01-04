@@ -8,10 +8,17 @@ using System.Threading.Tasks;
 using Catel;
 using Catel.Logging;
 using CsvHelper;
+using Microsoft.Extensions.Logging;
 
 public class CsvReaderService : CsvServiceBase, ICsvReaderService
 {
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+    private readonly ILogger<CsvReaderService> _logger;
+
+    public CsvReaderService(ILogger<CsvReaderService> logger)
+        : base(logger)
+    {
+        _logger = logger;
+    }
 
     public virtual IEnumerable ReadRecords(StreamReader streamReader, ICsvContext csvContext)
     {
@@ -54,14 +61,14 @@ public class CsvReaderService : CsvServiceBase, ICsvReaderService
             var configuration = csvReader.Configuration;
             if (configuration.HasHeaderRecord && csvReader.Context.Reader?.HeaderRecord is null)
             {
-                Log.DebugIfAttached("Reading header");
+                _logger.LogDebugIfAttached("Reading header");
 
                 // Yes, we need a double read
                 csvReader.Read();
                 csvReader.ReadHeader();
             }
 
-            Log.DebugIfAttached("Reading records");
+            _logger.LogDebugIfAttached("Reading records");
 
             while (csvReader.Read())
             {
@@ -75,7 +82,7 @@ public class CsvReaderService : CsvServiceBase, ICsvReaderService
                 return Array.Empty<object>();
             }
 
-            Log.Warning(ex, "Failed to read data");
+            _logger.LogWarning(ex, "Failed to read data");
 
             if (csvContext.ThrowOnError)
             {
@@ -97,14 +104,14 @@ public class CsvReaderService : CsvServiceBase, ICsvReaderService
             var configuration = csvReader.Configuration;
             if (configuration.HasHeaderRecord && csvReader.Context.Reader?.HeaderRecord is null)
             {
-                Log.DebugIfAttached("Reading header");
+                _logger.LogDebugIfAttached("Reading header");
 
                 // Yes, we need a double read
                 await csvReader.ReadAsync();
                 csvReader.ReadHeader();
             }
 
-            Log.DebugIfAttached("Reading records");
+            _logger.LogDebugIfAttached("Reading records");
 
             while (await csvReader.ReadAsync())
             {
@@ -118,7 +125,7 @@ public class CsvReaderService : CsvServiceBase, ICsvReaderService
                 return Array.Empty<object>();
             }
 
-            Log.Warning(ex, "Failed to read data");
+            _logger.LogWarning(ex, "Failed to read data");
 
             if (csvContext.ThrowOnError)
             {
@@ -134,7 +141,7 @@ public class CsvReaderService : CsvServiceBase, ICsvReaderService
         var record = ReadRecord(csvReader, recordType, csvContext);
         if (record is null)
         {
-            Log.DebugIfAttached($"Read record results in null at row '{csvReader.Context.Parser?.Row}', raw row content: '{csvReader.Context.Parser?.RawRecord}'");
+            _logger.LogDebugIfAttached($"Read record results in null at row '{csvReader.Context.Parser?.Row}', raw row content: '{csvReader.Context.Parser?.RawRecord}'");
 
             return;
         }
@@ -152,7 +159,7 @@ public class CsvReaderService : CsvServiceBase, ICsvReaderService
         }
         catch (Exception ex)
         {
-            Log.Warning(ex, $"Failed to read record of type '{recordType}'");
+            _logger.LogWarning(ex, $"Failed to read record of type '{recordType}'");
 
             if (csvContext.ThrowOnError)
             {

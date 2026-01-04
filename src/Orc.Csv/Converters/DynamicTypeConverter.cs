@@ -5,11 +5,10 @@ using Catel.Logging;
 using CsvHelper;
 using CsvHelper.Configuration;
 using CsvHelper.TypeConversion;
+using Microsoft.Extensions.Logging;
 
 public class DynamicTypeConverter<T> : ITypeConverter
 {
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
     private readonly Func<string?, IReaderRow, MemberMapData, T?> _convertFromString;
     private readonly Func<object?, IWriterRow, MemberMapData, string?> _convertToString;
     private readonly string? _defaultValue;
