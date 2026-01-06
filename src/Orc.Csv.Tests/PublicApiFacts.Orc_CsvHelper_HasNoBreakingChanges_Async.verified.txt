@@ -234,10 +234,6 @@ namespace Orc.Csv
         public NullableUShortConverter() { }
         protected override ushort? ConvertStringToActualType(CsvHelper.IReaderRow row, string text) { }
     }
-    public static class OrcCsvModule
-    {
-        public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddOrcCsv(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection) { }
-    }
     public static class StringExtensions
     {
         public static string ToCamelCase(this string input) { }
@@ -249,5 +245,12 @@ namespace Orc.Csv
         public virtual string? ConvertToString(object? value, CsvHelper.IWriterRow row, CsvHelper.Configuration.MemberMapData memberMapData) { }
         protected System.Globalization.CultureInfo GetCultureInfo(CsvHelper.IReaderRow row) { }
         protected System.Globalization.CultureInfo GetCultureInfo(CsvHelper.IWriterRow row) { }
+    }
+}
+namespace Orc
+{
+    public static class OrcCsvModule
+    {
+        public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddOrcCsv(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection) { }
     }
 }
