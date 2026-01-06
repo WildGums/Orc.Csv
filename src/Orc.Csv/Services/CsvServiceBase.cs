@@ -3,6 +3,7 @@
 using System.IO;
 using System.Linq;
 using System.Text;
+using Catel.Logging;
 using CsvHelper;
 using CsvHelper.Configuration;
 using CsvHelper.TypeConversion;
