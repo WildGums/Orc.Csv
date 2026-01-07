@@ -30,6 +30,6 @@ public class EnumConverter<T> : TypeConverterBase
             return DefaultValue;
         }
 
-        return Enum<T>.TryParse(text, true, out T? result) ? result.Value : DefaultValue;
+        return Enum<T>.TryParse(text, true, out T result) ? result : DefaultValue;
     }
 }
