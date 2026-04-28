@@ -2,17 +2,17 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
-using Catel.IoC;
 using CsvHelper.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 internal static class ITypeFactoryExtensions
 {
-    public static bool TryToCreateClassMap(this ITypeFactory typeFactory, Type type, [NotNullWhen(true)]out ClassMap? classMap)
+    public static bool TryToCreateClassMap(this IServiceProvider serviceProvider, Type type, [NotNullWhen(true)]out ClassMap? classMap)
     {
-        ArgumentNullException.ThrowIfNull(typeFactory);
+        ArgumentNullException.ThrowIfNull(serviceProvider);
         ArgumentNullException.ThrowIfNull(type);
 
-        classMap = typeFactory.CreateInstanceWithParametersAndAutoCompletion(type) as ClassMap;
+        classMap = ActivatorUtilities.CreateInstance(serviceProvider, type) as ClassMap;
         return classMap is not null;
     }
 }

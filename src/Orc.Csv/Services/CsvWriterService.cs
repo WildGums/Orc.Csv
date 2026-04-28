@@ -4,12 +4,18 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Threading.Tasks;
-using Catel.Logging;
 using CsvHelper;
+using Microsoft.Extensions.Logging;
 
 public class CsvWriterService : CsvServiceBase, ICsvWriterService
 {
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+    private readonly ILogger<CsvWriterService> _logger;
+
+    public CsvWriterService(ILogger<CsvWriterService> logger)
+        : base(logger)
+    {
+        _logger = logger;
+    }
 
     public virtual void WriteRecords(IEnumerable records, StreamWriter streamWriter, ICsvContext csvContext)
     {
@@ -46,7 +52,7 @@ public class CsvWriterService : CsvServiceBase, ICsvWriterService
         {
             // Note: no need to write the header, the WriteRecords method will take care of that.
 
-            Log.Debug($"Writing records");
+            _logger.LogDebug($"Writing records");
 
             var enumerator = records.GetEnumerator();
             if (!enumerator.MoveNext() && (csvContext.Configuration?.HasHeaderRecord??true))
@@ -63,7 +69,7 @@ public class CsvWriterService : CsvServiceBase, ICsvWriterService
         }
         catch (Exception ex)
         {
-            Log.Warning(ex, "Failed to write data");
+            _logger.LogWarning(ex, "Failed to write data");
 
             if (csvContext.ThrowOnError)
             {

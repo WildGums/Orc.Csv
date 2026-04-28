@@ -8,7 +8,9 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using CsvMaps;
 using Entities;
+using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
+using Orc.FileSystem;
 using VerifyNUnit;
 
 [TestFixture]
@@ -17,7 +19,9 @@ public class CsvWriterServiceFacts
     [Test]
     public async Task WritesWithCustomAttributeConvertersAsync()
     {
-        var writerService = new CsvWriterService();
+        var fileService = new FileService(NullLogger<FileService>.Instance);
+
+        var writerService = new CsvWriterService(NullLogger<CsvWriterService>.Instance);
 
         var attributes = new List<CustomAttribute>();
 
@@ -75,7 +79,7 @@ public class CsvWriterServiceFacts
             }
         }
 
-        await writerService.WriteRecordsAsync(operations, fileName, csvContext);
+        await writerService.WriteRecordsAsync(fileService, operations, fileName, csvContext);
 
         await Verifier.VerifyFile(fileName);
     }
@@ -83,7 +87,9 @@ public class CsvWriterServiceFacts
     [Test]
     public async Task WritesHeaderForEmptyRecordSetAsync()
     {
-        var writerService = new CsvWriterService();
+        var fileService = new FileService(NullLogger<FileService>.Instance);
+
+        var writerService = new CsvWriterService(NullLogger<CsvWriterService>.Instance);
 
         var operations = new List<Operation>();
 
@@ -92,7 +98,7 @@ public class CsvWriterServiceFacts
 
         var csvContext = new CsvContext<Operation>();
 
-        await writerService.WriteRecordsAsync(operations, fileName, csvContext);
+        await writerService.WriteRecordsAsync(fileService, operations, fileName, csvContext);
 
         await Verifier.VerifyFile(fileName);
     }

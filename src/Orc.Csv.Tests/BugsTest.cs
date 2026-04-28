@@ -5,6 +5,7 @@ using System.IO;
 using Csv;
 using FileSystem;
 using global::CsvHelper.Configuration;
+using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 
 [TestFixture]
@@ -15,10 +16,12 @@ public class BugsTest
     [Test]
     public void GetFieldByColumnName_NoExceptionsShouldBeThrown()
     {
+        var fileService = new FileService(NullLogger<FileService>.Instance);
+
         // Arrange
         var csvFilePath = $"{TestInputFolder}{"Operation.csv"}";
 
-        var csvReaderService = new CsvReaderService();
+        var csvReaderService = new CsvReaderService(NullLogger<CsvReaderService>.Instance);
         var configuration = new global::CsvHelper.Configuration.CsvConfiguration(new CultureInfo("en-AU"))
         {
             Delimiter = ",",
@@ -33,7 +36,7 @@ public class BugsTest
             Configuration = configuration
         };
 
-        using (var csvReader = csvReaderService.CreateReader(csvFilePath, csvContext))
+        using (var csvReader = csvReaderService.CreateReader(fileService, csvFilePath, csvContext))
         {
             csvReader.Read();
             csvReader.ReadHeader();
