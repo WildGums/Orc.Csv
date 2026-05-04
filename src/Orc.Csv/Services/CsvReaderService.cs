@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Catel;
+using Catel.Logging;
 using CsvHelper;
 using Microsoft.Extensions.Logging;
 
@@ -60,14 +61,14 @@ public class CsvReaderService : CsvServiceBase, ICsvReaderService
             var configuration = csvReader.Configuration;
             if (configuration.HasHeaderRecord && csvReader.Context.Reader?.HeaderRecord is null)
             {
-                _logger.LogDebug("Reading header");
+                _logger.LogDebugIfAttached("Reading header");
 
                 // Yes, we need a double read
                 csvReader.Read();
                 csvReader.ReadHeader();
             }
 
-            _logger.LogDebug("Reading records");
+            _logger.LogDebugIfAttached("Reading records");
 
             while (csvReader.Read())
             {
@@ -103,14 +104,14 @@ public class CsvReaderService : CsvServiceBase, ICsvReaderService
             var configuration = csvReader.Configuration;
             if (configuration.HasHeaderRecord && csvReader.Context.Reader?.HeaderRecord is null)
             {
-                _logger.LogDebug("Reading header");
+                _logger.LogDebugIfAttached("Reading header");
 
                 // Yes, we need a double read
                 await csvReader.ReadAsync();
                 csvReader.ReadHeader();
             }
 
-            _logger.LogDebug("Reading records");
+            _logger.LogDebugIfAttached("Reading records");
 
             while (await csvReader.ReadAsync())
             {
@@ -140,7 +141,7 @@ public class CsvReaderService : CsvServiceBase, ICsvReaderService
         var record = ReadRecord(csvReader, recordType, csvContext);
         if (record is null)
         {
-            _logger.LogDebug("Read record results in null at row '{Row}', raw row content: '{RawRecord}'", csvReader.Context.Parser?.Row, csvReader.Context.Parser?.RawRecord);
+            _logger.LogDebugIfAttached($"Read record results in null at row '{csvReader.Context.Parser?.Row}', raw row content: '{csvReader.Context.Parser?.RawRecord}'");
 
             return;
         }
