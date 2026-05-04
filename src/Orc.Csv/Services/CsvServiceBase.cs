@@ -2,8 +2,6 @@
 
 using System.IO;
 using System.Linq;
-using System.Text;
-using Catel.Logging;
 using CsvHelper;
 using CsvHelper.Configuration;
 using CsvHelper.TypeConversion;
@@ -85,7 +83,7 @@ public abstract class CsvServiceBase
 
     private void HandleBadDataFound(BadDataFoundArgs args, CsvConfiguration configuration)
     {
-        _logger.LogWarning($"Found bad data, row '{args.Context.Parser?.Row ?? 0}', char position '{args.Context.Parser?.CharCount ?? 0}', field '{args.Field}'");
+        _logger.LogWarning("Found bad data, row '{Row}', char position '{CharPosition}', field '{Field}'", args.Context.Parser?.Row ?? 0, args.Context.Parser?.CharCount ?? 0, args.Field);
 
         var handler = configuration.BadDataFound;
         handler?.Invoke(args);
@@ -97,7 +95,7 @@ public abstract class CsvServiceBase
         {
             var headerNames = string.Join(", ", invalidHeader.Names);
 
-            _logger.LogWarning($"Header matching '{headerNames}' names at index '{invalidHeader.Index}' was not found");
+            _logger.LogWarning("Header matching '{HeaderNames}' names at index '{HeaderIndex}' was not found", headerNames, invalidHeader.Index);
         }
 
         var handler = configuration.HeaderValidated;
@@ -134,14 +132,14 @@ public abstract class CsvServiceBase
                     {
                         var classMap = csvContext.ClassMap?.GetType().Name ?? "no-class-map";
 
-                        _logger.LogDebugIfAttached($"Found field '{field}' defined in class map '{classMap}', but it's not defined in the actual file");
+                        _logger.LogDebug("Found field '{Field}' defined in class map '{ClassMap}', but it's not defined in the actual file", field, classMap);
                     }
                 }
             }
 
             if (!ignoreWarning)
             {
-                _logger.LogWarning("Found '{0}' missing fields at row '{1}', char position '{1}': '{2}'", 
+                _logger.LogWarning("Found '{FieldCount}' missing fields at row '{Row}', char position '{CharPosition}': '{Fields}'", 
                     fields.Length, context.Parser?.Row, context.Parser?.CharCount, string.Join(",", fields));
             }
         }
@@ -156,26 +154,21 @@ public abstract class CsvServiceBase
         var readingContext = ex.Context?.Reader;
 
         // We always read from a csv file so we know we have a file stream
-        var fileName = string.Empty;
+        string? fileName = null;
 
         if (readingContext is StreamReader { BaseStream: FileStream fileStream })
         {
             fileName = fileStream.Name;
         }
 
-        var messageBuilder = new StringBuilder();
-        messageBuilder.Append("An exception occurred during reading");
-
-        if (!string.IsNullOrWhiteSpace(fileName))
-        {
-            messageBuilder.Append($", file: '{fileName}'");
-        }
+        var row = ex.Context?.Parser?.Row;
+        string? columnName = null;
+        string? content = null;
+        string? propertyName = null;
 
         if (readingContext is not null)
         {
-            messageBuilder.Append($", row '{ex.Context?.Parser?.Row}'");
-
-            var columnName = ex.Context?.Reader?.HeaderRecord?[ex.Context.Reader.CurrentIndex] ?? "unknown";
+            columnName = ex.Context?.Reader?.HeaderRecord?[ex.Context.Reader.CurrentIndex] ?? "unknown";
 
             if (ex is TypeConverterException typeConverterException)
             {
@@ -183,28 +176,15 @@ public abstract class CsvServiceBase
                     ? typeConverterException.MemberMapData.Names.FirstOrDefault()
                     : $"idx: {typeConverterException.MemberMapData.Index}";
 
-                messageBuilder.Append($", content '{typeConverterException.Text}'");
-
-                var propertyName = typeConverterException.MemberMapData.Member?.Name;
-                if (propertyName is not null)
-                {
-                    messageBuilder.Append($", property '{propertyName}'");
-                }
+                content = typeConverterException.Text;
+                propertyName = typeConverterException.MemberMapData.Member?.Name;
             }
-
-            messageBuilder.Append($", column '{columnName}'");
         }
 
-        var writingContext = ex.Context?.Writer;
-        if (writingContext is not null)
-        {
-            messageBuilder.Append($", row '{writingContext.Row}'");
-        }
+        var writingRow = ex.Context?.Writer?.Row;
 
-        messageBuilder.Append($", message: '{ex.Message}'");
-
-        var message = messageBuilder.ToString();
-        _logger.LogWarning(message);
+        _logger.LogWarning("An exception occurred during reading, file: '{FileName}', row '{Row}', content '{Content}', property '{PropertyName}', column '{ColumnName}', writing row '{WritingRow}', message: '{Message}'",
+            fileName, row, content, propertyName, columnName, writingRow, ex.Message);
 
         var handler = configuration.ReadingExceptionOccurred;
         handler?.Invoke(args);

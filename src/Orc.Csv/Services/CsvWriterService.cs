@@ -52,7 +52,7 @@ public class CsvWriterService : CsvServiceBase, ICsvWriterService
         {
             // Note: no need to write the header, the WriteRecords method will take care of that.
 
-            _logger.LogDebug($"Writing records");
+            _logger.LogDebug("Writing records");
 
             var enumerator = records.GetEnumerator();
             if (!enumerator.MoveNext() && (csvContext.Configuration?.HasHeaderRecord??true))
