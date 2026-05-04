@@ -159,7 +159,7 @@ public class CsvReaderService : CsvServiceBase, ICsvReaderService
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, $"Failed to read record of type '{recordType}'");
+            _logger.LogWarning(ex, "Failed to read record of type '{RecordType}'", recordType);
 
             if (csvContext.ThrowOnError)
             {
