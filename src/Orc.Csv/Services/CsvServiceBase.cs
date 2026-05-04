@@ -2,6 +2,7 @@
 
 using System.IO;
 using System.Linq;
+using Catel.Logging;
 using CsvHelper;
 using CsvHelper.Configuration;
 using CsvHelper.TypeConversion;
@@ -132,7 +133,7 @@ public abstract class CsvServiceBase
                     {
                         var classMap = csvContext.ClassMap?.GetType().Name ?? "no-class-map";
 
-                        _logger.LogDebug("Found field '{Field}' defined in class map '{ClassMap}', but it's not defined in the actual file", field, classMap);
+                        _logger.LogDebugIfAttached($"Found field '{field}' defined in class map '{classMap}', but it's not defined in the actual file");
                     }
                 }
             }
