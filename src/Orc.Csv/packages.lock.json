@@ -31,9 +31,9 @@
       },
       "CsvHelper": {
         "type": "Direct",
-        "requested": "[33.1.0, )",
-        "resolved": "33.1.0",
-        "contentHash": "kqfTOZGrn7NarNeXgjh86JcpTHUoeQDMB8t9NVa/ZtlSYiV1rxfRnQ49WaJsob4AiGrbK0XDzpyKkBwai4F8eg=="
+        "requested": "[34.1.0, )",
+        "resolved": "34.1.0",
+        "contentHash": "h5nMzKDFkOE/rJs4HBa1Tlj+fFvJlO+XXJd8gvguaK3Gzm7rO14C0ljyZ8tMBHsfg0szoL5RIIpEMGnaslR1uA=="
       },
       "Fody": {
         "type": "Direct",
@@ -213,9 +213,9 @@
       },
       "CsvHelper": {
         "type": "Direct",
-        "requested": "[33.1.0, )",
-        "resolved": "33.1.0",
-        "contentHash": "kqfTOZGrn7NarNeXgjh86JcpTHUoeQDMB8t9NVa/ZtlSYiV1rxfRnQ49WaJsob4AiGrbK0XDzpyKkBwai4F8eg=="
+        "requested": "[34.1.0, )",
+        "resolved": "34.1.0",
+        "contentHash": "h5nMzKDFkOE/rJs4HBa1Tlj+fFvJlO+XXJd8gvguaK3Gzm7rO14C0ljyZ8tMBHsfg0szoL5RIIpEMGnaslR1uA=="
       },
       "Fody": {
         "type": "Direct",
